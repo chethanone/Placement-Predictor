@@ -74,6 +74,7 @@ config/*-credentials.json
 *.json.credentials
 firebase_client/firebase-client.js
 firebase_client/*.js
+!firebase_client/*.example.js
 
 # Django
 db.sqlite3
