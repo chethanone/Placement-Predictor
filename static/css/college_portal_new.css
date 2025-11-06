@@ -1,0 +1,121 @@
+/* New Pastel Color Scheme for College Portal */
+:root {
+    --primary: #8FB8A8;    /* Mint Green */
+    --secondary: #F5C0DD;  /* Light Pink */
+    --accent: #765D69;     /* Deep Purple */
+    --background: #FEFAD4; /* Cream */
+    --text: #765D69;       /* Deep Purple for text */
+    --success: #8FB8A8;    /* Mint Green for success */
+    --warning: #F5C0DD;    /* Light Pink for warnings */
+    --danger: #765D69;     /* Deep Purple for danger */
+}
+
+.college-portal {
+    background-color: var(--background);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+/* Login Form Styling */
+.college-login-container {
+    background: white;
+    border-radius: 1.5rem;
+    padding: 2rem;
+    box-shadow: 0 4px 6px -1px rgba(118, 93, 105, 0.1);
+    max-width: 400px;
+    margin: 2rem auto;
+    border: 2px solid var(--primary);
+}
+
+.college-login-container h1 {
+    color: var(--accent);
+    font-size: 1.75rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.college-form-group {
+    margin-bottom: 1.5rem;
+}
+
+.college-form-group label {
+    display: block;
+    color: var(--text);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+.college-form-group input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid var(--primary);
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.college-form-group input:focus {
+    border-color: var(--secondary);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(143, 184, 168, 0.2);
+}
+
+.college-login-btn {
+    background: var(--primary);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.5rem;
+    width: 100%;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.college-login-btn:hover {
+    background: var(--accent);
+    transform: translateY(-2px);
+}
+
+.college-portal-header {
+    background: var(--primary);
+    padding: 1rem 2rem;
+    color: white;
+}
+
+/* Demo Credentials Box */
+.demo-credentials {
+    background: var(--secondary);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    margin-top: 1.5rem;
+    border: 1px solid var(--primary);
+}
+
+.demo-credentials h3 {
+    color: var(--accent);
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.demo-credentials p {
+    margin: 0.25rem 0;
+    color: var(--text);
+    font-size: 0.9rem;
+}
+
+/* Back to Home Link */
+.back-to-home {
+    color: var(--accent);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+    transition: all 0.3s ease;
+}
+
+.back-to-home:hover {
+    color: var(--primary);
+    transform: translateX(-5px);
+}

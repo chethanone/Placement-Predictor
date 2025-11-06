@@ -1,0 +1,82 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+*.env
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints/
+
+# Data files (optional - uncomment if you don't want to track data)
+# data/raw/*.csv
+# data/processed/*.csv
+
+# Models (optional - uncomment if you don't want to track models)
+# models/*.pkl
+# models/*.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Temporary files
+*.tmp
+*.bak
+
+# Firebase credentials (NEVER COMMIT!)
+config/firebase-credentials.json
+config/*-credentials.json
+*.json.credentials
+firebase_client/firebase-client.js
+firebase_client/*.js
+
+# Django
+db.sqlite3
+*.sqlite3
+media/
+staticfiles/

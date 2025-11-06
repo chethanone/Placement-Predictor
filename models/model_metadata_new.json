@@ -1,0 +1,70 @@
+{
+  "model_name": "Random Forest Classifier",
+  "train_date": "2025-11-03 17:17:19",
+  "dataset": "realistic_placement_data.csv",
+  "total_samples": 10000,
+  "training_samples": 8000,
+  "test_samples": 2000,
+  "feature_columns": [
+    "CGPA",
+    "Previous_Semester",
+    "Aptitude_Score",
+    "Academic_Performance",
+    "Academic_Consistency",
+    "Aptitude_Normalized",
+    "Communication_Skills",
+    "Technical_Skills",
+    "Programming_Skills",
+    "Soft_Skills",
+    "Overall_Skills",
+    "Skill_Gap",
+    "Projects_Completed",
+    "Internships",
+    "Certifications",
+    "Practical_Experience",
+    "Extracurricular_Activities",
+    "Extracurricular_x_Communication",
+    "Backlogs",
+    "Backlog_Penalty",
+    "College_Tier",
+    "Stream_Encoded",
+    "CGPA_x_Previous",
+    "CGPA_x_Technical",
+    "Communication_x_Soft"
+  ],
+  "metrics": {
+    "train_accuracy": 0.994625,
+    "test_accuracy": 0.9555,
+    "precision": 0.9401869158878504,
+    "recall": 0.8982142857142857,
+    "f1_score": 0.9187214611872146,
+    "roc_auc": 0.9909015376984127,
+    "cv_mean": 0.9416,
+    "cv_std": 0.0034117444218463846,
+    "confusion_matrix": [
+      [
+        1408,
+        32
+      ],
+      [
+        57,
+        503
+      ]
+    ],
+    "best_params": {
+      "max_depth": 20,
+      "max_features": "log2",
+      "min_samples_leaf": 2,
+      "min_samples_split": 5,
+      "n_estimators": 300
+    }
+  },
+  "placement_rate": 0.28,
+  "stream_classes": [
+    "Civil",
+    "Computer Science",
+    "Electronics",
+    "IT",
+    "Mechanical"
+  ]
+}

@@ -1,0 +1,47 @@
+{
+    "model_name": "Random Forest",
+    "train_date": "2025-11-03 14:31:41",
+    "metrics": {
+        "train_accuracy": 1.0,
+        "test_accuracy": 0.998,
+        "precision": 0.9980047846889953,
+        "recall": 0.998,
+        "f1_score": 0.9979951369987298,
+        "confusion_matrix": [
+            [
+                1668,
+                0
+            ],
+            [
+                4,
+                328
+            ]
+        ],
+        "roc_auc": 0.9999963884314236,
+        "cv_mean": 0.99875,
+        "cv_std": 0.0011180339887499082,
+        "best_params": {
+            "n_estimators": 200,
+            "max_depth": 20,
+            "min_samples_split": 5,
+            "min_samples_leaf": 2
+        }
+    },
+    "feature_columns": [
+        "Communication_Skills",
+        "Projects_Completed",
+        "IQ",
+        "CGPA",
+        "Prev_Sem_Result",
+        "IQ_x_Prev_Sem_Result",
+        "IQ_div_Prev_Sem_Result",
+        "avg_academic_score",
+        "Prev_Sem_Result_x_CGPA",
+        "Prev_Sem_Result_div_CGPA",
+        "College_ID_div_IQ",
+        "College_ID_x_IQ",
+        "academic_consistency",
+        "College_ID",
+        "Extra_Curricular_Score"
+    ]
+}

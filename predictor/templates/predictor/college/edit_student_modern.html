@@ -1,0 +1,479 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Edit Student - College Portal</title>
+ 
+ <!-- Google Fonts -->
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+ 
+ <!-- Font Awesome -->
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ 
+ <style>
+ :root {
+ --sage-green: #8FB9A8;
+ --cream: #FEFAD4;
+ --peach: #FCB9AA;
+ --rose: #F1828D;
+ --mauve: #765D69;
+ --dark-text: #2c3e50;
+ --white: #ffffff;
+ --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+ --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+ --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+ }
+
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ }
+
+ body {
+ font-family: 'Inter', 'Poppins', sans-serif;
+ background: linear-gradient(135deg, var(--cream) 0%, #fff 50%, var(--cream) 100%);
+ color: var(--dark-text);
+ min-height: 100vh;
+ padding: 30px;
+ }
+
+ .container {
+ max-width: 900px;
+ margin: 0 auto;
+ }
+
+ .back-link {
+ display: inline-flex;
+ align-items: center;
+ gap: 8px;
+ padding: 12px 20px;
+ background: white;
+ color: var(--mauve);
+ text-decoration: none;
+ border-radius: 10px;
+ box-shadow: var(--shadow-sm);
+ margin-bottom: 25px;
+ font-weight: 600;
+ transition: all 0.3s ease;
+ }
+
+ .back-link:hover {
+ background: var(--sage-green);
+ color: white;
+ transform: translateX(-5px);
+ }
+
+ .form-card {
+ background: white;
+ padding: 40px;
+ border-radius: 20px;
+ box-shadow: var(--shadow-md);
+ animation: fadeIn 0.5s ease;
+ }
+
+ @keyframes fadeIn {
+ from {
+ opacity: 0;
+ transform: translateY(20px);
+ }
+ to {
+ opacity: 1;
+ transform: translateY(0);
+ }
+ }
+
+ .form-header {
+ text-align: center;
+ margin-bottom: 35px;
+ padding-bottom: 20px;
+ border-bottom: 2px solid #f0f0f0;
+ }
+
+ .form-header i {
+ font-size: 48px;
+ background: linear-gradient(135deg, var(--sage-green), var(--mauve));
+ -webkit-background-clip: text;
+ -webkit-text-fill-color: transparent;
+ background-clip: text;
+ margin-bottom: 15px;
+ }
+
+ .form-header h1 {
+ font-size: 28px;
+ font-weight: 700;
+ color: var(--mauve);
+ margin-bottom: 8px;
+ }
+
+ .form-header p {
+ color: #666;
+ font-size: 15px;
+ }
+
+ .student-id-display {
+ background: linear-gradient(135deg, var(--sage-green), var(--mauve));
+ color: white;
+ padding: 15px 25px;
+ border-radius: 12px;
+ text-align: center;
+ margin-bottom: 30px;
+ font-size: 18px;
+ font-weight: 600;
+ font-family: 'Courier New', monospace;
+ }
+
+ .form-grid {
+ display: grid;
+ grid-template-columns: repeat(2, 1fr);
+ gap: 25px;
+ margin-bottom: 30px;
+ }
+
+ .form-group {
+ display: flex;
+ flex-direction: column;
+ }
+
+ .form-group.full-width {
+ grid-column: span 2;
+ }
+
+ .form-label {
+ font-weight: 600;
+ color: var(--dark-text);
+ margin-bottom: 10px;
+ font-size: 14px;
+ display: flex;
+ align-items: center;
+ gap: 8px;
+ }
+
+ .form-label i {
+ color: var(--sage-green);
+ font-size: 16px;
+ }
+
+ .form-input {
+ padding: 14px 16px;
+ border: 2px solid #e0e0e0;
+ border-radius: 10px;
+ font-size: 15px;
+ transition: all 0.3s ease;
+ font-family: 'Inter', sans-serif;
+ }
+
+ .form-input:focus {
+ outline: none;
+ border-color: var(--sage-green);
+ box-shadow: 0 0 0 3px rgba(143, 185, 168, 0.1);
+ }
+
+ .form-input:disabled {
+ background: #f5f5f5;
+ color: #999;
+ cursor: not-allowed;
+ }
+
+ select.form-input {
+ cursor: pointer;
+ appearance: none;
+ background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238FB9A8' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+ background-repeat: no-repeat;
+ background-position: right 15px center;
+ padding-right: 40px;
+ }
+
+ .form-actions {
+ display: flex;
+ gap: 15px;
+ justify-content: center;
+ margin-top: 35px;
+ }
+
+ .btn {
+ padding: 14px 32px;
+ border-radius: 12px;
+ font-weight: 600;
+ font-size: 15px;
+ text-decoration: none;
+ border: none;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ display: inline-flex;
+ align-items: center;
+ gap: 10px;
+ }
+
+ .btn-primary {
+ background: linear-gradient(135deg, var(--sage-green), var(--mauve));
+ color: white;
+ flex: 1;
+ justify-content: center;
+ }
+
+ .btn-primary:hover {
+ transform: translateY(-2px);
+ box-shadow: 0 8px 20px rgba(143, 185, 168, 0.3);
+ }
+
+ .btn-secondary {
+ background: white;
+ color: var(--mauve);
+ border: 2px solid var(--sage-green);
+ flex: 1;
+ justify-content: center;
+ }
+
+ .btn-secondary:hover {
+ background: var(--sage-green);
+ color: white;
+ }
+
+ .success-message, .error-message {
+ padding: 15px 20px;
+ border-radius: 12px;
+ margin-bottom: 25px;
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ animation: slideDown 0.5s ease;
+ }
+
+ @keyframes slideDown {
+ from {
+ opacity: 0;
+ transform: translateY(-20px);
+ }
+ to {
+ opacity: 1;
+ transform: translateY(0);
+ }
+ }
+
+ .success-message {
+ background: rgba(143, 185, 168, 0.1);
+ border-left: 4px solid var(--sage-green);
+ color: var(--dark-text);
+ }
+
+ .success-message i {
+ color: var(--sage-green);
+ font-size: 20px;
+ }
+
+ .error-message {
+ background: rgba(241, 130, 141, 0.1);
+ border-left: 4px solid var(--rose);
+ color: var(--dark-text);
+ }
+
+ .error-message i {
+ color: var(--rose);
+ font-size: 20px;
+ }
+
+ .helper-text {
+ font-size: 13px;
+ color: #666;
+ margin-top: 6px;
+ }
+
+ .info-banner {
+ background: linear-gradient(135deg, rgba(143, 185, 168, 0.1), rgba(252, 185, 170, 0.1));
+ border-left: 4px solid var(--peach);
+ padding: 15px 20px;
+ border-radius: 10px;
+ margin-bottom: 25px;
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ }
+
+ .info-banner i {
+ color: var(--peach);
+ font-size: 20px;
+ }
+
+ .info-banner p {
+ color: var(--dark-text);
+ font-size: 14px;
+ margin: 0;
+ }
+
+ @media (max-width: 768px) {
+ body {
+ padding: 15px;
+ }
+
+ .form-card {
+ padding: 30px 20px;
+ }
+
+ .form-grid {
+ grid-template-columns: 1fr;
+ }
+
+ .form-group.full-width {
+ grid-column: span 1;
+ }
+
+ .form-actions {
+ flex-direction: column;
+ }
+
+ .btn {
+ width: 100%;
+ }
+ }
+ </style>
+</head>
+<body>
+ <div class="container">
+ <a href="{% url 'college_manage_students' %}" class="back-link">
+ <i class="fas fa-arrow-left"></i>
+ <span>Back to Students</span>
+ </a>
+
+ <div class="form-card">
+ <div class="form-header">
+ <i class="fas fa-user-edit"></i>
+ <h1>Edit Student Details</h1>
+ <p>Update student information and academic details</p>
+ </div>
+
+ <div class="student-id-display">
+ <i class="fas fa-id-card"></i> Student ID: {{ student.student_id }}
+ </div>
+
+ <div class="info-banner">
+ <i class="fas fa-info-circle"></i>
+ <p>Student ID cannot be changed. Please verify all other information before saving.</p>
+ </div>
+
+ {% if messages %}
+ {% for message in messages %}
+ {% if message.tags == 'success' %}
+ <div class="success-message">
+ <i class="fas fa-check-circle"></i>
+ <span>{{ message }}</span>
+ </div>
+ {% else %}
+ <div class="error-message">
+ <i class="fas fa-exclamation-circle"></i>
+ <span>{{ message }}</span>
+ </div>
+ {% endif %}
+ {% endfor %}
+ {% endif %}
+
+ <form method="POST" id="editStudentForm">
+ {% csrf_token %}
+ 
+ <div class="form-grid">
+ <div class="form-group full-width">
+ <label class="form-label">
+ <i class="fas fa-user"></i>
+ Full Name
+ </label>
+ <input type="text" name="name" class="form-input" value="{{ student.name }}" required placeholder="Enter full name">
+ <span class="helper-text">Student's complete name as per records</span>
+ </div>
+
+ <div class="form-group">
+ <label class="form-label">
+ <i class="fas fa-envelope"></i>
+ Email Address
+ </label>
+ <input type="email" name="email" class="form-input" value="{{ student.email }}" required placeholder="student@example.com">
+ <span class="helper-text">Official college email</span>
+ </div>
+
+ <div class="form-group">
+ <label class="form-label">
+ <i class="fas fa-phone"></i>
+ Phone Number
+ </label>
+ <input type="tel" name="phone" class="form-input" id="phone" value="{{ student.phone }}" required placeholder="10-digit mobile number" pattern="[0-9]{10}" maxlength="10">
+ <span class="helper-text">Contact number (10 digits)</span>
+ </div>
+
+ <div class="form-group">
+ <label class="form-label">
+ <i class="fas fa-graduation-cap"></i>
+ Branch
+ </label>
+ <select name="branch" class="form-input" required>
+ <option value="">Select Branch</option>
+ {% for branch in branches %}
+ <option value="{{ branch.code }}" {% if branch.code == student.branch %}selected{% endif %}>
+ {{ branch.code }} - {{ branch.name }}
+ </option>
+ {% endfor %}
+ </select>
+ <span class="helper-text">Department/Branch</span>
+ </div>
+
+ <div class="form-group">
+ <label class="form-label">
+ <i class="fas fa-book-open"></i>
+ Current Semester
+ </label>
+ <select name="current_semester" class="form-input" required>
+ <option value="">Select Semester</option>
+ {% for sem in semesters %}
+ <option value="{{ sem }}" {% if sem == student.current_semester %}selected{% endif %}>
+ Semester {{ sem }}
+ </option>
+ {% endfor %}
+ </select>
+ <span class="helper-text">Current academic semester</span>
+ </div>
+
+ <div class="form-group">
+ <label class="form-label">
+ <i class="fas fa-calendar"></i>
+ Batch Year
+ </label>
+ <input type="number" name="batch_year" class="form-input" value="{{ student.batch_year }}" required min="2020" max="2030" placeholder="e.g., 2021">
+ <span class="helper-text">Year of joining</span>
+ </div>
+ </div>
+
+ <div class="form-actions">
+ <button type="submit" class="btn btn-primary">
+ <i class="fas fa-save"></i>
+ <span>Save Changes</span>
+ </button>
+ <a href="{% url 'college_manage_students' %}" class="btn btn-secondary">
+ <i class="fas fa-times"></i>
+ <span>Cancel</span>
+ </a>
+ </div>
+ </form>
+ </div>
+ </div>
+
+ <script>
+ // Form validation
+ document.getElementById('editStudentForm').addEventListener('submit', function(e) {
+ const phone = document.getElementById('phone').value.trim();
+ 
+ if (phone.length !== 10 || !/^\d+$/.test(phone)) {
+ e.preventDefault();
+ alert('Please enter a valid 10-digit phone number');
+ return false;
+ }
+ });
+
+ // Only allow numbers in phone input
+ document.getElementById('phone').addEventListener('input', function() {
+ this.value = this.value.replace(/[^0-9]/g, '');
+ });
+ </script>
+</body>
+</html>

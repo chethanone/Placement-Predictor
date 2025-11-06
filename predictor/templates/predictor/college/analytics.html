@@ -1,0 +1,738 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Analytics - College Portal</title>
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+ <style>
+ :root {
+ --sage-green: #8FB9A8;
+ --cream: #FEFAD4;
+ --peach: #FCB9AA;
+ --rose: #F1828D;
+ --mauve: #765D69;
+ --dark-text: #2d3748;
+ --light-bg: #f7fafc;
+ }
+
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ }
+
+ body {
+ font-family: 'Inter', sans-serif;
+ background: linear-gradient(135deg, var(--cream) 0%, var(--light-bg) 100%);
+ color: var(--dark-text);
+ min-height: 100vh;
+ }
+
+ /* Sidebar */
+ .sidebar {
+ position: fixed;
+ left: 0;
+ top: 0;
+ height: 100vh;
+ width: 260px;
+ background: linear-gradient(180deg, var(--mauve) 0%, var(--sage-green) 100%);
+ padding: 30px 20px;
+ box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+ z-index: 100;
+ }
+
+ .logo {
+ text-align: center;
+ margin-bottom: 40px;
+ animation: slideDown 0.6s ease;
+ }
+
+ .logo i {
+ font-size: 48px;
+ color: white;
+ margin-bottom: 10px;
+ }
+
+ .logo h2 {
+ color: white;
+ font-size: 20px;
+ font-weight: 600;
+ font-family: 'Poppins', sans-serif;
+ }
+
+ .logo p {
+ color: rgba(255,255,255,0.8);
+ font-size: 12px;
+ margin-top: 5px;
+ }
+
+ .nav-section {
+ padding: 20px 0;
+ }
+
+ .nav-item {
+ margin: 5px 15px;
+ }
+
+ .nav-link {
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ padding: 14px 20px;
+ color: rgba(255, 255, 255, 0.9);
+ text-decoration: none;
+ border-radius: 12px;
+ transition: all 0.3s ease;
+ font-weight: 500;
+ }
+
+ .nav-link:hover, .nav-link.active {
+ background: rgba(255, 255, 255, 0.15);
+ color: white;
+ transform: translateX(5px);
+ }
+
+ .nav-link i {
+ width: 24px;
+ text-align: center;
+ font-size: 18px;
+ }
+
+ /* Main Content */
+ .main-content {
+ margin-left: 260px;
+ padding: 40px;
+ animation: fadeIn 0.8s ease;
+ }
+
+ .page-header {
+ margin-bottom: 40px;
+ }
+
+ .page-header h1 {
+ font-family: 'Poppins', sans-serif;
+ font-size: 32px;
+ color: var(--mauve);
+ margin-bottom: 8px;
+ }
+
+ .page-header p {
+ color: #718096;
+ font-size: 15px;
+ }
+
+ /* Time Period Selector */
+ .period-selector {
+ display: flex;
+ gap: 10px;
+ margin-bottom: 30px;
+ }
+
+ .period-btn {
+ padding: 10px 20px;
+ border: 2px solid var(--sage-green);
+ background: white;
+ color: var(--sage-green);
+ border-radius: 12px;
+ cursor: pointer;
+ font-weight: 600;
+ font-size: 14px;
+ transition: all 0.3s ease;
+ }
+
+ .period-btn:hover, .period-btn.active {
+ background: var(--sage-green);
+ color: white;
+ transform: translateY(-2px);
+ }
+
+ /* Metrics Grid */
+ .metrics-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+ gap: 25px;
+ margin-bottom: 30px;
+ }
+
+ .metric-card {
+ background: white;
+ padding: 25px;
+ border-radius: 16px;
+ box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+ transition: all 0.3s ease;
+ animation: slideUp 0.6s ease;
+ }
+
+ .metric-card:hover {
+ transform: translateY(-5px);
+ box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+ }
+
+ .metric-header {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ margin-bottom: 15px;
+ }
+
+ .metric-icon {
+ width: 50px;
+ height: 50px;
+ border-radius: 12px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ font-size: 24px;
+ color: white;
+ }
+
+ .metric-icon.sage { background: var(--sage-green); }
+ .metric-icon.peach { background: var(--peach); }
+ .metric-icon.rose { background: var(--rose); }
+ .metric-icon.mauve { background: var(--mauve); }
+
+ .metric-value {
+ font-size: 32px;
+ font-weight: 700;
+ color: var(--mauve);
+ margin-bottom: 5px;
+ }
+
+ .metric-label {
+ font-size: 13px;
+ color: #718096;
+ font-weight: 500;
+ }
+
+ .metric-trend {
+ display: flex;
+ align-items: center;
+ gap: 5px;
+ font-size: 12px;
+ margin-top: 10px;
+ }
+
+ .metric-trend.up {
+ color: var(--sage-green);
+ }
+
+ .metric-trend.down {
+ color: var(--rose);
+ }
+
+ /* Charts Section */
+ .charts-container {
+ display: grid;
+ grid-template-columns: repeat(2, 1fr);
+ gap: 25px;
+ margin-bottom: 30px;
+ }
+
+ .chart-card {
+ background: white;
+ padding: 25px;
+ border-radius: 16px;
+ box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+ animation: slideUp 0.7s ease;
+ }
+
+ .chart-card.full-width {
+ grid-column: span 2;
+ }
+
+ .chart-header {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ margin-bottom: 20px;
+ }
+
+ .chart-title {
+ font-size: 18px;
+ font-weight: 600;
+ color: var(--mauve);
+ font-family: 'Poppins', sans-serif;
+ }
+
+ .chart-subtitle {
+ font-size: 13px;
+ color: #718096;
+ margin-top: 4px;
+ }
+
+ canvas {
+ max-height: 350px !important;
+ }
+
+ /* Department Comparison Table */
+ .comparison-table {
+ background: white;
+ padding: 25px;
+ border-radius: 16px;
+ box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+ animation: slideUp 0.8s ease;
+ margin-bottom: 30px;
+ }
+
+ .table-title {
+ font-size: 20px;
+ font-weight: 600;
+ color: var(--mauve);
+ margin-bottom: 20px;
+ font-family: 'Poppins', sans-serif;
+ }
+
+ table {
+ width: 100%;
+ border-collapse: collapse;
+ }
+
+ thead th {
+ text-align: left;
+ padding: 15px;
+ color: var(--mauve);
+ font-weight: 600;
+ font-size: 13px;
+ text-transform: uppercase;
+ border-bottom: 2px solid #f0f0f0;
+ }
+
+ tbody tr {
+ border-bottom: 1px solid #f5f5f5;
+ transition: all 0.2s ease;
+ }
+
+ tbody tr:hover {
+ background: rgba(143, 185, 168, 0.05);
+ }
+
+ tbody td {
+ padding: 15px;
+ color: var(--dark-text);
+ font-size: 14px;
+ }
+
+ .rank-badge {
+ width: 30px;
+ height: 30px;
+ border-radius: 50%;
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ font-weight: 700;
+ font-size: 12px;
+ }
+
+ .rank-1 { background: #FFD700; color: #8B6914; }
+ .rank-2 { background: #C0C0C0; color: #595959; }
+ .rank-3 { background: #CD7F32; color: white; }
+ .rank-other { background: var(--light-bg); color: var(--dark-text); }
+
+ .progress-bar {
+ width: 100%;
+ height: 8px;
+ background: #f0f0f0;
+ border-radius: 10px;
+ overflow: hidden;
+ }
+
+ .progress-fill {
+ height: 100%;
+ border-radius: 10px;
+ transition: width 1s ease;
+ }
+
+ /* Animations */
+ @keyframes fadeIn {
+ from { opacity: 0; }
+ to { opacity: 1; }
+ }
+
+ @keyframes slideDown {
+ from {
+ opacity: 0;
+ transform: translateY(-20px);
+ }
+ to {
+ opacity: 1;
+ transform: translateY(0);
+ }
+ }
+
+ @keyframes slideUp {
+ from {
+ opacity: 0;
+ transform: translateY(20px);
+ }
+ to {
+ opacity: 1;
+ transform: translateY(0);
+ }
+ }
+
+ /* Responsive */
+ @media (max-width: 1200px) {
+ .charts-container {
+ grid-template-columns: 1fr;
+ }
+
+ .chart-card.full-width {
+ grid-column: span 1;
+ }
+ }
+
+ @media (max-width: 768px) {
+ .sidebar {
+ transform: translateX(-100%);
+ }
+
+ .main-content {
+ margin-left: 0;
+ padding: 20px;
+ }
+ }
+ </style>
+</head>
+<body>
+ <!-- Sidebar -->
+ <aside class="sidebar">
+ <div class="logo">
+ <i class="fas fa-university"></i>
+ <h2>College Portal</h2>
+ <p>Analytics Dashboard</p>
+ </div>
+
+ <nav class="nav-section">
+ <div class="nav-item">
+ <a href="{% url 'college_dashboard' %}" class="nav-link">
+ <i class="fas fa-home"></i>
+ <span>Dashboard</span>
+ </a>
+ </div>
+ <div class="nav-item">
+ <a href="{% url 'college_manage_students' %}" class="nav-link">
+ <i class="fas fa-users"></i>
+ <span>Manage Students</span>
+ </a>
+ </div>
+ <div class="nav-item">
+ <a href="{% url 'manage_subjects' %}" class="nav-link">
+ <i class="fas fa-book"></i>
+ <span>Manage Subjects</span>
+ </a>
+ </div>
+ <div class="nav-item">
+ <a href="{% url 'college_add_student' %}" class="nav-link">
+ <i class="fas fa-user-plus"></i>
+ <span>Add Student</span>
+ </a>
+ </div>
+ <div class="nav-item">
+ <a href="{% url 'college_analytics' %}" class="nav-link active">
+ <i class="fas fa-chart-pie"></i>
+ <span>Analytics</span>
+ </a>
+ </div>
+ <div class="nav-item">
+ <a href="{% url 'college_reports' %}" class="nav-link">
+ <i class="fas fa-file-export"></i>
+ <span>Reports</span>
+ </a>
+ </div>
+ <div class="nav-item">
+ <a href="{% url 'college_notifications' %}" class="nav-link">
+ <i class="fas fa-bell"></i>
+ <span>Notifications</span>
+ </a>
+ </div>
+ <div class="nav-item">
+ <a href="{% url 'college_logout' %}" class="nav-link">
+ <i class="fas fa-sign-out-alt"></i>
+ <span>Logout</span>
+ </a>
+ </div>
+ </nav>
+ </aside>
+
+ <!-- Main Content -->
+ <main class="main-content">
+ <div class="page-header">
+ <h1>Analytics Dashboard</h1>
+ <p>Comprehensive insights into student performance and trends</p>
+ </div>
+
+ <!-- Time Period Selector -->
+ <div class="period-selector">
+ <button class="period-btn active" data-period="week">This Week</button>
+ <button class="period-btn" data-period="month">This Month</button>
+ <button class="period-btn" data-period="semester">This Semester</button>
+ <button class="period-btn" data-period="year">This Year</button>
+ </div>
+
+ <!-- Metrics Grid -->
+ <div class="metrics-grid">
+ <div class="metric-card">
+ <div class="metric-header">
+ <div>
+ <div class="metric-value">{{ total_students }}</div>
+ <div class="metric-label">Total Students</div>
+ </div>
+ <div class="metric-icon sage">
+ <i class="fas fa-users"></i>
+ </div>
+ </div>
+ <div class="metric-trend up">
+ <i class="fas fa-arrow-up"></i>
+ <span>+12% from last semester</span>
+ </div>
+ </div>
+
+ <div class="metric-card">
+ <div class="metric-header">
+ <div>
+ <div class="metric-value">{{ avg_cgpa|floatformat:2 }}</div>
+ <div class="metric-label">Average CGPA</div>
+ </div>
+ <div class="metric-icon peach">
+ <i class="fas fa-star"></i>
+ </div>
+ </div>
+ <div class="metric-trend up">
+ <i class="fas fa-arrow-up"></i>
+ <span>+0.3 points increase</span>
+ </div>
+ </div>
+
+ <div class="metric-card">
+ <div class="metric-header">
+ <div>
+ <div class="metric-value">{{ pass_percentage|floatformat:0 }}%</div>
+ <div class="metric-label">Pass Percentage</div>
+ </div>
+ <div class="metric-icon sage">
+ <i class="fas fa-check-circle"></i>
+ </div>
+ </div>
+ <div class="metric-trend up">
+ <i class="fas fa-arrow-up"></i>
+ <span>+5% improvement</span>
+ </div>
+ </div>
+
+ <div class="metric-card">
+ <div class="metric-header">
+ <div>
+ <div class="metric-value">{{ students_with_backlogs }}</div>
+ <div class="metric-label">Active Backlogs</div>
+ </div>
+ <div class="metric-icon rose">
+ <i class="fas fa-exclamation-triangle"></i>
+ </div>
+ </div>
+ <div class="metric-trend down">
+ <i class="fas fa-arrow-down"></i>
+ <span>Needs attention</span>
+ </div>
+ </div>
+ </div>
+
+ <!-- Charts Section -->
+ <div class="charts-container">
+ <div class="chart-card">
+ <div class="chart-header">
+ <div>
+ <div class="chart-title">CGPA Distribution</div>
+ <div class="chart-subtitle">Student performance breakdown</div>
+ </div>
+ </div>
+ <canvas id="cgpaChart"></canvas>
+ </div>
+
+ <div class="chart-card">
+ <div class="chart-header">
+ <div>
+ <div class="chart-title">Department Performance</div>
+ <div class="chart-subtitle">Average CGPA by branch</div>
+ </div>
+ </div>
+ <canvas id="deptChart"></canvas>
+ </div>
+
+ <div class="chart-card full-width">
+ <div class="chart-header">
+ <div>
+ <div class="chart-title">Semester-wise Trends</div>
+ <div class="chart-subtitle">Performance trends across semesters</div>
+ </div>
+ </div>
+ <canvas id="trendChart"></canvas>
+ </div>
+ </div>
+
+ <!-- Department Comparison Table -->
+ <div class="comparison-table">
+ <h3 class="table-title">Department Comparison</h3>
+ <table>
+ <thead>
+ <tr>
+ <th>Rank</th>
+ <th>Department</th>
+ <th>Avg CGPA</th>
+ <th>Students</th>
+ <th>Pass Rate</th>
+ <th>Placement Rate</th>
+ <th>Performance</th>
+ </tr>
+ </thead>
+ <tbody>
+ {% for dept in department_stats %}
+ <tr>
+ <td>
+ <span class="rank-badge rank-{{ forloop.counter }}">
+ {{ forloop.counter }}
+ </span>
+ </td>
+ <td><strong>{{ dept.branch }}</strong></td>
+ <td>{{ dept.avg_cgpa|floatformat:2 }}</td>
+ <td>{{ dept.count }}</td>
+ <td>{{ dept.pass_rate|floatformat:0 }}%</td>
+ <td>{{ dept.placement_rate|floatformat:0 }}%</td>
+ <td>
+ <div class="progress-bar">
+ <div class="progress-fill" style="width: {{ dept.performance }}%; background: var(--sage-green);"></div>
+ </div>
+ </td>
+ </tr>
+ {% empty %}
+ <tr>
+ <td colspan="7" style="text-align: center; padding: 30px; color: #718096;">
+ No department data available
+ </td>
+ </tr>
+ {% endfor %}
+ </tbody>
+ </table>
+ </div>
+ </main>
+
+ <script>
+ // CGPA Distribution Chart
+ const cgpaCtx = document.getElementById('cgpaChart').getContext('2d');
+ new Chart(cgpaCtx, {
+ type: 'doughnut',
+ data: {
+ labels: ['9.0-10.0', '8.0-8.9', '7.0-7.9', '6.0-6.9', 'Below 6.0'],
+ datasets: [{
+ data: [15, 25, 30, 20, 10],
+ backgroundColor: [
+ '#8FB9A8',
+ '#FEFAD4',
+ '#FCB9AA',
+ '#F1828D',
+ '#765D69'
+ ],
+ borderWidth: 0
+ }]
+ },
+ options: {
+ responsive: true,
+ maintainAspectRatio: true,
+ plugins: {
+ legend: {
+ position: 'bottom'
+ }
+ }
+ }
+ });
+
+ // Department Performance Chart
+ const deptCtx = document.getElementById('deptChart').getContext('2d');
+ new Chart(deptCtx, {
+ type: 'bar',
+ data: {
+ labels: ['CSE', 'ECE', 'ME', 'CE', 'EEE', 'ISE'],
+ datasets: [{
+ label: 'Average CGPA',
+ data: [8.2, 7.8, 7.5, 7.3, 7.6, 8.0],
+ backgroundColor: '#8FB9A8',
+ borderRadius: 8
+ }]
+ },
+ options: {
+ responsive: true,
+ maintainAspectRatio: true,
+ scales: {
+ y: {
+ beginAtZero: true,
+ max: 10
+ }
+ },
+ plugins: {
+ legend: {
+ display: false
+ }
+ }
+ }
+ });
+
+ // Trend Chart
+ const trendCtx = document.getElementById('trendChart').getContext('2d');
+ new Chart(trendCtx, {
+ type: 'line',
+ data: {
+ labels: ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4', 'Sem 5', 'Sem 6', 'Sem 7', 'Sem 8'],
+ datasets: [{
+ label: 'CSE',
+ data: [7.5, 7.8, 8.0, 8.1, 8.2, 8.3, 8.4, 8.5],
+ borderColor: '#8FB9A8',
+ backgroundColor: 'rgba(143, 185, 168, 0.1)',
+ tension: 0.4
+ }, {
+ label: 'ECE',
+ data: [7.2, 7.4, 7.6, 7.7, 7.8, 7.9, 8.0, 8.1],
+ borderColor: '#FCB9AA',
+ backgroundColor: 'rgba(252, 185, 170, 0.1)',
+ tension: 0.4
+ }, {
+ label: 'ME',
+ data: [7.0, 7.1, 7.3, 7.4, 7.5, 7.6, 7.7, 7.8],
+ borderColor: '#F1828D',
+ backgroundColor: 'rgba(241, 130, 141, 0.1)',
+ tension: 0.4
+ }]
+ },
+ options: {
+ responsive: true,
+ maintainAspectRatio: true,
+ scales: {
+ y: {
+ beginAtZero: false,
+ min: 6.5,
+ max: 9.0
+ }
+ },
+ plugins: {
+ legend: {
+ position: 'bottom'
+ }
+ }
+ }
+ });
+
+ // Period selector functionality
+ const periodBtns = document.querySelectorAll('.period-btn');
+ periodBtns.forEach(btn => {
+ btn.addEventListener('click', function() {
+ periodBtns.forEach(b => b.classList.remove('active'));
+ this.classList.add('active');
+ // Here you would typically reload data based on selected period
+ console.log('Period changed to:', this.dataset.period);
+ });
+ });
+ </script>
+</body>
+</html>

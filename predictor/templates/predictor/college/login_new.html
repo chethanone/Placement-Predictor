@@ -1,0 +1,46 @@
+{% extends 'predictor/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link href="{% static 'css/college_portal_new.css' %}" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="college-portal">
+ <div class="college-login-container">
+ <a href="{% url 'home' %}" class="back-to-home">
+ ← Back to Home
+ </a>
+ 
+ <h1>
+ College Portal
+ </h1>
+ <p class="text-center mb-4">VTU Marks Entry & Student Management</p>
+
+ <form method="post" action="{% url 'college_login' %}">
+ {% csrf_token %}
+ 
+ <div class="college-form-group">
+ <label for="username">Username</label>
+ <input type="text" id="username" name="username" required>
+ </div>
+
+ <div class="college-form-group">
+ <label for="password">Password</label>
+ <input type="password" id="password" name="password" required>
+ </div>
+
+ <button type="submit" class="college-login-btn">
+ Login
+ </button>
+ </form>
+
+ <div class="demo-credentials">
+ <h3>Demo Credentials</h3>
+ <p><strong>Username:</strong> college</p>
+ <p><strong>Password:</strong> college123</p>
+ </div>
+ </div>
+</div>
+{% endblock %}

@@ -1,0 +1,102 @@
+[
+  {
+    "feature": "CGPA",
+    "importance": 0.13950602835002876
+  },
+  {
+    "feature": "Academic_Performance",
+    "importance": 0.12422778394895348
+  },
+  {
+    "feature": "CGPA_x_Previous",
+    "importance": 0.11537464308079462
+  },
+  {
+    "feature": "Overall_Skills",
+    "importance": 0.10377997465301432
+  },
+  {
+    "feature": "CGPA_x_Technical",
+    "importance": 0.09578195936653675
+  },
+  {
+    "feature": "Practical_Experience",
+    "importance": 0.07414038094083455
+  },
+  {
+    "feature": "Previous_Semester",
+    "importance": 0.06346430574090825
+  },
+  {
+    "feature": "Technical_Skills",
+    "importance": 0.040249526297332965
+  },
+  {
+    "feature": "Programming_Skills",
+    "importance": 0.03211498416951749
+  },
+  {
+    "feature": "Communication_x_Soft",
+    "importance": 0.029219753704225665
+  },
+  {
+    "feature": "Internships",
+    "importance": 0.024526429599881692
+  },
+  {
+    "feature": "Aptitude_Score",
+    "importance": 0.023289269227459573
+  },
+  {
+    "feature": "Extracurricular_x_Communication",
+    "importance": 0.021669424477918534
+  },
+  {
+    "feature": "Aptitude_Normalized",
+    "importance": 0.020294781282330854
+  },
+  {
+    "feature": "Communication_Skills",
+    "importance": 0.019557499048578345
+  },
+  {
+    "feature": "Soft_Skills",
+    "importance": 0.013677792604437335
+  },
+  {
+    "feature": "Projects_Completed",
+    "importance": 0.01113837389468957
+  },
+  {
+    "feature": "Extracurricular_Activities",
+    "importance": 0.009993917909837604
+  },
+  {
+    "feature": "Skill_Gap",
+    "importance": 0.00972958960439473
+  },
+  {
+    "feature": "Certifications",
+    "importance": 0.008629533697199333
+  },
+  {
+    "feature": "Academic_Consistency",
+    "importance": 0.008194587809470634
+  },
+  {
+    "feature": "College_Tier",
+    "importance": 0.005607859122980465
+  },
+  {
+    "feature": "Stream_Encoded",
+    "importance": 0.0032991316801139546
+  },
+  {
+    "feature": "Backlog_Penalty",
+    "importance": 0.0014039277241001404
+  },
+  {
+    "feature": "Backlogs",
+    "importance": 0.001128542064460338
+  }
+]

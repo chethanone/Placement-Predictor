@@ -1,0 +1,494 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Analytics - Placement Portal</title>
+ 
+ <!-- Google Fonts -->
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+ 
+ <!-- Font Awesome -->
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ 
+ <style>
+ :root {
+ --purple: #6d28d9;
+ --violet: #a855f7;
+ --indigo: #4f46e5;
+ --amber: #f59e0b;
+ --slate: #334155;
+ --light-gray: #f8fafc;
+ --white: #ffffff;
+ --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+ --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+ --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+ }
+
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ }
+
+ body {
+ font-family: 'Inter', 'Poppins', sans-serif;
+ background: linear-gradient(135deg, var(--light-gray) 0%, #e0f2fe 50%, var(--light-gray) 100%);
+ color: var(--slate);
+ min-height: 100vh;
+ padding: 30px;
+ }
+
+ .container {
+ max-width: 1400px;
+ margin: 0 auto;
+ }
+
+ /* Header */
+ .header {
+ background: linear-gradient(135deg, var(--purple), var(--violet));
+ padding: 35px 40px;
+ border-radius: 20px;
+ margin-bottom: 30px;
+ box-shadow: var(--shadow-lg);
+ animation: slideDown 0.6s ease;
+ color: white;
+ position: relative;
+ overflow: hidden;
+ }
+
+ @keyframes slideDown {
+ from {
+ opacity: 0;
+ transform: translateY(-20px);
+ }
+ to {
+ opacity: 1;
+ transform: translateY(0);
+ }
+ }
+
+ .header::before {
+ content: '';
+ position: absolute;
+ top: -50%;
+ right: -10%;
+ width: 300px;
+ height: 300px;
+ background: rgba(251, 191, 36, 0.1);
+ border-radius: 50%;
+ }
+
+ .header-content {
+ position: relative;
+ z-index: 1;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ }
+
+ .header-title {
+ display: flex;
+ align-items: center;
+ gap: 15px;
+ }
+
+ .header-title i {
+ font-size: 42px;
+ color: var(--amber);
+ animation: pulse 2s infinite;
+ }
+
+ @keyframes pulse {
+ 0%, 100% { transform: scale(1); }
+ 50% { transform: scale(1.1); }
+ }
+
+ .header-title h1 {
+ font-size: 32px;
+ font-weight: 700;
+ margin-bottom: 5px;
+ }
+
+ .header-title p {
+ color: rgba(255, 255, 255, 0.9);
+ font-size: 15px;
+ }
+
+ .back-btn {
+ background: rgba(255, 255, 255, 0.2);
+ color: white;
+ text-decoration: none;
+ padding: 12px 24px;
+ border-radius: 12px;
+ font-weight: 600;
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ transition: all 0.3s ease;
+ backdrop-filter: blur(10px);
+ }
+
+ .back-btn:hover {
+ background: rgba(255, 255, 255, 0.3);
+ transform: translateX(-5px);
+ }
+
+ /* Section Cards */
+ .section-card {
+ background: white;
+ padding: 35px;
+ border-radius: 18px;
+ margin-bottom: 30px;
+ box-shadow: var(--shadow-sm);
+ animation: fadeIn 0.8s ease;
+ transition: all 0.3s ease;
+ }
+
+ @keyframes fadeIn {
+ from {
+ opacity: 0;
+ transform: translateY(20px);
+ }
+ to {
+ opacity: 1;
+ transform: translateY(0);
+ }
+ }
+
+ .section-card:hover {
+ box-shadow: var(--shadow-md);
+ }
+
+ .section-title {
+ font-size: 22px;
+ font-weight: 700;
+ color: var(--purple);
+ margin-bottom: 25px;
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ padding-bottom: 15px;
+ border-bottom: 2px solid #e2e8f0;
+ }
+
+ .section-title i {
+ color: var(--violet);
+ font-size: 24px;
+ }
+
+ /* Stats Grid */
+ .stats-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+ gap: 20px;
+ }
+
+ .stat-item {
+ background: linear-gradient(135deg, rgba(109, 40, 217, 0.05), rgba(168, 85, 247, 0.05));
+ padding: 30px 25px;
+ border-radius: 15px;
+ text-align: center;
+ transition: all 0.3s ease;
+ border: 2px solid transparent;
+ position: relative;
+ overflow: hidden;
+ }
+
+ .stat-item::before {
+ content: '';
+ position: absolute;
+ top: 0;
+ left: 0;
+ right: 0;
+ height: 4px;
+ background: linear-gradient(90deg, var(--purple), var(--violet));
+ }
+
+ .stat-item:nth-child(even)::before {
+ background: linear-gradient(90deg, var(--indigo), var(--amber));
+ }
+
+ .stat-item:hover {
+ transform: translateY(-5px);
+ border-color: var(--violet);
+ box-shadow: var(--shadow-md);
+ }
+
+ .stat-number {
+ font-size: 48px;
+ font-weight: 700;
+ background: linear-gradient(135deg, var(--purple), var(--violet));
+ -webkit-background-clip: text;
+ -webkit-text-fill-color: transparent;
+ background-clip: text;
+ margin-bottom: 10px;
+ line-height: 1;
+ }
+
+ .stat-item:nth-child(even) .stat-number {
+ background: linear-gradient(135deg, var(--indigo), var(--amber));
+ -webkit-background-clip: text;
+ -webkit-text-fill-color: transparent;
+ background-clip: text;
+ }
+
+ .stat-label {
+ color: var(--slate);
+ font-size: 14px;
+ font-weight: 600;
+ text-transform: uppercase;
+ letter-spacing: 0.5px;
+ }
+
+ /* Skills Section */
+ .skills-container {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+ gap: 25px;
+ }
+
+ .skill-card {
+ background: linear-gradient(135deg, rgba(168, 85, 247, 0.05), rgba(245, 158, 11, 0.05));
+ padding: 30px;
+ border-radius: 15px;
+ transition: all 0.3s ease;
+ }
+
+ .skill-card:hover {
+ transform: scale(1.05);
+ box-shadow: var(--shadow-md);
+ }
+
+ .skill-header {
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ margin-bottom: 20px;
+ }
+
+ .skill-icon {
+ width: 50px;
+ height: 50px;
+ border-radius: 12px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ font-size: 24px;
+ background: linear-gradient(135deg, var(--violet), var(--amber));
+ color: white;
+ }
+
+ .skill-card:nth-child(1) .skill-icon {
+ background: linear-gradient(135deg, var(--purple), var(--violet));
+ }
+
+ .skill-card:nth-child(2) .skill-icon {
+ background: linear-gradient(135deg, var(--indigo), var(--violet));
+ }
+
+ .skill-card:nth-child(3) .skill-icon {
+ background: linear-gradient(135deg, var(--amber), var(--purple));
+ }
+
+ .skill-name {
+ font-size: 18px;
+ font-weight: 600;
+ color: var(--purple);
+ }
+
+ .skill-value {
+ font-size: 42px;
+ font-weight: 700;
+ background: linear-gradient(135deg, var(--violet), var(--amber));
+ -webkit-background-clip: text;
+ -webkit-text-fill-color: transparent;
+ background-clip: text;
+ line-height: 1;
+ }
+
+ .skill-card:nth-child(1) .skill-value {
+ background: linear-gradient(135deg, var(--purple), var(--violet));
+ -webkit-background-clip: text;
+ -webkit-text-fill-color: transparent;
+ background-clip: text;
+ }
+
+ .skill-card:nth-child(2) .skill-value {
+ background: linear-gradient(135deg, var(--indigo), var(--violet));
+ -webkit-background-clip: text;
+ -webkit-text-fill-color: transparent;
+ background-clip: text;
+ }
+
+ .skill-card:nth-child(3) .skill-value {
+ background: linear-gradient(135deg, var(--amber), var(--purple));
+ -webkit-background-clip: text;
+ -webkit-text-fill-color: transparent;
+ background-clip: text;
+ }
+
+ .skill-bar {
+ height: 8px;
+ background: #e2e8f0;
+ border-radius: 10px;
+ overflow: hidden;
+ margin-top: 15px;
+ }
+
+ .skill-progress {
+ height: 100%;
+ background: linear-gradient(90deg, var(--violet), var(--amber));
+ border-radius: 10px;
+ transition: width 1s ease;
+ }
+
+ .skill-card:nth-child(1) .skill-progress {
+ background: linear-gradient(90deg, var(--purple), var(--violet));
+ }
+
+ .skill-card:nth-child(2) .skill-progress {
+ background: linear-gradient(90deg, var(--indigo), var(--violet));
+ }
+
+ .skill-card:nth-child(3) .skill-progress {
+ background: linear-gradient(90deg, var(--amber), var(--purple));
+ }
+
+ @media (max-width: 768px) {
+ body {
+ padding: 15px;
+ }
+
+ .header {
+ padding: 25px 20px;
+ }
+
+ .header-content {
+ flex-direction: column;
+ gap: 20px;
+ }
+
+ .header-title {
+ flex-direction: column;
+ text-align: center;
+ }
+
+ .header-title h1 {
+ font-size: 24px;
+ }
+
+ .stats-grid {
+ grid-template-columns: 1fr;
+ }
+
+ .skills-container {
+ grid-template-columns: 1fr;
+ }
+ }
+ </style>
+</head>
+<body>
+ <div class="container">
+ <!-- Header -->
+ <div class="header">
+ <div class="header-content">
+ <div class="header-title">
+ <i class="fas fa-chart-pie"></i>
+ <div>
+ <h1>Detailed Analytics</h1>
+ <p>Comprehensive Placement Insights & Metrics</p>
+ </div>
+ </div>
+ <a href="{% url 'tpo_dashboard' %}" class="back-btn">
+ <i class="fas fa-arrow-left"></i>
+ <span>Back to Dashboard</span>
+ </a>
+ </div>
+ </div>
+
+ <!-- CGPA Distribution -->
+ <div class="section-card">
+ <h2 class="section-title">
+ <i class="fas fa-graduation-cap"></i>
+ CGPA Distribution
+ </h2>
+ <div class="stats-grid">
+ {% for range, count in cgpa_ranges %}
+ <div class="stat-item">
+ <div class="stat-number">{{ count }}</div>
+ <p class="stat-label">{{ range }}</p>
+ </div>
+ {% endfor %}
+ </div>
+ </div>
+ 
+ <!-- Placement Probability Distribution -->
+ <div class="section-card">
+ <h2 class="section-title">
+ <i class="fas fa-percentage"></i>
+ Placement Probability Distribution
+ </h2>
+ <div class="stats-grid">
+ {% for range, count in prob_ranges %}
+ <div class="stat-item">
+ <div class="stat-number">{{ count }}</div>
+ <p class="stat-label">{{ range }}</p>
+ </div>
+ {% endfor %}
+ </div>
+ </div>
+ 
+ <!-- Average Skills -->
+ <div class="section-card">
+ <h2 class="section-title">
+ <i class="fas fa-chart-line"></i>
+ Average Skills Assessment
+ </h2>
+ <div class="skills-container">
+ <div class="skill-card">
+ <div class="skill-header">
+ <div class="skill-icon">
+ <i class="fas fa-comments"></i>
+ </div>
+ <span class="skill-name">Communication</span>
+ </div>
+ <div class="skill-value">{{ avg_communication }}/10</div>
+ <div class="skill-bar">
+ <div class="skill-progress" style="width: {{ avg_communication }}0%;"></div>
+ </div>
+ </div>
+ 
+ <div class="skill-card">
+ <div class="skill-header">
+ <div class="skill-icon">
+ <i class="fas fa-code"></i>
+ </div>
+ <span class="skill-name">Technical</span>
+ </div>
+ <div class="skill-value">{{ avg_technical }}/10</div>
+ <div class="skill-bar">
+ <div class="skill-progress" style="width: {{ avg_technical }}0%;"></div>
+ </div>
+ </div>
+ 
+ <div class="skill-card">
+ <div class="skill-header">
+ <div class="skill-icon">
+ <i class="fas fa-brain"></i>
+ </div>
+ <span class="skill-name">Aptitude</span>
+ </div>
+ <div class="skill-value">{{ avg_aptitude }}/10</div>
+ <div class="skill-bar">
+ <div class="skill-progress" style="width: {{ avg_aptitude }}0%;"></div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+</body>
+</html>

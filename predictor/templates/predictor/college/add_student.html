@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+ <title>Add Student - College Portal</title>
+ <style>
+ body { font-family: Arial; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 20px; }
+ .container { max-width: 800px; margin: 0 auto; }
+ .card { background: white; padding: 40px; border-radius: 10px; }
+ input, select { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #e0e0e0; border-radius: 5px; }
+ button { width: 100%; padding: 15px; background: #f5576c; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; }
+ label { font-weight: 600; color: #333; }
+ </style>
+</head>
+<body>
+ <div class="container">
+ <a href="{% url 'college_manage_students' %}" style="color: white;">← Back</a>
+ <div class="card">
+ <h1> Add New Student</h1>
+ <form method="POST">
+ {% csrf_token %}
+ <label>Student ID (VTU USN)</label>
+ <input type="text" name="student_id" required placeholder="e.g., 1XX21CS001">
+ 
+ <label>Name</label>
+ <input type="text" name="name" required>
+ 
+ <label>Email</label>
+ <input type="email" name="email" required>
+ 
+ <label>Phone</label>
+ <input type="text" name="phone" required>
+ 
+ <label>Branch</label>
+ <select name="branch" required>
+ {% for code, name in branches %}
+ <option value="{{ code }}">{{ name }}</option>
+ {% endfor %}
+ </select>
+ 
+ <label>Current Semester</label>
+ <select name="current_semester" required>
+ {% for sem in semesters %}
+ <option value="{{ sem }}">Semester {{ sem }}</option>
+ {% endfor %}
+ </select>
+ 
+ <label>Batch Year</label>
+ <input type="number" name="batch_year" value="{{ current_year }}" required min="2020" max="2030">
+ 
+ <label>CGPA (Optional - Direct Entry)</label>
+ <input type="number" name="cgpa" step="0.01" min="0" max="10" placeholder="Enter CGPA if available (0.00 - 10.00)">
+ <small style="color: #666; display: block; margin-top: -8px; margin-bottom: 10px;">
+ 💡 You can enter CGPA directly here, or add it later via subject marks
+ </small>
+ 
+ <button type="submit">Add Student</button>
+ </form>
+ </div>
+ </div>
+</body>
+</html>

@@ -1,0 +1,359 @@
+{% extends 'predictor/base.html' %}
+{% load static %}
+
+{% block title %}TPO Dashboard - AI Placement Predictor{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/apexcharts@3.35.0/dist/apexcharts.css">
+{% endblock %}
+
+{% block content %}
+<div class="tpo-dashboard-container">
+ <!-- Sidebar Navigation -->
+ <aside class="tpo-sidebar">
+ <div class="sidebar-header">
+ <img src="{% static 'images/college-logo.png' %}" alt="College Logo" class="sidebar-logo">
+ <h3>TPO Portal</h3>
+ </div>
+ 
+ <nav class="sidebar-nav">
+ <div class="nav-section">
+ <span class="nav-title">MAIN MENU</span>
+ <a href="{% url 'tpo_dashboard' %}" class="nav-item active">
+ <i class="fas fa-chart-line"></i>
+ <span>Dashboard</span>
+ </a>
+ <a href="{% url 'tpo_students' %}" class="nav-item">
+ <i class="fas fa-user-graduate"></i>
+ <span>Students</span>
+ </a>
+ <a href="{% url 'tpo_analytics' %}" class="nav-item">
+ <i class="fas fa-chart-bar"></i>
+ <span>Analytics</span>
+ </a>
+ <a href="{% url 'tpo_companies' %}" class="nav-item">
+ <i class="fas fa-building"></i>
+ <span>Companies</span>
+ </a>
+ </div>
+
+ <div class="nav-section">
+ <span class="nav-title">MANAGEMENT</span>
+ <a href="{% url 'tpo_data' %}" class="nav-item">
+ <i class="fas fa-database"></i>
+ <span>Manage Data</span>
+ </a>
+ <a href="{% url 'tpo_reports' %}" class="nav-item">
+ <i class="fas fa-file-alt"></i>
+ <span>Reports</span>
+ </a>
+ <a href="{% url 'tpo_mentors' %}" class="nav-item">
+ <i class="fas fa-users"></i>
+ <span>Mentorship</span>
+ </a>
+ </div>
+ </nav>
+
+ <div class="ai-assistant-widget">
+ <button class="ai-assistant-btn">
+ <i class="fas fa-robot"></i>
+ <span>Ask Placement Assistant</span>
+ </button>
+ </div>
+ </aside>
+
+ <!-- Main Content Area -->
+ <main class="tpo-main-content">
+ <!-- Top Bar -->
+ <header class="top-bar">
+ <div class="search-box">
+ <i class="fas fa-search"></i>
+ <input type="text" placeholder="Search students, departments...">
+ </div>
+ 
+ <div class="top-bar-right">
+ <div class="notifications">
+ <i class="fas fa-bell"></i>
+ <span class="notification-badge">3</span>
+ </div>
+ <div class="profile-menu">
+ <img src="{% static 'images/tpo-avatar.png' %}" alt="TPO" class="avatar">
+ <span>Dr. Smith</span>
+ <i class="fas fa-chevron-down"></i>
+ </div>
+ </div>
+ </header>
+
+ <!-- Dashboard Content -->
+ <div class="dashboard-content">
+ <!-- Summary Cards -->
+ <div class="summary-grid">
+ <div class="summary-card">
+ <div class="card-icon">
+ <i class="fas fa-percentage"></i>
+ </div>
+ <div class="card-info">
+ <h4>Overall Readiness</h4>
+ <div class="card-value">78%</div>
+ <div class="trend up">
+ <i class="fas fa-arrow-up"></i> 5% from last month
+ </div>
+ </div>
+ </div>
+
+ <div class="summary-card">
+ <div class="card-icon">
+ <i class="fas fa-user-graduate"></i>
+ </div>
+ <div class="card-info">
+ <h4>Total Students</h4>
+ <div class="card-value">1,245</div>
+ <div class="card-subtitle">Final Year Batch</div>
+ </div>
+ </div>
+
+ <div class="summary-card">
+ <div class="card-icon">
+ <i class="fas fa-building"></i>
+ </div>
+ <div class="card-info">
+ <h4>Top Department</h4>
+ <div class="card-value">CSE</div>
+ <div class="trend up">92% placement rate</div>
+ </div>
+ </div>
+
+ <div class="summary-card">
+ <div class="card-icon">
+ <i class="fas fa-briefcase"></i>
+ </div>
+ <div class="card-info">
+ <h4>Top Recruiter</h4>
+ <div class="card-value">TechCorp</div>
+ <div class="card-subtitle">45 offers</div>
+ </div>
+ </div>
+ </div>
+
+ <!-- Charts Section -->
+ <div class="charts-grid">
+ <div class="chart-card full-width">
+ <div class="card-header">
+ <h3>Department-wise Placement Probability</h3>
+ <div class="card-actions">
+ <select class="form-control">
+ <option>Last 6 Months</option>
+ <option>Last Year</option>
+ </select>
+ </div>
+ </div>
+ <div id="deptChart" class="chart-container"></div>
+ </div>
+
+ <div class="chart-card">
+ <div class="card-header">
+ <h3>Skill Distribution</h3>
+ </div>
+ <div id="skillChart" class="chart-container"></div>
+ </div>
+
+ <div class="chart-card">
+ <div class="card-header">
+ <h3>Placement Trends</h3>
+ </div>
+ <div id="trendChart" class="chart-container"></div>
+ </div>
+ </div>
+
+ <!-- AI Insights Section -->
+ <div class="insights-section">
+ <h3>AI-Powered Insights</h3>
+ <div class="insights-grid">
+ <div class="insight-card">
+ <div class="insight-icon warning">
+ <i class="fas fa-exclamation-triangle"></i>
+ </div>
+ <div class="insight-content">
+ <h4>Communication Skills Gap</h4>
+ <p>ECE department shows 25% lower communication scores compared to industry requirements.</p>
+ <button class="btn btn-outline-primary btn-sm">View Action Plan</button>
+ </div>
+ </div>
+
+ <div class="insight-card">
+ <div class="insight-icon success">
+ <i class="fas fa-chart-line"></i>
+ </div>
+ <div class="insight-content">
+ <h4>Technical Skills Improvement</h4>
+ <p>15% increase in coding assessment scores after Python workshop.</p>
+ <button class="btn btn-outline-primary btn-sm">See Details</button>
+ </div>
+ </div>
+
+ <div class="insight-card">
+ <div class="insight-icon info">
+ <i class="fas fa-lightbulb"></i>
+ </div>
+ <div class="insight-content">
+ <h4>Recommended Action</h4>
+ <p>Schedule mock interviews for 45 students with low interview confidence scores.</p>
+ <button class="btn btn-outline-primary btn-sm">Schedule Now</button>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <!-- Recent Updates -->
+ <div class="updates-section">
+ <div class="card-header">
+ <h3>Recent Updates</h3>
+ <a href="#" class="view-all">View All</a>
+ </div>
+ <div class="updates-list">
+ <div class="update-item">
+ <div class="update-icon">
+ <i class="fas fa-user-plus"></i>
+ </div>
+ <div class="update-content">
+ <h4>New Company Registration</h4>
+ <p>TechCorp added as new recruiter</p>
+ <span class="timestamp">2 hours ago</span>
+ </div>
+ </div>
+
+ <div class="update-item">
+ <div class="update-icon">
+ <i class="fas fa-file-upload"></i>
+ </div>
+ <div class="update-content">
+ <h4>Data Update</h4>
+ <p>Student records updated for CSE department</p>
+ <span class="timestamp">5 hours ago</span>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+ </main>
+</div>
+
+<!-- AI Assistant Chat Widget -->
+<div class="ai-chat-widget" style="display: none;">
+ <div class="chat-header">
+ <h4><i class="fas fa-robot"></i> AI Placement Assistant</h4>
+ <button class="close-chat"><i class="fas fa-times"></i></button>
+ </div>
+ <div class="chat-messages">
+ <!-- Messages will be dynamically added here -->
+ </div>
+ <div class="chat-input">
+ <input type="text" placeholder="Ask a question...">
+ <button><i class="fas fa-paper-plane"></i></button>
+ </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/apexcharts@3.35.0/dist/apexcharts.min.js"></script>
+<script>
+// Department-wise Placement Probability Chart
+var deptOptions = {
+ series: [{
+ name: 'Placement Probability',
+ data: [92, 85, 76, 88, 79]
+ }],
+ chart: {
+ type: 'bar',
+ height: 350,
+ toolbar: {
+ show: false
+ }
+ },
+ colors: ['#E74C3C'],
+ plotOptions: {
+ bar: {
+ borderRadius: 8,
+ columnWidth: '60%',
+ }
+ },
+ dataLabels: {
+ enabled: false
+ },
+ xaxis: {
+ categories: ['CSE', 'ECE', 'ME', 'IT', 'CE'],
+ labels: {
+ style: {
+ colors: '#2C3E50'
+ }
+ }
+ },
+ yaxis: {
+ title: {
+ text: 'Probability (%)'
+ }
+ }
+};
+
+var deptChart = new ApexCharts(document.querySelector("#deptChart"), deptOptions);
+deptChart.render();
+
+// Skill Distribution Chart
+var skillOptions = {
+ series: [75, 65, 85, 70, 60],
+ chart: {
+ type: 'polarArea',
+ height: 350
+ },
+ labels: ['Technical', 'Communication', 'Problem Solving', 'Leadership', 'Domain'],
+ colors: ['#E74C3C', '#27AE60', '#F39C12', '#3498DB', '#9B59B6'],
+ stroke: {
+ colors: ['#fff']
+ },
+ fill: {
+ opacity: 0.8
+ }
+};
+
+var skillChart = new ApexCharts(document.querySelector("#skillChart"), skillOptions);
+skillChart.render();
+
+// Placement Trends Chart
+var trendOptions = {
+ series: [{
+ name: 'Placement Rate',
+ data: [65, 72, 78, 75, 82, 88]
+ }],
+ chart: {
+ type: 'line',
+ height: 350,
+ toolbar: {
+ show: false
+ }
+ },
+ stroke: {
+ curve: 'smooth',
+ width: 3
+ },
+ colors: ['#27AE60'],
+ xaxis: {
+ categories: ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov']
+ },
+ markers: {
+ size: 5
+ }
+};
+
+var trendChart = new ApexCharts(document.querySelector("#trendChart"), trendOptions);
+trendChart.render();
+
+// AI Assistant Widget Toggle
+document.querySelector('.ai-assistant-btn').addEventListener('click', function() {
+ document.querySelector('.ai-chat-widget').style.display = 'block';
+});
+
+document.querySelector('.close-chat').addEventListener('click', function() {
+ document.querySelector('.ai-chat-widget').style.display = 'none';
+});
+</script>
+{% endblock %}

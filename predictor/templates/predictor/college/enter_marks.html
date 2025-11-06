@@ -1,0 +1,469 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Enter Marks - College Portal</title>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ <style>
+ :root {
+ --sage-green: #8FB9A8;
+ --cream: #FEFAD4;
+ --peach: #FCB9AA;
+ --rose: #F1828D;
+ --mauve: #765D69;
+ }
+ 
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ }
+ 
+ body {
+ font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+ background: linear-gradient(135deg, #e8f5f1 0%, #f5e6f3 100%);
+ min-height: 100vh;
+ padding: 30px 20px;
+ color: #2c3e50;
+ }
+ 
+ .container {
+ max-width: 1100px;
+ margin: 0 auto;
+ }
+ 
+ .back-link {
+ display: inline-flex;
+ align-items: center;
+ gap: 8px;
+ margin-bottom: 24px;
+ color: var(--mauve);
+ text-decoration: none;
+ font-size: 15px;
+ font-weight: 600;
+ padding: 10px 20px;
+ border-radius: 10px;
+ background: white;
+ box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+ transition: all 0.3s ease;
+ }
+ 
+ .back-link:hover {
+ background: var(--mauve);
+ color: white;
+ transform: translateX(-4px);
+ box-shadow: 0 4px 12px rgba(118, 93, 105, 0.3);
+ }
+ 
+ .card {
+ background: white;
+ padding: 32px;
+ border-radius: 20px;
+ margin-bottom: 28px;
+ box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+ border: 2px solid var(--cream);
+ transition: all 0.3s ease;
+ }
+ 
+ .card:hover {
+ box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+ }
+ 
+ .header-card {
+ background: linear-gradient(135deg, var(--sage-green) 0%, #6a9d88 100%);
+ color: white;
+ border: none;
+ }
+ 
+ .header-card h1 {
+ font-size: 2rem;
+ margin-bottom: 16px;
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ }
+ 
+ .student-info {
+ display: flex;
+ flex-wrap: wrap;
+ gap: 24px;
+ margin-top: 16px;
+ font-size: 15px;
+ }
+ 
+ .info-item {
+ display: flex;
+ align-items: center;
+ gap: 8px;
+ background: rgba(255, 255, 255, 0.15);
+ padding: 8px 16px;
+ border-radius: 8px;
+ backdrop-filter: blur(10px);
+ }
+ 
+ .info-item strong {
+ font-weight: 700;
+ }
+ 
+ .cgpa-badge {
+ background: rgba(255, 255, 255, 0.25);
+ padding: 12px 24px;
+ border-radius: 12px;
+ font-size: 18px;
+ font-weight: 700;
+ display: inline-block;
+ margin-top: 12px;
+ border: 2px solid rgba(255, 255, 255, 0.3);
+ }
+ 
+ h2 {
+ font-size: 1.5rem;
+ color: var(--mauve);
+ margin-bottom: 24px;
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ }
+ 
+ form {
+ display: grid;
+ gap: 20px;
+ }
+ 
+ .form-group {
+ display: flex;
+ flex-direction: column;
+ gap: 8px;
+ }
+ 
+ label {
+ font-weight: 600;
+ color: var(--mauve);
+ font-size: 14px;
+ display: flex;
+ align-items: center;
+ gap: 8px;
+ }
+ 
+ input, select {
+ width: 100%;
+ padding: 14px 16px;
+ border: 2px solid #e0e0e0;
+ border-radius: 10px;
+ font-size: 15px;
+ font-family: 'Inter', sans-serif;
+ transition: all 0.3s ease;
+ background: white;
+ }
+ 
+ input:focus, select:focus {
+ outline: none;
+ border-color: var(--sage-green);
+ box-shadow: 0 0 0 3px rgba(143, 185, 168, 0.1);
+ }
+ 
+ input:hover, select:hover {
+ border-color: var(--peach);
+ }
+ 
+ .form-row {
+ display: grid;
+ grid-template-columns: 1fr 1fr;
+ gap: 20px;
+ }
+ 
+ button {
+ padding: 16px 32px;
+ background: linear-gradient(135deg, var(--sage-green), #6a9d88);
+ color: white;
+ border: none;
+ border-radius: 12px;
+ font-size: 16px;
+ font-weight: 700;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ box-shadow: 0 4px 12px rgba(143, 185, 168, 0.3);
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ gap: 10px;
+ }
+ 
+ button:hover {
+ transform: translateY(-2px);
+ box-shadow: 0 6px 20px rgba(143, 185, 168, 0.5);
+ }
+ 
+ button:active {
+ transform: translateY(0);
+ }
+ 
+ table {
+ width: 100%;
+ border-collapse: collapse;
+ margin-top: 20px;
+ }
+ 
+ thead {
+ background: var(--cream);
+ }
+ 
+ th {
+ padding: 16px;
+ text-align: left;
+ font-weight: 700;
+ color: var(--mauve);
+ font-size: 14px;
+ text-transform: uppercase;
+ letter-spacing: 0.5px;
+ border-bottom: 2px solid var(--peach);
+ }
+ 
+ td {
+ padding: 16px;
+ border-bottom: 1px solid #e0e0e0;
+ color: #2c3e50;
+ font-size: 15px;
+ }
+ 
+ tbody tr {
+ transition: all 0.2s ease;
+ }
+ 
+ tbody tr:hover {
+ background: #f8f9fa;
+ }
+ 
+ .grade-badge {
+ display: inline-block;
+ padding: 6px 14px;
+ border-radius: 8px;
+ font-weight: 700;
+ font-size: 14px;
+ }
+ 
+ .grade-O, .grade-A { background: #d1fae5; color: #065f46; }
+ .grade-B { background: #dbeafe; color: #1e40af; }
+ .grade-C { background: #fef3c7; color: #92400e; }
+ .grade-D, .grade-F { background: #fee2e2; color: #991b1b; }
+ 
+ .empty-state {
+ text-align: center;
+ padding: 40px;
+ color: #6b7280;
+ }
+ 
+ .empty-state i {
+ font-size: 48px;
+ color: #d1d5db;
+ margin-bottom: 16px;
+ }
+ 
+ @media (max-width: 768px) {
+ .form-row {
+ grid-template-columns: 1fr;
+ }
+ 
+ .student-info {
+ flex-direction: column;
+ gap: 12px;
+ }
+ 
+ table {
+ font-size: 13px;
+ }
+ 
+ th, td {
+ padding: 10px 8px;
+ }
+ }
+ </style>
+</head>
+<body>
+ <div class="container">
+ <a href="{% url 'college_manage_students' %}" class="back-link">
+ <i class="fas fa-arrow-left"></i>
+ Back to Students
+ </a>
+ 
+ <div class="card header-card">
+ <h1>
+ <i class="fas fa-edit"></i>
+ Enter Marks - {{ student.name }}
+ </h1>
+ <div class="student-info">
+ <div class="info-item">
+ <i class="fas fa-id-card"></i>
+ <span><strong>Student ID:</strong> {{ student.student_id }}</span>
+ </div>
+ <div class="info-item">
+ <i class="fas fa-code-branch"></i>
+ <span><strong>Branch:</strong> {{ student.get_branch_display }}</span>
+ </div>
+ <div class="info-item">
+ <i class="fas fa-calendar"></i>
+ <span><strong>Semester:</strong> {{ student.current_semester }}</span>
+ </div>
+ </div>
+ <div class="cgpa-badge">
+ <i class="fas fa-star"></i>
+ Current CGPA: {{ student.cgpa|floatformat:2 }}
+ {% if student.cgpa_manually_entered %}
+ <span style="color: #fef3c7; font-size: 0.9em; margin-left: 10px;">
+ <i class="fas fa-keyboard"></i> Manually Entered
+ </span>
+ {% else %}
+ <span style="color: #dbeafe; font-size: 0.9em; margin-left: 10px;">
+ <i class="fas fa-calculator"></i> Calculated from Marks
+ </span>
+ {% endif %}
+ </div>
+ </div>
+ 
+ <!-- CGPA Mode Toggle Card -->
+ <div class="card" style="background: linear-gradient(135deg, #fff7ed 0%, #fef3c7 100%); border-color: var(--peach);">
+ <h2 style="color: #92400e;">
+ <i class="fas fa-cog"></i>
+ CGPA Management Options
+ </h2>
+ <p style="margin-bottom: 20px; color: #78350f;">
+ Choose how you want to manage this student's CGPA:
+ </p>
+ 
+ {% if student.cgpa_manually_entered %}
+ <div style="background: white; padding: 20px; border-radius: 12px; border: 2px solid var(--peach); margin-bottom: 15px;">
+ <p style="color: #92400e; margin-bottom: 15px;">
+ <i class="fas fa-info-circle"></i>
+ <strong>Current Mode:</strong> Manual CGPA Entry ({{ student.cgpa }})
+ </p>
+ <form method="POST" action="{% url 'switch_cgpa_mode' student.student_id %}" style="display: inline;">
+ {% csrf_token %}
+ <input type="hidden" name="mode" value="calculated">
+ <button type="submit" style="background: linear-gradient(135deg, #2196F3, #1976D2);">
+ <i class="fas fa-calculator"></i>
+ Switch to Calculated Mode (from marks)
+ </button>
+ </form>
+ <small style="display: block; margin-top: 10px; color: #666;">
+ This will recalculate CGPA based on entered subject marks
+ </small>
+ </div>
+ {% else %}
+ <div style="background: white; padding: 20px; border-radius: 12px; border: 2px solid var(--sage-green); margin-bottom: 15px;">
+ <p style="color: #065f46; margin-bottom: 15px;">
+ <i class="fas fa-info-circle"></i>
+ <strong>Current Mode:</strong> Calculated from Marks ({{ student.cgpa }})
+ </p>
+ <p style="margin-bottom: 15px; color: #666; font-size: 14px;">
+ Enter CGPA directly if you don't want to use calculated value:
+ </p>
+ <form method="POST" action="{% url 'switch_cgpa_mode' student.student_id %}">
+ {% csrf_token %}
+ <div style="display: flex; gap: 15px; align-items: flex-end;">
+ <div class="form-group" style="flex: 1; margin: 0;">
+ <label>
+ <i class="fas fa-keyboard"></i>
+ Enter CGPA Manually (0.00 - 10.00)
+ </label>
+ <input type="number" name="manual_cgpa" step="0.01" min="0" max="10" value="{{ student.cgpa }}" required>
+ </div>
+ <button type="submit" style="background: linear-gradient(135deg, #4CAF50, #388E3C); margin: 0;">
+ <i class="fas fa-check"></i>
+ Set Manual CGPA
+ </button>
+ </div>
+ </form>
+ <small style="display: block; margin-top: 10px; color: #666;">
+ This will disable automatic CGPA calculation from marks
+ </small>
+ </div>
+ {% endif %}
+ </div>
+ 
+ <div class="card">
+ <h2>
+ <i class="fas fa-plus-circle"></i>
+ Add New Marks
+ </h2>
+ <form method="POST">
+ {% csrf_token %}
+ <div class="form-group">
+ <label>
+ <i class="fas fa-book"></i>
+ Subject
+ </label>
+ <select name="subject" required>
+ <option value="">Select a subject...</option>
+ {% for subj in subjects %}
+ <option value="{{ subj.id }}">{{ subj.subject_code }} - {{ subj.subject_name }} ({{ subj.credits }} credits)</option>
+ {% endfor %}
+ </select>
+ </div>
+ 
+ <div class="form-row">
+ <div class="form-group">
+ <label>
+ <i class="fas fa-file-alt"></i>
+ Internal Marks (0-50)
+ </label>
+ <input type="number" name="internal_marks" min="0" max="50" placeholder="Enter internal marks" required>
+ </div>
+ 
+ <div class="form-group">
+ <label>
+ <i class="fas fa-file-signature"></i>
+ External Marks (0-100)
+ </label>
+ <input type="number" name="external_marks" min="0" max="100" placeholder="Enter external marks" required>
+ </div>
+ </div>
+ 
+ <button type="submit">
+ <i class="fas fa-save"></i>
+ Submit Marks
+ </button>
+ </form>
+ </div>
+ 
+ <div class="card">
+ <h2>
+ <i class="fas fa-list"></i>
+ Existing Marks
+ </h2>
+ {% if existing_marks %}
+ <table>
+ <thead>
+ <tr>
+ <th><i class="fas fa-book"></i> Subject</th>
+ <th><i class="fas fa-file-alt"></i> Internal</th>
+ <th><i class="fas fa-file-signature"></i> External</th>
+ <th><i class="fas fa-calculator"></i> Total</th>
+ <th><i class="fas fa-award"></i> Grade</th>
+ </tr>
+ </thead>
+ <tbody>
+ {% for mark in existing_marks %}
+ <tr>
+ <td><strong>{{ mark.subject.subject_name }}</strong></td>
+ <td>{{ mark.internal_marks }}/50</td>
+ <td>{{ mark.external_marks }}/100</td>
+ <td><strong>{{ mark.total_marks }}/150</strong></td>
+ <td><span class="grade-badge grade-{{ mark.grade }}">{{ mark.grade }}</span></td>
+ </tr>
+ {% endfor %}
+ </tbody>
+ </table>
+ {% else %}
+ <div class="empty-state">
+ <i class="fas fa-inbox"></i>
+ <h3>No marks entered yet</h3>
+ <p>Add marks using the form above to see them here.</p>
+ </div>
+ {% endif %}
+ </div>
+ </div>
+</body>
+</html>

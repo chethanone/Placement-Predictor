@@ -1,0 +1,69 @@
+# Placement Predictor Configuration
+
+# Data paths
+data:
+  raw_path: "data/raw/placement_data.csv"
+  processed_path: "data/processed/placement_data_processed.csv"
+  featured_path: "data/processed/placement_data_featured.csv"
+
+# Model paths
+model:
+  save_path: "models/best_model.pkl"
+  metadata_path: "models/best_model_metadata.json"
+  results_path: "models/training_results.json"
+
+# Target column
+# Update this to match your dataset's target column name
+target_column: "Placement"  # e.g., "placed", "status", "placement_status"
+
+# Preprocessing settings
+preprocessing:
+  handle_outliers: true
+  outlier_method: "iqr"  # Options: "iqr", "zscore"
+  outlier_threshold: 1.5
+  encoding_type: "label"  # Options: "label", "onehot"
+  scaling_method: "standard"  # Options: "standard", "minmax"
+  missing_numeric_strategy: "mean"  # Options: "mean", "median", "constant"
+  missing_categorical_strategy: "most_frequent"  # Options: "most_frequent", "constant"
+
+# Feature engineering settings
+feature_engineering:
+  create_academic_features: true
+  create_interactions: true
+  create_polynomial: false
+  create_binning: false
+  apply_feature_selection: true
+  selection_method: "importance"  # Options: "importance", "f_classif", "chi2", "mutual_info"
+  n_features_to_select: 15
+
+# Model training settings
+training:
+  test_size: 0.2
+  random_state: 42
+  cross_validation_folds: 5
+  
+  # Models to train (set to false to skip)
+  models:
+    logistic_regression: true
+    decision_tree: true
+    random_forest: true
+    gradient_boosting: true
+    adaboost: true
+    svm: true
+    knn: true
+    naive_bayes: true
+
+# Hyperparameter tuning
+hyperparameter_tuning:
+  enabled: true
+  method: "grid_search"  # Options: "grid_search", "random_search"
+  
+  random_forest:
+    n_estimators: [100, 200]
+    max_depth: [10, 20, null]
+    min_samples_split: [2, 5]
+  
+  gradient_boosting:
+    n_estimators: [100, 200]
+    learning_rate: [0.01, 0.1]
+    max_depth: [3, 5]

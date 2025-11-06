@@ -1,0 +1,548 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Student Records - TPO Portal</title>
+ 
+ <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ 
+ <style>
+ :root {
+ --purple: #6d28d9;
+ --violet: #a855f7;
+ --indigo: #4f46e5;
+ --amber: #f59e0b;
+ --slate: #334155;
+ --light-gray: #f8fafc;
+ }
+
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ }
+
+ body {
+ font-family: 'Inter', sans-serif;
+ background: linear-gradient(135deg, var(--light-gray) 0%, #ede9fe 50%, var(--light-gray) 100%);
+ color: var(--slate);
+ padding: 30px;
+ }
+
+ .container {
+ max-width: 1600px;
+ margin: 0 auto;
+ }
+
+ .header {
+ background: linear-gradient(135deg, var(--purple), var(--violet));
+ padding: 30px 40px;
+ border-radius: 18px;
+ margin-bottom: 25px;
+ color: white;
+ box-shadow: 0 8px 32px rgba(109, 40, 217, 0.16);
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ }
+
+ .header h1 {
+ font-size: 28px;
+ font-weight: 700;
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ }
+
+ .btn {
+ padding: 10px 20px;
+ border-radius: 10px;
+ border: none;
+ font-weight: 600;
+ font-size: 14px;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ display: inline-flex;
+ align-items: center;
+ gap: 8px;
+ text-decoration: none;
+ }
+
+ .btn-primary {
+ background: white;
+ color: var(--purple);
+ }
+
+ .btn-primary:hover {
+ transform: translateY(-2px);
+ box-shadow: 0 8px 20px rgba(255, 255, 255, 0.3);
+ }
+
+ .filters-card {
+ background: white;
+ padding: 25px;
+ border-radius: 18px;
+ margin-bottom: 25px;
+ box-shadow: 0 2px 8px rgba(109, 40, 217, 0.08);
+ }
+
+ .filters-header {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ margin-bottom: 20px;
+ padding-bottom: 15px;
+ border-bottom: 2px solid #e2e8f0;
+ }
+
+ .filters-title {
+ font-size: 18px;
+ font-weight: 700;
+ color: var(--purple);
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ }
+
+ .filters-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+ gap: 15px;
+ margin-bottom: 20px;
+ }
+
+ .form-group {
+ display: flex;
+ flex-direction: column;
+ gap: 6px;
+ }
+
+ .form-group label {
+ font-size: 13px;
+ font-weight: 600;
+ color: var(--slate);
+ text-transform: uppercase;
+ letter-spacing: 0.5px;
+ }
+
+ .form-group input,
+ .form-group select {
+ padding: 10px 14px;
+ border: 2px solid #e2e8f0;
+ border-radius: 10px;
+ font-size: 14px;
+ font-family: 'Inter', sans-serif;
+ transition: all 0.3s ease;
+ }
+
+ .form-group input:focus,
+ .form-group select:focus {
+ outline: none;
+ border-color: var(--purple);
+ box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.1);
+ }
+
+ .filter-actions {
+ display: flex;
+ gap: 10px;
+ justify-content: flex-end;
+ }
+
+ .btn-filter {
+ background: linear-gradient(135deg, var(--purple), var(--violet));
+ color: white;
+ }
+
+ .btn-reset {
+ background: #e2e8f0;
+ color: var(--slate);
+ }
+
+ .stats-bar {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ background: white;
+ padding: 20px 25px;
+ border-radius: 18px;
+ margin-bottom: 25px;
+ box-shadow: 0 2px 8px rgba(109, 40, 217, 0.08);
+ }
+
+ .stat-item {
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ }
+
+ .stat-icon {
+ width: 45px;
+ height: 45px;
+ border-radius: 12px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ font-size: 20px;
+ background: linear-gradient(135deg, var(--purple), var(--violet));
+ color: white;
+ }
+
+ .stat-info h3 {
+ font-size: 24px;
+ font-weight: 700;
+ color: var(--purple);
+ }
+
+ .stat-info p {
+ font-size: 13px;
+ color: var(--slate);
+ font-weight: 600;
+ }
+
+ .table-card {
+ background: white;
+ padding: 25px;
+ border-radius: 18px;
+ box-shadow: 0 2px 8px rgba(109, 40, 217, 0.08);
+ margin-bottom: 25px;
+ }
+
+ table {
+ width: 100%;
+ border-collapse: collapse;
+ }
+
+ thead th {
+ text-align: left;
+ padding: 15px;
+ color: var(--purple);
+ font-weight: 600;
+ font-size: 13px;
+ text-transform: uppercase;
+ letter-spacing: 0.5px;
+ border-bottom: 2px solid #e2e8f0;
+ position: sticky;
+ top: 0;
+ background: white;
+ }
+
+ tbody tr {
+ border-bottom: 1px solid #f1f5f9;
+ transition: all 0.2s ease;
+ cursor: pointer;
+ }
+
+ tbody tr:hover {
+ background: rgba(109, 40, 217, 0.05);
+ transform: scale(1.01);
+ }
+
+ tbody td {
+ padding: 18px 15px;
+ color: var(--slate);
+ font-size: 14px;
+ }
+
+ .badge {
+ display: inline-block;
+ padding: 6px 12px;
+ border-radius: 20px;
+ font-weight: 600;
+ font-size: 12px;
+ }
+
+ .badge-excellent {
+ background: rgba(16, 185, 129, 0.1);
+ color: #059669;
+ }
+
+ .badge-good {
+ background: rgba(59, 130, 246, 0.1);
+ color: #2563eb;
+ }
+
+ .badge-average {
+ background: rgba(245, 158, 11, 0.1);
+ color: #d97706;
+ }
+
+ .badge-needs-improvement {
+ background: rgba(239, 68, 68, 0.1);
+ color: #dc2626;
+ }
+
+ .score-bar {
+ width: 100px;
+ height: 8px;
+ background: #e2e8f0;
+ border-radius: 10px;
+ overflow: hidden;
+ position: relative;
+ }
+
+ .score-fill {
+ height: 100%;
+ background: linear-gradient(90deg, var(--purple), var(--violet));
+ border-radius: 10px;
+ transition: width 0.5s ease;
+ }
+
+ .pagination {
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ gap: 10px;
+ margin-top: 25px;
+ }
+
+ .pagination a,
+ .pagination span {
+ padding: 10px 16px;
+ border-radius: 10px;
+ background: white;
+ color: var(--purple);
+ text-decoration: none;
+ font-weight: 600;
+ transition: all 0.3s ease;
+ }
+
+ .pagination a:hover {
+ background: var(--purple);
+ color: white;
+ }
+
+ .pagination .current {
+ background: linear-gradient(135deg, var(--purple), var(--violet));
+ color: white;
+ }
+
+ .no-data {
+ text-align: center;
+ padding: 60px 20px;
+ color: #94a3b8;
+ }
+
+ .no-data i {
+ font-size: 64px;
+ color: var(--violet);
+ margin-bottom: 20px;
+ }
+ </style>
+</head>
+<body>
+ <div class="container">
+ <div class="header">
+ <h1>
+ <i class="fas fa-users"></i>
+ Student Records
+ </h1>
+ <div style="display: flex; gap: 10px;">
+ <a href="{% url 'export_student_data' %}" class="btn btn-primary">
+ <i class="fas fa-download"></i>
+ Export CSV
+ </a>
+ <a href="{% url 'tpo_dashboard' %}" class="btn btn-primary">
+ <i class="fas fa-arrow-left"></i>
+ Back to Dashboard
+ </a>
+ </div>
+ </div>
+
+ <!-- Filters -->
+ <div class="filters-card">
+ <div class="filters-header">
+ <h3 class="filters-title">
+ <i class="fas fa-filter"></i>
+ Filters & Search
+ </h3>
+ </div>
+ <form method="get" action="{% url 'student_list' %}">
+ <div class="filters-grid">
+ <div class="form-group">
+ <label>Search</label>
+ <input type="text" name="search" value="{{ filters.search }}" placeholder="ID, Name, Email...">
+ </div>
+ <div class="form-group">
+ <label>Branch</label>
+ <select name="branch">
+ <option value="">All Branches</option>
+ {% for branch in branches %}
+ <option value="{{ branch.code }}" {% if filters.branch == branch.code %}selected{% endif %}>
+ {{ branch.name }}
+ </option>
+ {% endfor %}
+ </select>
+ </div>
+ <div class="form-group">
+ <label>Semester</label>
+ <select name="semester">
+ <option value="">All Semesters</option>
+ {% for i in "12345678" %}
+ <option value="{{ i }}" {% if filters.semester == i %}selected{% endif %}>Semester {{ i }}</option>
+ {% endfor %}
+ </select>
+ </div>
+ <div class="form-group">
+ <label>Min CGPA</label>
+ <input type="number" name="min_cgpa" value="{{ filters.min_cgpa }}" step="0.1" min="0" max="10" placeholder="0.0">
+ </div>
+ <div class="form-group">
+ <label>Max CGPA</label>
+ <input type="number" name="max_cgpa" value="{{ filters.max_cgpa }}" step="0.1" min="0" max="10" placeholder="10.0">
+ </div>
+ <div class="form-group">
+ <label>Min Employability</label>
+ <input type="number" name="employability_min" value="{{ filters.employability_min }}" min="0" max="100" placeholder="0">
+ </div>
+ <div class="form-group">
+ <label>Max Employability</label>
+ <input type="number" name="employability_max" value="{{ filters.employability_max }}" min="0" max="100" placeholder="100">
+ </div>
+ <div class="form-group">
+ <label>Placement Readiness</label>
+ <select name="placement_readiness">
+ <option value="">All Levels</option>
+ <option value="excellent" {% if filters.placement_readiness == 'excellent' %}selected{% endif %}>Excellent (90-100%)</option>
+ <option value="good" {% if filters.placement_readiness == 'good' %}selected{% endif %}>Good (70-89%)</option>
+ <option value="average" {% if filters.placement_readiness == 'average' %}selected{% endif %}>Average (50-69%)</option>
+ <option value="needs_improvement" {% if filters.placement_readiness == 'needs_improvement' %}selected{% endif %}>Needs Improvement</option>
+ </select>
+ </div>
+ </div>
+ <div class="filter-actions">
+ <button type="submit" class="btn btn-filter">
+ <i class="fas fa-search"></i>
+ Apply Filters
+ </button>
+ <a href="{% url 'student_list' %}" class="btn btn-reset">
+ <i class="fas fa-redo"></i>
+ Reset
+ </a>
+ </div>
+ </form>
+ </div>
+
+ <!-- Stats Bar -->
+ <div class="stats-bar">
+ <div class="stat-item">
+ <div class="stat-icon">
+ <i class="fas fa-users"></i>
+ </div>
+ <div class="stat-info">
+ <h3>{{ total_count }}</h3>
+ <p>Total Students</p>
+ </div>
+ </div>
+ <div class="stat-item">
+ <div class="stat-icon">
+ <i class="fas fa-filter"></i>
+ </div>
+ <div class="stat-info">
+ <h3>{{ page_obj.paginator.count }}</h3>
+ <p>Filtered Results</p>
+ </div>
+ </div>
+ </div>
+
+ <!-- Table -->
+ <div class="table-card">
+ {% if page_obj %}
+ <table>
+ <thead>
+ <tr>
+ <th>Student ID</th>
+ <th>Name</th>
+ <th>Branch</th>
+ <th>Semester</th>
+ <th>CGPA</th>
+ <th>Employability</th>
+ <th>Placement Chance</th>
+ <th>Status</th>
+ <th>Action</th>
+ </tr>
+ </thead>
+ <tbody>
+ {% for item in page_obj %}
+ <tr onclick="window.location.href='{% url 'student_detail' item.student.student_id %}'">
+ <td><strong style="color: var(--purple);">{{ item.student.student_id }}</strong></td>
+ <td>{{ item.student.name }}</td>
+ <td>{{ item.student.get_branch_display }}</td>
+ <td>{{ item.student.current_semester }}</td>
+ <td><strong>{{ item.student.cgpa }}</strong></td>
+ <td>
+ {% if item.employability %}
+ <div style="display: flex; align-items: center; gap: 10px;">
+ <strong style="min-width: 45px;">{{ item.employability.overall_employability|floatformat:1 }}%</strong>
+ <div class="score-bar">
+ <div class="score-fill" style="width: {{ item.employability.overall_employability }}%;"></div>
+ </div>
+ </div>
+ {% else %}
+ <span style="color: #94a3b8;">N/A</span>
+ {% endif %}
+ </td>
+ <td><strong style="color: var(--indigo);">{{ item.placement_probability|floatformat:1 }}%</strong></td>
+ <td>
+ {% if item.employability %}
+ {% if item.employability.placement_readiness == 'excellent' %}
+ <span class="badge badge-excellent">Excellent</span>
+ {% elif item.employability.placement_readiness == 'good' %}
+ <span class="badge badge-good">Good</span>
+ {% elif item.employability.placement_readiness == 'average' %}
+ <span class="badge badge-average">Average</span>
+ {% else %}
+ <span class="badge badge-needs-improvement">Needs Work</span>
+ {% endif %}
+ {% else %}
+ <span class="badge badge-average">Not Assessed</span>
+ {% endif %}
+ </td>
+ <td>
+ <a href="{% url 'student_detail' item.student.student_id %}" class="btn" style="padding: 6px 12px; font-size: 12px; background: linear-gradient(135deg, var(--purple), var(--violet)); color: white;" onclick="event.stopPropagation();">
+ <i class="fas fa-eye"></i>
+ View
+ </a>
+ </td>
+ </tr>
+ {% endfor %}
+ </tbody>
+ </table>
+
+ <!-- Pagination -->
+ {% if page_obj.has_other_pages %}
+ <div class="pagination">
+ {% if page_obj.has_previous %}
+ <a href="?page=1{% for key, value in filters.items %}&{{ key }}={{ value }}{% endfor %}">
+ <i class="fas fa-angle-double-left"></i>
+ </a>
+ <a href="?page={{ page_obj.previous_page_number }}{% for key, value in filters.items %}&{{ key }}={{ value }}{% endfor %}">
+ <i class="fas fa-angle-left"></i>
+ </a>
+ {% endif %}
+
+ <span class="current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+ {% if page_obj.has_next %}
+ <a href="?page={{ page_obj.next_page_number }}{% for key, value in filters.items %}&{{ key }}={{ value }}{% endfor %}">
+ <i class="fas fa-angle-right"></i>
+ </a>
+ <a href="?page={{ page_obj.paginator.num_pages }}{% for key, value in filters.items %}&{{ key }}={{ value }}{% endfor %}">
+ <i class="fas fa-angle-double-right"></i>
+ </a>
+ {% endif %}
+ </div>
+ {% endif %}
+ {% else %}
+ <div class="no-data">
+ <i class="fas fa-users-slash"></i>
+ <p style="font-size: 18px; margin-bottom: 10px; font-weight: 600;">No students found</p>
+ <small>Try adjusting your filters or add new students</small>
+ </div>
+ {% endif %}
+ </div>
+ </div>
+</body>
+</html>

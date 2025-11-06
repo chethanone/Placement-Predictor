@@ -1,0 +1,453 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Student Portal - AI Placement Predictor</title>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ <style>
+ :root {
+ --sage-green: #8FB9A8;
+ --cream: #FEFAD4;
+ --peach: #FCB9AA;
+ --rose: #F1828D;
+ --mauve: #765D69;
+ }
+ 
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ }
+
+ body {
+ font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+ background: linear-gradient(135deg, #f5f7fa 0%, #e8eef5 100%);
+ min-height: 100vh;
+ color: #333;
+ overflow-x: hidden;
+ padding: 20px;
+ }
+
+ .container {
+ max-width: 1200px;
+ margin: 0 auto;
+ animation: fadeIn 0.6s ease-out;
+ }
+ 
+ @keyframes fadeIn {
+ from {
+ opacity: 0;
+ transform: translateY(20px);
+ }
+ to {
+ opacity: 1;
+ transform: translateY(0);
+ }
+ }
+ 
+ .back-link {
+ display: inline-flex;
+ align-items: center;
+ gap: 8px;
+ margin-bottom: 24px;
+ color: var(--mauve);
+ text-decoration: none;
+ font-size: 15px;
+ font-weight: 600;
+ padding: 10px 20px;
+ border-radius: 10px;
+ background: white;
+ box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+ transition: all 0.3s ease;
+ }
+
+ .back-link:hover {
+ background: var(--mauve);
+ color: white;
+ transform: translateX(-4px);
+ box-shadow: 0 4px 12px rgba(118, 93, 105, 0.3);
+ }
+
+ .header {
+ background: linear-gradient(135deg, var(--sage-green) 0%, #6a9d88 100%);
+ padding: 40px;
+ border-radius: 24px;
+ margin-bottom: 32px;
+ box-shadow: 0 15px 40px rgba(143, 185, 168, 0.3);
+ position: relative;
+ overflow: hidden;
+ }
+ 
+ .header::before {
+ content: '';
+ position: absolute;
+ width: 300px;
+ height: 300px;
+ background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%);
+ border-radius: 50%;
+ top: -100px;
+ right: -100px;
+ animation: float 15s ease-in-out infinite;
+ }
+ 
+ @keyframes float {
+ 0%, 100% { transform: translate(0, 0); }
+ 50% { transform: translate(-20px, -20px); }
+ }
+ 
+ .header-content {
+ position: relative;
+ z-index: 1;
+ }
+ 
+ .header-icon {
+ width: 80px;
+ height: 80px;
+ background: rgba(255, 255, 255, 0.2);
+ border-radius: 50%;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ font-size: 2.5rem;
+ margin-bottom: 20px;
+ backdrop-filter: blur(10px);
+ }
+
+ .header h1 {
+ color: white;
+ margin-bottom: 12px;
+ font-size: 2.2rem;
+ font-weight: 700;
+ letter-spacing: -0.5px;
+ }
+
+ .header p {
+ color: rgba(255, 255, 255, 0.95);
+ font-size: 1.05rem;
+ line-height: 1.6;
+ margin-bottom: 16px;
+ }
+
+ .badge {
+ display: inline-flex;
+ align-items: center;
+ gap: 8px;
+ background: rgba(255, 255, 255, 0.25);
+ color: white;
+ padding: 8px 18px;
+ border-radius: 20px;
+ font-size: 14px;
+ font-weight: 600;
+ backdrop-filter: blur(10px);
+ border: 1px solid rgba(255, 255, 255, 0.3);
+ }
+
+ .info-box {
+ background: white;
+ padding: 28px 32px;
+ border-radius: 20px;
+ margin-bottom: 32px;
+ border-left: 5px solid var(--peach);
+ box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+ transition: all 0.3s ease;
+ }
+ 
+ .info-box:hover {
+ transform: translateY(-4px);
+ box-shadow: 0 12px 32px rgba(0,0,0,0.12);
+ }
+
+ .info-box h3 {
+ color: var(--mauve);
+ margin-bottom: 16px;
+ font-size: 1.3rem;
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ }
+
+ .info-box ul {
+ list-style: none;
+ padding-left: 0;
+ }
+
+ .info-box li {
+ padding: 10px 0;
+ color: #555;
+ font-size: 0.95rem;
+ display: flex;
+ align-items: flex-start;
+ gap: 12px;
+ }
+
+ .info-box li::before {
+ content: "";
+ width: 20px;
+ height: 20px;
+ background: var(--sage-green);
+ border-radius: 50%;
+ flex-shrink: 0;
+ margin-top: 2px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ font-size: 12px;
+ color: white;
+ font-weight: bold;
+ }
+ 
+ .info-box li::before {
+ content: "";
+ }
+
+ .features-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+ gap: 28px;
+ margin-top: 32px;
+ }
+
+ .feature-card {
+ background: white;
+ padding: 36px;
+ border-radius: 24px;
+ box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+ transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+ cursor: pointer;
+ position: relative;
+ overflow: hidden;
+ border: 2px solid transparent;
+ }
+ 
+ .feature-card::before {
+ content: '';
+ position: absolute;
+ top: 0;
+ left: 0;
+ right: 0;
+ height: 4px;
+ background: linear-gradient(90deg, var(--sage-green), var(--peach));
+ transform: scaleX(0);
+ transition: transform 0.4s ease;
+ }
+
+ .feature-card:hover {
+ transform: translateY(-8px);
+ box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+ border-color: var(--sage-green);
+ }
+ 
+ .feature-card:hover::before {
+ transform: scaleX(1);
+ }
+ 
+ .feature-card:nth-child(1):hover {
+ border-color: var(--rose);
+ }
+ 
+ .feature-card:nth-child(2):hover {
+ border-color: var(--peach);
+ }
+ 
+ .feature-card:nth-child(3):hover {
+ border-color: var(--sage-green);
+ }
+
+ .feature-icon {
+ width: 80px;
+ height: 80px;
+ border-radius: 20px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ font-size: 2.5rem;
+ margin-bottom: 24px;
+ transition: all 0.3s ease;
+ }
+ 
+ .feature-card:nth-child(1) .feature-icon {
+ background: linear-gradient(135deg, var(--rose), #e06b76);
+ box-shadow: 0 8px 20px rgba(241, 130, 141, 0.3);
+ }
+ 
+ .feature-card:nth-child(2) .feature-icon {
+ background: linear-gradient(135deg, var(--peach), #faa599);
+ box-shadow: 0 8px 20px rgba(252, 185, 170, 0.3);
+ }
+ 
+ .feature-card:nth-child(3) .feature-icon {
+ background: linear-gradient(135deg, var(--sage-green), #6a9d88);
+ box-shadow: 0 8px 20px rgba(143, 185, 168, 0.3);
+ }
+ 
+ .feature-card:hover .feature-icon {
+ transform: scale(1.1) rotate(5deg);
+ }
+
+ .feature-card h2 {
+ color: var(--mauve);
+ margin-bottom: 14px;
+ font-size: 1.5rem;
+ font-weight: 700;
+ }
+
+ .feature-card p {
+ color: #666;
+ line-height: 1.7;
+ margin-bottom: 24px;
+ font-size: 0.95rem;
+ }
+
+ .btn {
+ display: inline-flex;
+ align-items: center;
+ gap: 10px;
+ padding: 14px 28px;
+ background: linear-gradient(135deg, var(--sage-green), #6a9d88);
+ color: white;
+ text-decoration: none;
+ border-radius: 12px;
+ font-weight: 600;
+ font-size: 0.95rem;
+ transition: all 0.3s ease;
+ box-shadow: 0 4px 12px rgba(143, 185, 168, 0.3);
+ position: relative;
+ overflow: hidden;
+ }
+ 
+ .btn::before {
+ content: '';
+ position: absolute;
+ top: 0;
+ left: -100%;
+ width: 100%;
+ height: 100%;
+ background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+ transition: left 0.5s ease;
+ }
+ 
+ .btn:hover::before {
+ left: 100%;
+ }
+
+ .btn:hover {
+ transform: translateY(-2px);
+ box-shadow: 0 6px 20px rgba(143, 185, 168, 0.5);
+ gap: 14px;
+ }
+ 
+ .feature-card:nth-child(1) .btn {
+ background: linear-gradient(135deg, var(--rose), #e06b76);
+ box-shadow: 0 4px 12px rgba(241, 130, 141, 0.3);
+ }
+ 
+ .feature-card:nth-child(1) .btn:hover {
+ box-shadow: 0 6px 20px rgba(241, 130, 141, 0.5);
+ }
+ 
+ .feature-card:nth-child(2) .btn {
+ background: linear-gradient(135deg, var(--peach), #faa599);
+ box-shadow: 0 4px 12px rgba(252, 185, 170, 0.3);
+ }
+ 
+ .feature-card:nth-child(2) .btn:hover {
+ box-shadow: 0 6px 20px rgba(252, 185, 170, 0.5);
+ }
+ 
+ @media (max-width: 768px) {
+ .header {
+ padding: 30px 24px;
+ }
+ 
+ .header h1 {
+ font-size: 1.8rem;
+ }
+ 
+ .features-grid {
+ grid-template-columns: 1fr;
+ }
+ 
+ .feature-card {
+ padding: 28px;
+ }
+ }
+ </style>
+</head>
+<body>
+ <div class="container">
+ <a href="{% url 'landing' %}" class="back-link">
+ <i class="fas fa-arrow-left"></i>
+ Back to Home
+ </a>
+ 
+ <div class="header">
+ <div class="header-content">
+ <div class="header-icon"></div>
+ <h1>Student Portal</h1>
+ <p>Welcome to the Student Portal - Your gateway to placement predictions and skill assessments</p>
+ <span class="badge">
+ <i class="fas fa-check-circle"></i>
+ No Login Required
+ </span>
+ </div>
+ </div>
+
+ <div class="info-box">
+ <h3><i class="fas fa-info-circle" style="color: var(--peach);"></i> How to Use the Student Portal</h3>
+ <ul>
+ <li><i class="fas fa-id-card" style="color: var(--sage);"></i> Enter your Student ID provided by your college</li>
+ <li><i class="fas fa-robot" style="color: var(--sage);"></i> Get AI-powered placement probability predictions</li>
+ <li><i class="fas fa-file-upload" style="color: var(--sage);"></i> Upload PDF/PPT documents to generate quizzes</li>
+ <li><i class="fas fa-clipboard-check" style="color: var(--sage);"></i> Take quizzes and receive personalized recommendations</li>
+ <li><i class="fas fa-chart-line" style="color: var(--sage);"></i> Track your progress and improve your skills</li>
+ </ul>
+ </div>
+
+ <div class="features-grid">
+ <div class="feature-card" onclick="window.location.href='{% url 'student_predict' %}'">
+ <div class="feature-icon"></div>
+ <h2>Placement Prediction</h2>
+ <p>Get AI-powered predictions about your placement probability based on your academic performance, skills, and experience.</p>
+ <a href="{% url 'student_predict' %}" class="btn">
+ <span>Start Prediction</span>
+ <i class="fas fa-arrow-right"></i>
+ </a>
+ </div>
+
+ <div class="feature-card" onclick="window.location.href='{% url 'student_quiz_upload' %}'">
+ <div class="feature-icon"></div>
+ <h2>Upload & Quiz</h2>
+ <p>Upload PDF or PowerPoint files and get automatically generated quizzes with 25 questions to test your knowledge.</p>
+ <a href="{% url 'student_quiz_upload' %}" class="btn">
+ <span>Upload Document</span>
+ <i class="fas fa-arrow-right"></i>
+ </a>
+ </div>
+
+ <div class="feature-card" onclick="window.location.href='{% url 'student_results' %}'">
+ <div class="feature-icon"></div>
+ <h2>View Results</h2>
+ <p>Check your quiz scores, placement predictions, and receive personalized book recommendations to improve.</p>
+ <a href="{% url 'student_results' %}" class="btn">
+ <span>View Results</span>
+ <i class="fas fa-arrow-right"></i>
+ </a>
+ </div>
+ </div>
+
+ <div class="info-box" style="margin-top: 32px; border-left-color: var(--sage-green);">
+ <h3><i class="fas fa-lightbulb" style="color: var(--sage-green);"></i> Tips for Best Results</h3>
+ <ul>
+ <li>Ensure your Student ID is correct and registered with your college</li>
+ <li>Provide accurate information for better placement predictions</li>
+ <li>Upload clear, well-formatted PDF or PPT files for quiz generation</li>
+ <li>Review your quiz results and follow the recommendations</li>
+ <li>Contact your placement cell for training sessions</li>
+ </ul>
+ </div>
+ </div>
+</body>
+</html>

@@ -1,0 +1,441 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>College Portal Login</title>
+ 
+ <!-- Google Fonts -->
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+ 
+ <!-- Font Awesome -->
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ 
+ <style>
+ :root {
+ --sage-green: #8FB9A8;
+ --cream: #FEFAD4;
+ --peach: #FCB9AA;
+ --rose: #F1828D;
+ --mauve: #765D69;
+ --dark-text: #2c3e50;
+ }
+
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ }
+
+ body {
+ font-family: 'Inter', 'Poppins', sans-serif;
+ background: linear-gradient(135deg, var(--cream) 0%, #fff 30%, var(--cream) 70%, #fff 100%);
+ min-height: 100vh;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ padding: 20px;
+ position: relative;
+ overflow: hidden;
+ }
+
+ /* Animated Background Circles */
+ body::before,
+ body::after {
+ content: '';
+ position: absolute;
+ border-radius: 50%;
+ z-index: 0;
+ }
+
+ body::before {
+ width: 500px;
+ height: 500px;
+ background: radial-gradient(circle, rgba(143, 185, 168, 0.3), transparent);
+ top: -250px;
+ right: -250px;
+ animation: float 6s ease-in-out infinite;
+ }
+
+ body::after {
+ width: 400px;
+ height: 400px;
+ background: radial-gradient(circle, rgba(252, 185, 170, 0.3), transparent);
+ bottom: -200px;
+ left: -200px;
+ animation: float 8s ease-in-out infinite reverse;
+ }
+
+ @keyframes float {
+ 0%, 100% { transform: translate(0, 0); }
+ 50% { transform: translate(30px, 30px); }
+ }
+
+ .login-container {
+ background: white;
+ padding: 50px;
+ border-radius: 30px;
+ box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+ width: 100%;
+ max-width: 480px;
+ position: relative;
+ z-index: 1;
+ animation: slideUp 0.6s ease;
+ }
+
+ @keyframes slideUp {
+ from {
+ opacity: 0;
+ transform: translateY(30px);
+ }
+ to {
+ opacity: 1;
+ transform: translateY(0);
+ }
+ }
+
+ .back-link {
+ display: inline-flex;
+ align-items: center;
+ gap: 8px;
+ margin-bottom: 25px;
+ color: var(--mauve);
+ text-decoration: none;
+ font-size: 15px;
+ font-weight: 500;
+ transition: all 0.3s ease;
+ }
+
+ .back-link:hover {
+ color: var(--sage-green);
+ transform: translateX(-5px);
+ }
+
+ .logo-section {
+ text-align: center;
+ margin-bottom: 35px;
+ }
+
+ .logo-icon {
+ width: 80px;
+ height: 80px;
+ background: linear-gradient(135deg, var(--sage-green), var(--mauve));
+ border-radius: 20px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ margin: 0 auto 20px;
+ animation: pulse 2s ease-in-out infinite;
+ }
+
+ @keyframes pulse {
+ 0%, 100% { transform: scale(1); }
+ 50% { transform: scale(1.05); }
+ }
+
+ .logo-icon i {
+ font-size: 40px;
+ color: white;
+ }
+
+ h1 {
+ color: var(--mauve);
+ margin-bottom: 8px;
+ font-size: 28px;
+ font-weight: 700;
+ font-family: 'Poppins', sans-serif;
+ }
+
+ .subtitle {
+ color: #666;
+ margin-bottom: 10px;
+ font-size: 15px;
+ }
+
+ .badge {
+ display: inline-block;
+ background: linear-gradient(135deg, var(--peach), var(--rose));
+ color: white;
+ padding: 8px 20px;
+ border-radius: 25px;
+ font-size: 13px;
+ font-weight: 600;
+ margin-bottom: 30px;
+ animation: fadeIn 0.8s ease;
+ }
+
+ @keyframes fadeIn {
+ from { opacity: 0; }
+ to { opacity: 1; }
+ }
+
+ .form-group {
+ margin-bottom: 25px;
+ position: relative;
+ }
+
+ label {
+ display: block;
+ color: var(--dark-text);
+ font-weight: 600;
+ margin-bottom: 10px;
+ font-size: 14px;
+ }
+
+ .input-wrapper {
+ position: relative;
+ }
+
+ .input-icon {
+ position: absolute;
+ left: 15px;
+ top: 50%;
+ transform: translateY(-50%);
+ color: var(--sage-green);
+ font-size: 18px;
+ }
+
+ input {
+ width: 100%;
+ padding: 14px 15px 14px 45px;
+ border: 2px solid #e8e8e8;
+ border-radius: 12px;
+ font-size: 15px;
+ transition: all 0.3s ease;
+ font-family: 'Inter', sans-serif;
+ }
+
+ input:focus {
+ outline: none;
+ border-color: var(--sage-green);
+ box-shadow: 0 0 0 4px rgba(143, 185, 168, 0.1);
+ }
+
+ .btn {
+ width: 100%;
+ padding: 16px;
+ background: linear-gradient(135deg, var(--sage-green), var(--mauve));
+ color: white;
+ border: none;
+ border-radius: 12px;
+ font-size: 16px;
+ font-weight: 600;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ gap: 10px;
+ font-family: 'Poppins', sans-serif;
+ }
+
+ .btn:hover {
+ transform: translateY(-2px);
+ box-shadow: 0 10px 25px rgba(143, 185, 168, 0.3);
+ }
+
+ .btn:active {
+ transform: translateY(0);
+ }
+
+ .error {
+ background: linear-gradient(135deg, rgba(241, 130, 141, 0.1), rgba(241, 130, 141, 0.05));
+ border-left: 4px solid var(--rose);
+ color: var(--dark-text);
+ padding: 15px 20px;
+ border-radius: 12px;
+ margin-bottom: 25px;
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ animation: shake 0.5s ease;
+ }
+
+ @keyframes shake {
+ 0%, 100% { transform: translateX(0); }
+ 25% { transform: translateX(-10px); }
+ 75% { transform: translateX(10px); }
+ }
+
+ .error i {
+ color: var(--rose);
+ font-size: 20px;
+ }
+
+ .info-box {
+ background: linear-gradient(135deg, rgba(143, 185, 168, 0.2), rgba(143, 185, 168, 0.1));
+ border: 3px solid var(--sage-green);
+ border-radius: 16px;
+ padding: 25px;
+ margin-top: 30px;
+ box-shadow: 0 8px 20px rgba(143, 185, 168, 0.2);
+ animation: pulse 2s ease-in-out infinite;
+ transition: transform 0.3s ease;
+ }
+
+ @keyframes pulse {
+ 0%, 100% {
+ box-shadow: 0 8px 20px rgba(143, 185, 168, 0.2);
+ }
+ 50% {
+ box-shadow: 0 8px 30px rgba(143, 185, 168, 0.4);
+ }
+ }
+
+ .info-box h4 {
+ color: var(--mauve);
+ margin-bottom: 18px;
+ font-size: 18px;
+ font-weight: 700;
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ text-align: center;
+ justify-content: center;
+ }
+
+ .info-box h4 i {
+ color: var(--sage-green);
+ font-size: 20px;
+ }
+
+ .info-box p {
+ color: var(--dark-text);
+ font-size: 15px;
+ margin: 12px 0;
+ display: flex;
+ align-items: center;
+ justify-content: space-between;
+ background: white;
+ padding: 12px 18px;
+ border-radius: 10px;
+ box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+ }
+
+ .info-box strong {
+ color: var(--mauve);
+ font-weight: 700;
+ min-width: 90px;
+ font-size: 15px;
+ }
+
+ .credential-value {
+ background: linear-gradient(135deg, var(--sage-green), var(--mauve));
+ padding: 8px 20px;
+ border-radius: 8px;
+ color: white;
+ font-weight: 700;
+ font-size: 16px;
+ font-family: 'Courier New', monospace;
+ letter-spacing: 1px;
+ box-shadow: 0 4px 12px rgba(143, 185, 168, 0.3);
+ }
+ </style>
+</head>
+<body>
+ <div class="login-container">
+ <a href="{% url 'landing' %}" class="back-link">
+ <i class="fas fa-arrow-left"></i>
+ <span>Back to Home</span>
+ </a>
+ 
+ <div class="logo-section">
+ <div class="logo-icon">
+ <i class="fas fa-graduation-cap"></i>
+ </div>
+ <h1>College Portal</h1>
+ <p class="subtitle">VTU Marks Entry & Student Management</p>
+ <span class="badge"> Login Required</span>
+ </div>
+
+ {% if messages %}
+ {% for message in messages %}
+ <div class="error">
+ <i class="fas fa-exclamation-circle"></i>
+ <span>{{ message }}</span>
+ </div>
+ {% endfor %}
+ {% endif %}
+
+ <form method="POST">
+ {% csrf_token %}
+ 
+ <div class="form-group">
+ <label for="username">Username</label>
+ <div class="input-wrapper">
+ <i class="fas fa-user input-icon"></i>
+ <input type="text" id="username" name="username" required autofocus placeholder="Enter your username">
+ </div>
+ </div>
+
+ <div class="form-group">
+ <label for="password">Password</label>
+ <div class="input-wrapper">
+ <i class="fas fa-lock input-icon"></i>
+ <input type="password" id="password" name="password" required placeholder="Enter your password">
+ </div>
+ </div>
+
+ <button type="submit" class="btn">
+ <i class="fas fa-sign-in-alt"></i>
+ <span>Login to Dashboard</span>
+ </button>
+ </form>
+
+ <div class="info-box">
+ <h4>
+ <i class="fas fa-info-circle"></i>
+ Demo Credentials
+ </h4>
+ <p>
+ <strong>Username:</strong>
+ <span class="credential-value">college</span>
+ </p>
+ <p>
+ <strong>Password:</strong>
+ <span class="credential-value">college123</span>
+ </p>
+ </div>
+ </div>
+
+ <script>
+ // Highlight and animate credentials box on load
+ window.addEventListener('load', function() {
+ const infoBox = document.querySelector('.info-box');
+ const credentialValues = document.querySelectorAll('.credential-value');
+ 
+ // Make the info box bounce slightly to grab attention
+ setTimeout(() => {
+ infoBox.style.transform = 'scale(1.05)';
+ setTimeout(() => {
+ infoBox.style.transform = 'scale(1)';
+ }, 300);
+ }, 800);
+ 
+ // Add a glow effect to credential values
+ credentialValues.forEach((value, index) => {
+ setTimeout(() => {
+ value.style.animation = 'glow 1.5s ease-in-out';
+ }, 1200 + (index * 200));
+ });
+ });
+ 
+ // Add glow animation
+ const style = document.createElement('style');
+ style.textContent = `
+ @keyframes glow {
+ 0%, 100% {
+ box-shadow: 0 4px 12px rgba(143, 185, 168, 0.3);
+ }
+ 50% {
+ box-shadow: 0 4px 25px rgba(143, 185, 168, 0.8);
+ }
+ }
+ `;
+ document.head.appendChild(style);
+ </script>
+</body>
+</html>

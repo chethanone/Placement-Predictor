@@ -1,0 +1,116 @@
+/* College Portal Specific Color Scheme */
+:root {
+    --college-primary: #2C3E50;    /* Deep blue for headers and main elements */
+    --college-secondary: #ECF0F1;  /* Light gray for backgrounds */
+    --college-accent: #E74C3C;     /* Red for important actions/highlights */
+    --college-text: #2C3E50;       /* Dark blue for text */
+    --college-light: #FFFFFF;      /* White for contrast */
+    --college-hover: #34495E;      /* Darker blue for hover states */
+    --college-success: #27AE60;    /* Green for success states */
+    --college-warning: #F39C12;    /* Orange for warnings */
+}
+
+/* Only apply these styles when in college portal */
+.college-portal {
+    background-color: var(--college-secondary);
+    color: var(--college-text);
+}
+
+.college-portal .navbar {
+    background-color: var(--college-primary);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.college-portal .navbar a {
+    color: var(--college-light);
+}
+
+.college-portal .navbar a:hover {
+    color: var(--college-accent);
+}
+
+.college-portal .btn-primary {
+    background-color: var(--college-accent);
+    border-color: var(--college-accent);
+    color: var(--college-light);
+}
+
+.college-portal .btn-primary:hover {
+    background-color: var(--college-hover);
+    border-color: var(--college-hover);
+}
+
+.college-portal .card {
+    background-color: var(--college-light);
+    border: none;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.1);
+}
+
+.college-portal .form-control:focus {
+    border-color: var(--college-accent);
+    box-shadow: 0 0 0 0.2rem rgba(231, 76, 60, 0.25);
+}
+
+.college-portal .progress-bar {
+    background-color: var(--college-accent);
+}
+
+.college-portal h1, 
+.college-portal h2, 
+.college-portal h3, 
+.college-portal h4, 
+.college-portal h5, 
+.college-portal h6 {
+    color: var(--college-primary);
+}
+
+.college-portal .alert-success {
+    background-color: var(--college-success);
+    color: var(--college-light);
+    border: none;
+}
+
+.college-portal .alert-warning {
+    background-color: var(--college-warning);
+    color: var(--college-light);
+    border: none;
+}
+
+.college-portal .table thead th {
+    background-color: var(--college-primary);
+    color: var(--college-light);
+}
+
+.college-portal .table-hover tbody tr:hover {
+    background-color: rgba(44, 62, 80, 0.05);
+}
+
+.college-portal .dashboard-card {
+    border-left: 4px solid var(--college-accent);
+}
+
+.college-portal .stats-number {
+    color: var(--college-accent);
+}
+
+.college-portal .nav-pills .nav-link.active {
+    background-color: var(--college-accent);
+    color: var(--college-light);
+}
+
+.college-portal .nav-pills .nav-link {
+    color: var(--college-primary);
+}
+
+.college-portal .footer {
+    background-color: var(--college-primary);
+    color: var(--college-light);
+}
+
+.college-portal .footer a {
+    color: var(--college-light);
+}
+
+.college-portal .footer a:hover {
+    color: var(--college-accent);
+}

@@ -1,0 +1,605 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Upload Study Material - Placement Predictor</title>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+ <style>
+ :root {
+ --sage-green: #8FB9A8;
+ --cream: #FEFAD4;
+ --peach: #FCB9AA;
+ --rose: #F1828D;
+ --mauve: #765D69;
+ --dark: #2c2c2c;
+ --light: #f8f9fa;
+ }
+ 
+ * { 
+ margin: 0; 
+ padding: 0; 
+ box-sizing: border-box; 
+ }
+ 
+ body {
+ font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+ background: linear-gradient(135deg, #e8f5f1 0%, #f5e6f3 100%);
+ color: #2c3e50;
+ min-height: 100vh;
+ position: relative;
+ overflow-x: hidden;
+ padding: 20px;
+ }
+ 
+ /* Subtle animated background gradient */
+ body::before {
+ content: '';
+ position: fixed;
+ top: -50%;
+ left: -50%;
+ width: 200%;
+ height: 200%;
+ background: radial-gradient(circle, rgba(143, 185, 168, 0.05) 1px, transparent 1px);
+ background-size: 50px 50px;
+ animation: moveGrid 20s linear infinite;
+ pointer-events: none;
+ z-index: 0;
+ }
+ 
+ @keyframes moveGrid {
+ 0% { transform: translate(0, 0); }
+ 100% { transform: translate(50px, 50px); }
+ }
+ 
+ .header {
+ position: sticky;
+ top: 0;
+ z-index: 100;
+ padding: 20px 40px;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ background: white;
+ backdrop-filter: blur(12px);
+ border-radius: 16px;
+ margin-bottom: 30px;
+ box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+ animation: slideDown 0.5s ease-out;
+ }
+ 
+ @keyframes slideDown {
+ from {
+ transform: translateY(-100%);
+ opacity: 0;
+ }
+ to {
+ transform: translateY(0);
+ opacity: 1;
+ }
+ }
+ 
+ .logo {
+ font-size: 20px;
+ font-weight: 700;
+ color: var(--sage-green);
+ display: flex;
+ align-items: center;
+ gap: 8px;
+ transition: all 0.3s ease;
+ }
+ 
+ .logo:hover {
+ transform: translateX(5px);
+ }
+ 
+ .logo-icon {
+ font-size: 24px;
+ animation: bounce 2s ease-in-out infinite;
+ }
+ 
+ @keyframes bounce {
+ 0%, 100% { transform: translateY(0); }
+ 50% { transform: translateY(-5px); }
+ }
+ 
+ .back-link {
+ color: var(--mauve);
+ text-decoration: none;
+ font-size: 14px;
+ font-weight: 600;
+ padding: 10px 20px;
+ border-radius: 10px;
+ transition: all 0.3s ease;
+ border: 2px solid var(--mauve);
+ }
+ 
+ .back-link:hover {
+ background: var(--mauve);
+ color: white;
+ transform: translateX(-4px);
+ }
+ 
+ .container { 
+ max-width: 720px; 
+ margin: 0 auto; 
+ padding: 60px 20px; 
+ position: relative;
+ z-index: 1;
+ animation: fadeInUp 0.6s ease-out;
+ }
+ 
+ @keyframes fadeInUp {
+ from {
+ opacity: 0;
+ transform: translateY(30px);
+ }
+ to {
+ opacity: 1;
+ transform: translateY(0);
+ }
+ }
+ 
+ .hero {
+ text-align: center;
+ margin-bottom: 48px;
+ }
+ 
+ .hero h1 {
+ font-size: 42px;
+ font-weight: 700;
+ margin-bottom: 12px;
+ color: var(--mauve);
+ letter-spacing: -0.5px;
+ animation: fadeInUp 0.6s ease-out 0.1s both;
+ }
+ 
+ .hero p { 
+ color: #666;
+ font-size: 16px;
+ line-height: 1.6;
+ font-weight: 500;
+ animation: fadeInUp 0.6s ease-out 0.2s both;
+ }
+ 
+ .form-card {
+ background: white;
+ border: 2px solid var(--cream);
+ border-radius: 20px;
+ padding: 40px;
+ margin-bottom: 24px;
+ box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+ transition: all 0.3s ease;
+ animation: fadeInUp 0.6s ease-out 0.3s both;
+ }
+ 
+ .form-card:hover {
+ border-color: var(--sage-green);
+ box-shadow: 0 12px 40px rgba(143, 185, 168, 0.15);
+ }
+ 
+ .form-group { 
+ margin-bottom: 28px;
+ animation: fadeInUp 0.5s ease-out both;
+ }
+ 
+ .form-group:nth-child(1) { animation-delay: 0.4s; }
+ .form-group:nth-child(2) { animation-delay: 0.5s; }
+ .form-group:nth-child(3) { animation-delay: 0.6s; }
+ 
+ label {
+ display: block;
+ margin-bottom: 10px;
+ font-weight: 600;
+ color: var(--mauve);
+ font-size: 14px;
+ letter-spacing: 0.3px;
+ }
+ 
+ input[type="text"] {
+ width: 100%;
+ padding: 14px 16px;
+ background: white;
+ border: 2px solid #e5e7eb;
+ border-radius: 10px;
+ color: #2c3e50;
+ font-size: 15px;
+ transition: all 0.3s ease;
+ }
+ 
+ input[type="text"]:focus {
+ outline: none;
+ border-color: var(--sage-green);
+ box-shadow: 0 0 0 3px rgba(143, 185, 168, 0.1);
+ transform: translateY(-1px);
+ }
+ 
+ input[type="text"]::placeholder {
+ color: #9ca3af;
+ }
+ 
+ .upload-area {
+ border: 3px dashed var(--sage-green);
+ border-radius: 16px;
+ padding: 48px 32px;
+ text-align: center;
+ background: var(--cream);
+ cursor: pointer;
+ transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+ position: relative;
+ overflow: hidden;
+ }
+ 
+ .upload-area::before {
+ content: '';
+ position: absolute;
+ top: 50%;
+ left: 50%;
+ width: 0;
+ height: 0;
+ border-radius: 50%;
+ background: rgba(143, 185, 168, 0.1);
+ transform: translate(-50%, -50%);
+ transition: width 0.6s ease, height 0.6s ease;
+ }
+ 
+ .upload-area:hover::before {
+ width: 400px;
+ height: 400px;
+ }
+ 
+ .upload-area:hover {
+ border-color: var(--peach);
+ background: white;
+ transform: translateY(-2px);
+ box-shadow: 0 8px 24px rgba(143, 185, 168, 0.2);
+ }
+ 
+ .upload-icon {
+ font-size: 56px;
+ margin-bottom: 16px;
+ display: inline-block;
+ transition: all 0.4s ease;
+ position: relative;
+ z-index: 1;
+ color: var(--sage-green);
+ }
+ 
+ .upload-area:hover .upload-icon {
+ transform: scale(1.1) translateY(-4px);
+ }
+ 
+ .upload-text {
+ position: relative;
+ z-index: 1;
+ }
+ 
+ .upload-area p {
+ position: relative;
+ z-index: 1;
+ }
+ 
+ .submit-btn {
+ width: 100%;
+ padding: 16px;
+ background: linear-gradient(135deg, var(--sage-green) 0%, #6a9d88 100%);
+ border: none;
+ border-radius: 10px;
+ color: #fff;
+ font-size: 16px;
+ font-weight: 600;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ position: relative;
+ overflow: hidden;
+ animation: fadeInUp 0.6s ease-out 0.7s both;
+ box-shadow: 0 4px 15px rgba(143, 185, 168, 0.3);
+ }
+ 
+ .submit-btn::before {
+ content: '';
+ position: absolute;
+ top: 0;
+ left: -100%;
+ width: 100%;
+ height: 100%;
+ background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+ transition: left 0.5s ease;
+ }
+ 
+ .submit-btn:hover::before {
+ left: 100%;
+ }
+ 
+ .submit-btn:hover {
+ transform: translateY(-2px);
+ box-shadow: 0 12px 28px rgba(143, 185, 168, 0.5);
+ }
+ 
+ .submit-btn:active {
+ transform: translateY(0);
+ }
+ 
+ .submit-btn:disabled {
+ opacity: 0.6;
+ cursor: not-allowed;
+ transform: none;
+ }
+ 
+ .loading {
+ display: none;
+ text-align: center;
+ padding: 24px;
+ margin-top: 20px;
+ }
+ 
+ .loading.active {
+ display: block;
+ animation: fadeIn 0.3s ease;
+ }
+ 
+ @keyframes fadeIn {
+ from { opacity: 0; }
+ to { opacity: 1; }
+ }
+ 
+ .loading-spinner {
+ font-size: 32px;
+ margin-bottom: 12px;
+ animation: spin 1s linear infinite;
+ }
+ 
+ @keyframes spin {
+ from { transform: rotate(0deg); }
+ to { transform: rotate(360deg); }
+ }
+ 
+ .loading-text {
+ color: #666;
+ font-weight: 600;
+ }
+ 
+ .info-card {
+ background: white;
+ border: 2px solid var(--cream);
+ border-radius: 16px;
+ padding: 28px;
+ box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+ animation: fadeInUp 0.6s ease-out 0.8s both;
+ }
+ 
+ .info-card h3 {
+ color: var(--mauve);
+ margin-bottom: 16px;
+ font-size: 16px;
+ font-weight: 700;
+ display: flex;
+ align-items: center;
+ gap: 8px;
+ }
+ 
+ .info-card ul {
+ margin-left: 20px;
+ color: #2c3e50;
+ line-height: 1.8;
+ }
+ 
+ .info-card li { 
+ margin: 10px 0;
+ font-size: 14px;
+ font-weight: 500;
+ }
+ 
+ .error {
+ background: rgba(241, 130, 141, 0.1);
+ border: 2px solid var(--rose);
+ padding: 16px;
+ border-radius: 10px;
+ margin-bottom: 20px;
+ color: #c0392b;
+ font-weight: 600;
+ animation: shake 0.5s ease;
+ }
+ 
+ @keyframes shake {
+ 0%, 100% { transform: translateX(0); }
+ 25% { transform: translateX(-10px); }
+ 75% { transform: translateX(10px); }
+ }
+ 
+ .file-name {
+ margin-top: 16px;
+ color: var(--sage-green);
+ font-weight: 700;
+ font-size: 15px;
+ animation: fadeIn 0.3s ease;
+ }
+ 
+ /* Smooth scrollbar */
+ ::-webkit-scrollbar {
+ width: 8px;
+ }
+ 
+ ::-webkit-scrollbar-track {
+ background: rgba(15, 23, 42, 0.5);
+ }
+ 
+ ::-webkit-scrollbar-thumb {
+ background: rgba(59, 130, 246, 0.3);
+ border-radius: 4px;
+ }
+ 
+ ::-webkit-scrollbar-thumb:hover {
+ background: rgba(59, 130, 246, 0.5);
+ }
+ </style>
+</head>
+<body>
+ <div class="header">
+ <div class="logo">
+ <span class="logo-icon"></span>
+ Upload Study Material
+ </div>
+ <a href="{% url 'student_portal' %}" class="back-link">← Back to Dashboard</a>
+ </div>
+ 
+ <div class="container">
+ <div class="hero">
+ <h1>Upload Your Study Material</h1>
+ <p>Upload PDF or PowerPoint files to generate an AI-powered quiz</p>
+ </div>
+ 
+ {% if error %}
+ <div class="error"> {{ error }}</div>
+ {% endif %}
+ 
+ <form method="post" enctype="multipart/form-data" id="uploadForm">
+ {% csrf_token %}
+ <div class="form-card">
+ <!-- Student info from session - no need to enter again -->
+ <div style="background: white; padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; border-left: 4px solid var(--sage-green); box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+ <p style="margin: 0; color: var(--mauve); font-weight: 600; font-size: 0.95rem; display: flex; align-items: center; gap: 10px;">
+ <span style="font-size: 1.2rem;"></span>
+ Logged in as: <strong>{{ request.session.student_usn }}</strong>
+ </p>
+ {% if request.session.student_college %}
+ <p style="margin: 4px 0 0 0; color: #666; font-size: 0.85rem; padding-left: 32px;">{{ request.session.student_college }}</p>
+ {% endif %}
+ </div>
+ 
+ <div class="form-group">
+ <label>Study Material (PDF/PPT/PPTX)</label>
+ <div class="upload-area" onclick="document.getElementById('file').click()">
+ <div class="upload-icon"></div>
+ <div class="upload-text">
+ <p style="color: #cbd5e1; margin-bottom: 8px; font-weight: 500;">Click to upload or drag and drop</p>
+ <p style="color: #64748b; font-size: 14px;">PDF, PPT, or PPTX files accepted</p>
+ </div>
+ <div class="file-name" id="fileName"></div>
+ </div>
+ <input type="file" id="file" name="file" accept=".pdf,.ppt,.pptx" required style="display: none;">
+ </div>
+ 
+ <button type="submit" class="submit-btn" id="submitBtn">
+ <span>Generate Quiz</span>
+ </button>
+ 
+ <div class="loading" id="loading">
+ <div class="loading-spinner">⏳</div>
+ <p class="loading-text">Analyzing your content with AI...</p>
+ <p style="color: #666; font-size: 13px; margin-top: 8px; font-weight: 500;">This may take 10-30 seconds</p>
+ </div>
+ </div>
+ </form>
+ 
+ <div class="info-card">
+ <h3>
+ <span></span>
+ How It Works
+ </h3>
+ <ul>
+ <li>Upload your study material in PDF or PowerPoint format</li>
+ <li>AI analyzes the content and generates 25 diverse questions</li>
+ <li>Questions include MCQs, True/False, Fill in the Blanks, and Short Answers</li>
+ <li>Get instant feedback and personalized study recommendations</li>
+ <li>Track your progress and improve your understanding</li>
+ </ul>
+ </div>
+ </div>
+ 
+ <script>
+ // Form submission handler with smooth animations
+ document.getElementById('uploadForm').addEventListener('submit', function(e) {
+ const submitBtn = document.getElementById('submitBtn');
+ const loading = document.getElementById('loading');
+ 
+ // Disable button and show loading with animation
+ submitBtn.disabled = true;
+ submitBtn.style.opacity = '0.6';
+ submitBtn.querySelector('span').textContent = 'Processing...';
+ 
+ // Show loading indicator with smooth fade-in
+ setTimeout(() => {
+ loading.classList.add('active');
+ }, 200);
+ });
+ 
+ // File input change handler with smooth animation
+ document.getElementById('file').addEventListener('change', function(e) {
+ const fileName = e.target.files[0]?.name;
+ const fileNameElement = document.getElementById('fileName');
+ 
+ if (fileName) {
+ // Animate file name appearance
+ fileNameElement.style.opacity = '0';
+ fileNameElement.textContent = ' ' + fileName;
+ 
+ setTimeout(() => {
+ fileNameElement.style.transition = 'opacity 0.3s ease';
+ fileNameElement.style.opacity = '1';
+ }, 50);
+ }
+ });
+ 
+ // Enhanced drag and drop functionality
+ const uploadArea = document.querySelector('.upload-area');
+ let dragCounter = 0;
+ 
+ ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+ uploadArea.addEventListener(eventName, preventDefaults, false);
+ document.body.addEventListener(eventName, preventDefaults, false);
+ });
+ 
+ function preventDefaults(e) {
+ e.preventDefault();
+ e.stopPropagation();
+ }
+ 
+ uploadArea.addEventListener('dragenter', function(e) {
+ dragCounter++;
+ uploadArea.style.borderColor = '#3b82f6';
+ uploadArea.style.background = 'rgba(59, 130, 246, 0.1)';
+ uploadArea.style.transform = 'scale(1.02)';
+ });
+ 
+ uploadArea.addEventListener('dragleave', function(e) {
+ dragCounter--;
+ if (dragCounter === 0) {
+ uploadArea.style.borderColor = 'rgba(148, 163, 184, 0.3)';
+ uploadArea.style.background = 'rgba(15, 23, 42, 0.4)';
+ uploadArea.style.transform = 'scale(1)';
+ }
+ });
+ 
+ uploadArea.addEventListener('drop', function(e) {
+ dragCounter = 0;
+ uploadArea.style.borderColor = 'rgba(148, 163, 184, 0.3)';
+ uploadArea.style.background = 'rgba(15, 23, 42, 0.4)';
+ uploadArea.style.transform = 'scale(1)';
+ 
+ const dt = e.dataTransfer;
+ const files = dt.files;
+ 
+ if (files.length > 0) {
+ document.getElementById('file').files = files;
+ 
+ // Trigger change event
+ const event = new Event('change', { bubbles: true });
+ document.getElementById('file').dispatchEvent(event);
+ }
+ });
+ 
+ // Add input focus animations
+ document.querySelectorAll('input[type="text"]').forEach(input => {
+ input.addEventListener('focus', function() {
+ this.parentElement.style.transform = 'translateX(4px)';
+ });
+ 
+ input.addEventListener('blur', function() {
+ this.parentElement.style.transform = 'translateX(0)';
+ });
+ });
+ </script>
+</body>
+</html>

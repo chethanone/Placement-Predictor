@@ -1,0 +1,159 @@
+{% extends 'predictor/base.html' %}
+{% load static %}
+
+{% block title %}Student View - AI Placement Predictor{% endblock %}
+
+{% block extra_css %}
+<style>
+/* small overrides for student view */
+.student-grid {
+ display: grid;
+ grid-template-columns: 1fr;
+ gap: 2rem;
+}
+
+@media (min-width: 900px) {
+ .student-grid { grid-template-columns: 1fr 420px; }
+}
+
+.predict-card { border-radius: 20px; padding: 1.5rem; }
+.result-summary { position: sticky; top: 100px; }
+.confidence-badge { padding: 0.4rem 0.8rem; border-radius: 999px; font-weight:700; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+ <div class="container">
+ <h1 class="hero-title"> Student View</h1>
+ <p class="hero-subtitle">Quickly estimate your placement probability and get tailored next steps</p>
+ </div>
+ </div>
+
+<div class="container">
+ <div class="student-grid">
+ <!-- Form column -->
+ <div>
+ <div class="form-card predict-card">
+ <h2 class="section-title"><i class="fas fa-clipboard-list"></i> Predict Placement</h2>
+
+ <form method="POST" action="{% url 'predict' %}" id="studentPredictForm">
+ {% csrf_token %}
+
+ <div class="form-row">
+ <div class="form-group">
+ <label for="cgpa">CGPA <span class="required">*</span></label>
+ <input type="number" id="cgpa" name="cgpa" class="form-control" min="0" max="10" step="0.01" placeholder="e.g., 7.85" value="{{ request.POST.cgpa|default_if_none:'' }}" required>
+ </div>
+
+ <div class="form-group">
+ <label for="soft_skills">Soft Skills</label>
+ <select id="soft_skills" name="soft_skills" class="form-control">
+ <option value="">Select level</option>
+ <option value="Poor">Poor</option>
+ <option value="Average">Average</option>
+ <option value="Good">Good</option>
+ <option value="Excellent">Excellent</option>
+ </select>
+ </div>
+ </div>
+
+ <div class="form-row">
+ <div class="form-group full-width">
+ <label for="certifications">Certifications</label>
+ <textarea id="certifications" name="certifications" class="form-control" rows="3" placeholder="Enter certifications, one per line (or comma separated)"></textarea>
+ <small class="form-help">e.g., AWS Certified, Google Data Analytics</small>
+ </div>
+ </div>
+
+ <div class="form-row">
+ <div class="form-group full-width">
+ <label for="internship">Internship Experience</label>
+ <textarea id="internship" name="internship" class="form-control" rows="4" placeholder="Briefly describe any internships, role and duration"></textarea>
+ </div>
+ </div>
+
+ <div class="form-row">
+ <div class="form-group">
+ <label for="extra_activities">Extracurricular Activities</label>
+ <select id="extra_activities" name="extra_activities" class="form-control">
+ <option value="">Select level</option>
+ <option value="Low">Low</option>
+ <option value="Medium">Medium</option>
+ <option value="High">High</option>
+ </select>
+ </div>
+
+ <div class="form-group">
+ <label>&nbsp;</label>
+ <button type="submit" class="btn btn-primary btn-large">
+ <i class="fas fa-magic"></i>
+ Predict Placement
+ </button>
+ </div>
+ </div>
+ </form>
+ </div>
+
+ <!-- quick tips -->
+ <div class="info-section" style="margin-top:1rem;">
+ <div class="info-card">
+ <div class="info-icon"><i class="fas fa-lightbulb"></i></div>
+ <h3>Tips</h3>
+ <p>Be honest in your inputs. Add certifications and internships to increase placement probability.</p>
+ </div>
+ <div class="info-card">
+ <div class="info-icon"><i class="fas fa-book"></i></div>
+ <h3>Resources</h3>
+ <p>Recommended: Learn SQL, Python, and version-control basics to improve employability.</p>
+ </div>
+ </div>
+ </div>
+
+ <!-- Results / Summary column -->
+ <aside class="result-summary">
+ <div class="result-card" style="padding:1.5rem;">
+ <h3 style="margin-bottom:0.5rem;">Prediction Results</h3>
+
+ {% if probability is not None %}
+ <div style="text-align:center; margin:1rem 0;">
+ <div class="result-percentage">{{ probability|floatformat:1 }}%</div>
+ <div class="result-confidence">Confidence: {{ confidence|default:0 }}%</div>
+ </div>
+
+ <div style="margin:0.5rem 0;">
+ <strong>Recommended Career Path</strong>
+ <p>{{ career_path|default:'Data Analyst / Developer / AI Engineer' }}</p>
+ </div>
+
+ <div style="margin:0.5rem 0;">
+ <strong>Next Step Suggestions</strong>
+ <ul>
+ {% for step in suggestions %}
+ <li>{{ step }}</li>
+ {% empty %}
+ <li>Learn SQL</li>
+ <li>Take a Python course</li>
+ <li>Build 2-3 projects</li>
+ {% endfor %}
+ </ul>
+ </div>
+
+ <div style="margin-top:1rem;">
+ <strong>Confidence Level</strong>
+ <div class="progress-bar" style="height:18px; border-radius:10px; overflow:hidden;">
+ <div class="progress-fill" style="width: {{ confidence|default:0 }}%;"></div>
+ </div>
+ </div>
+ {% else %}
+ <p class="mb-2">No prediction yet — fill the inputs and click <strong>Predict Placement</strong>.</p>
+ <div class="recommendation-card priority-low">
+ <p class="rec-description">Example suggestions will appear here after prediction. Keep your profile updated.</p>
+ </div>
+ {% endif %}
+ </div>
+ </aside>
+ </div>
+</div>
+
+{% endblock %}

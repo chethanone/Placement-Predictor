@@ -1,0 +1,333 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Placement Prediction - Student Portal</title>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ <style>
+ :root {
+ --sage-green: #8FB9A8;
+ --cream: #FEFAD4;
+ --peach: #FCB9AA;
+ --rose: #F1828D;
+ --mauve: #765D69;
+ }
+ 
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ }
+
+ body {
+ font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+ background: linear-gradient(135deg, #e8f5f1 0%, #f5e6f3 100%);
+ color: #2c3e50;
+ min-height: 100vh;
+ padding: 20px;
+ }
+
+ .header {
+ max-width: 1200px;
+ margin: 0 auto 30px;
+ padding: 20px 30px;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ background: white;
+ backdrop-filter: blur(10px);
+ border-radius: 16px;
+ box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+ }
+
+ .logo {
+ font-size: 24px;
+ font-weight: 700;
+ color: var(--sage-green);
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ }
+
+ .back-btn {
+ padding: 12px 24px;
+ background: white;
+ border: 2px solid var(--mauve);
+ border-radius: 10px;
+ color: var(--mauve);
+ text-decoration: none;
+ font-weight: 600;
+ transition: all 0.3s ease;
+ }
+
+ .back-btn:hover {
+ background: var(--mauve);
+ color: white;
+ transform: translateX(-4px);
+ }
+
+ .container {
+ max-width: 800px;
+ margin: 0 auto;
+ padding: 0 20px;
+ }
+
+ .hero {
+ text-align: center;
+ margin-bottom: 40px;
+ background: linear-gradient(135deg, var(--sage-green), #6a9d88);
+ padding: 50px 30px;
+ border-radius: 24px;
+ box-shadow: 0 10px 40px rgba(143, 185, 168, 0.3);
+ color: white;
+ }
+
+ .hero h1 {
+ font-size: 48px;
+ font-weight: 700;
+ margin-bottom: 16px;
+ color: white;
+ }
+
+ .hero p {
+ font-size: 18px;
+ color: rgba(255,255,255,0.95);
+ }
+
+ .form-card {
+ background: white;
+ border: 2px solid rgba(143, 185, 168, 0.2);
+ border-radius: 20px;
+ padding: 40px;
+ box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+ }
+
+ .error-message {
+ background: rgba(241, 130, 141, 0.1);
+ border: 2px solid var(--rose);
+ color: #c0392b;
+ padding: 16px;
+ border-radius: 12px;
+ margin-bottom: 24px;
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ font-weight: 600;
+ }
+
+ .form-group {
+ margin-bottom: 24px;
+ }
+
+ label {
+ display: block;
+ font-weight: 600;
+ margin-bottom: 8px;
+ color: var(--mauve);
+ font-size: 14px;
+ text-transform: uppercase;
+ letter-spacing: 0.5px;
+ }
+
+ input, select {
+ width: 100%;
+ padding: 16px;
+ background: white;
+ border: 2px solid #e5e7eb;
+ border-radius: 12px;
+ color: #2c3e50;
+ font-size: 16px;
+ font-family: 'Inter', sans-serif;
+ transition: all 0.3s ease;
+ }
+
+ input:focus, select:focus {
+ outline: none;
+ border-color: var(--sage-green);
+ box-shadow: 0 0 0 3px rgba(143, 185, 168, 0.1);
+ }
+
+ input::placeholder {
+ color: #9ca3af;
+ }
+
+ .form-row {
+ display: grid;
+ grid-template-columns: 1fr 1fr;
+ gap: 20px;
+ }
+
+ .help-text {
+ font-size: 13px;
+ color: #6b7280;
+ margin-top: 6px;
+ }
+
+ .submit-btn {
+ width: 100%;
+ padding: 18px;
+ background: linear-gradient(135deg, var(--sage-green), #6a9d88);
+ border: none;
+ border-radius: 12px;
+ color: white;
+ font-size: 18px;
+ font-weight: 700;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ margin-top: 20px;
+ box-shadow: 0 4px 12px rgba(143, 185, 168, 0.3);
+ }
+
+ .submit-btn:hover {
+ transform: translateY(-2px);
+ box-shadow: 0 8px 24px rgba(143, 185, 168, 0.5);
+ }
+
+ .info-card {
+ background: var(--cream);
+ border: 2px solid var(--peach);
+ border-radius: 12px;
+ padding: 20px;
+ margin-top: 30px;
+ }
+
+ .info-card h3 {
+ color: var(--mauve);
+ margin-bottom: 12px;
+ font-size: 16px;
+ font-weight: 700;
+ display: flex;
+ align-items: center;
+ gap: 8px;
+ }
+
+ .info-card p {
+ color: #2c3e50;
+ line-height: 1.6;
+ font-size: 14px;
+ }
+ 
+ .info-badge {
+ background: var(--cream);
+ padding: 16px 20px;
+ border-radius: 12px;
+ margin-bottom: 24px;
+ border-left: 4px solid var(--sage-green);
+ box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+ }
+ 
+ .info-badge p {
+ margin: 0;
+ color: var(--mauve);
+ font-weight: 600;
+ font-size: 15px;
+ }
+
+ @media (max-width: 768px) {
+ .form-row {
+ grid-template-columns: 1fr;
+ }
+ 
+ .hero h1 {
+ font-size: 36px;
+ }
+ 
+ .header {
+ padding: 16px 20px;
+ flex-direction: column;
+ gap: 16px;
+ }
+ }
+ </style>
+</head>
+<body>
+ <div class="header">
+ <div class="logo"><i class="fas fa-chart-line"></i> Placement Predictor</div>
+ <a href="{% url 'student_portal' %}" class="back-btn"><i class="fas fa-arrow-left"></i> Back</a>
+ </div>
+
+ <div class="container">
+ <div class="hero">
+ <h1>Get Your Prediction</h1>
+ <p>AI-powered placement probability analysis</p>
+ </div>
+
+ <div class="form-card">
+ {% if error %}
+ <div class="error-message">
+ <i class="fas fa-exclamation-triangle" style="font-size: 24px;"></i>
+ <span>{{ error }}</span>
+ </div>
+ {% endif %}
+
+ <form method="POST">
+ {% csrf_token %}
+ 
+ <!-- Student USN from session - no need to enter again -->
+ <input type="hidden" name="student_id" value="{{ request.session.student_usn }}">
+ 
+ <div class="info-badge">
+ <p>
+ <i class="fas fa-user-check" style="color: var(--sage-green); margin-right: 8px;"></i>
+ Logged in as: <strong>{{ request.session.student_usn }}</strong>
+ </p>
+ </div>
+
+ <div class="form-row">
+ <div class="form-group">
+ <label for="communication_skills">Communication Skills</label>
+ <input type="number" id="communication_skills" name="communication_skills" 
+ min="1" max="10" value="5" required>
+ <p class="help-text">Rate 1-10</p>
+ </div>
+
+ <div class="form-group">
+ <label for="technical_skills">Technical Skills</label>
+ <input type="number" id="technical_skills" name="technical_skills" 
+ min="1" max="10" value="5" required>
+ <p class="help-text">Rate 1-10</p>
+ </div>
+ </div>
+
+ <div class="form-group">
+ <label for="aptitude_score">Aptitude Score</label>
+ <input type="number" id="aptitude_score" name="aptitude_score" 
+ min="0" max="100" value="50" required>
+ <p class="help-text">Your score in aptitude tests (0-100)</p>
+ </div>
+
+ <div class="form-row">
+ <div class="form-group">
+ <label for="projects">Projects Completed</label>
+ <input type="number" id="projects" name="projects" 
+ min="0" value="0" required>
+ </div>
+
+ <div class="form-group">
+ <label for="internships">Internships</label>
+ <input type="number" id="internships" name="internships" 
+ min="0" value="0" required>
+ </div>
+ </div>
+
+ <div class="form-group">
+ <label for="certifications">Certifications</label>
+ <input type="number" id="certifications" name="certifications" 
+ min="0" value="0" required>
+ <p class="help-text">Number of professional certifications</p>
+ </div>
+
+ <button type="submit" class="submit-btn"><i class="fas fa-chart-line"></i> Analyze Now</button>
+ </form>
+
+ <div class="info-card">
+ <h3><i class="fas fa-lightbulb"></i> How It Works</h3>
+ <p>Our AI analyzes your academic performance, skills, and experience to predict your placement probability. Fill in accurate information for the best results.</p>
+ </div>
+ </div>
+ </div>
+</body>
+</html>

@@ -1,0 +1,169 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+ <title>Manage Subjects - College Portal</title>
+ <style>
+ * { margin: 0; padding: 0; box-sizing: border-box; }
+ body { 
+ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+ background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+ min-height: 100vh;
+ padding: 20px;
+ }
+ .container { max-width: 1200px; margin: 0 auto; }
+ .header {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ margin-bottom: 30px;
+ }
+ .header h1 {
+ color: white;
+ font-size: 32px;
+ }
+ .btn {
+ padding: 12px 24px;
+ background: white;
+ color: #f5576c;
+ text-decoration: none;
+ border-radius: 8px;
+ font-weight: 600;
+ transition: all 0.3s;
+ }
+ .btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+ .btn-primary { background: #4CAF50; color: white; }
+ .btn-danger { background: #f44336; color: white; }
+ .card {
+ background: white;
+ padding: 30px;
+ border-radius: 12px;
+ box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+ }
+ .filters {
+ display: flex;
+ gap: 15px;
+ margin-bottom: 25px;
+ flex-wrap: wrap;
+ }
+ select {
+ padding: 10px 15px;
+ border: 2px solid #e0e0e0;
+ border-radius: 6px;
+ font-size: 14px;
+ }
+ table {
+ width: 100%;
+ border-collapse: collapse;
+ margin-top: 20px;
+ }
+ th, td {
+ padding: 15px;
+ text-align: left;
+ border-bottom: 1px solid #e0e0e0;
+ }
+ th {
+ background: #f5f5f5;
+ font-weight: 600;
+ color: #333;
+ }
+ tr:hover { background: #f9f9f9; }
+ .badge {
+ padding: 4px 12px;
+ border-radius: 12px;
+ font-size: 12px;
+ font-weight: 600;
+ }
+ .badge-cse { background: #e3f2fd; color: #1976d2; }
+ .badge-ise { background: #f3e5f5; color: #7b1fa2; }
+ .badge-ece { background: #fff3e0; color: #e65100; }
+ .badge-me { background: #e8f5e9; color: #388e3c; }
+ .badge-ce { background: #fce4ec; color: #c2185b; }
+ .badge-eee { background: #fff9c4; color: #f57f17; }
+ .actions {
+ display: flex;
+ gap: 10px;
+ }
+ .btn-sm {
+ padding: 6px 12px;
+ font-size: 13px;
+ text-decoration: none;
+ border-radius: 4px;
+ }
+ .btn-edit { background: #2196f3; color: white; }
+ .btn-delete { background: #f44336; color: white; }
+ .no-data {
+ text-align: center;
+ padding: 40px;
+ color: #999;
+ }
+ </style>
+</head>
+<body>
+ <div class="container">
+ <div class="header">
+ <h1> Manage Subjects</h1>
+ <div style="display: flex; gap: 15px;">
+ <a href="{% url 'add_subject' %}" class="btn btn-primary"> Add Subject</a>
+ <a href="{% url 'college_dashboard' %}" class="btn">← Back to Dashboard</a>
+ </div>
+ </div>
+ 
+ <div class="card">
+ <div class="filters">
+ <form method="GET" style="display: flex; gap: 15px; align-items: center;">
+ <select name="branch" onchange="this.form.submit()">
+ <option value="">All Branches</option>
+ {% for code, name in branches %}
+ <option value="{{ code }}" {% if request.GET.branch == code %}selected{% endif %}>{{ name }}</option>
+ {% endfor %}
+ </select>
+ 
+ <select name="semester" onchange="this.form.submit()">
+ <option value="">All Semesters</option>
+ {% for sem in semesters %}
+ <option value="{{ sem }}" {% if request.GET.semester|add:0 == sem %}selected{% endif %}>Semester {{ sem }}</option>
+ {% endfor %}
+ </select>
+ </form>
+ </div>
+ 
+ {% if subjects %}
+ <table>
+ <thead>
+ <tr>
+ <th>Subject Code</th>
+ <th>Subject Name</th>
+ <th>Branch</th>
+ <th>Semester</th>
+ <th>Credits</th>
+ <th>Actions</th>
+ </tr>
+ </thead>
+ <tbody>
+ {% for subject in subjects %}
+ <tr>
+ <td><strong>{{ subject.subject_code }}</strong></td>
+ <td>{{ subject.subject_name }}</td>
+ <td><span class="badge badge-{{ subject.branch|lower }}">{{ subject.get_branch_display }}</span></td>
+ <td>Semester {{ subject.semester }}</td>
+ <td>{{ subject.credits }}</td>
+ <td>
+ <div class="actions">
+ <a href="{% url 'edit_subject' subject.id %}" class="btn-sm btn-edit">Edit</a>
+ <a href="{% url 'delete_subject' subject.id %}" class="btn-sm btn-delete">Delete</a>
+ </div>
+ </td>
+ </tr>
+ {% endfor %}
+ </tbody>
+ </table>
+ {% else %}
+ <div class="no-data">
+ <p> No subjects found. Click "Add Subject" to create one.</p>
+ </div>
+ {% endif %}
+ </div>
+ </div>
+</body>
+</html>

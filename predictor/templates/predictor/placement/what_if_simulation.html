@@ -1,0 +1,94 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+ <title>What-If Simulation - TPO Portal</title>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ <style>
+ :root { --purple: #6d28d9; --violet: #a855f7; }
+ * { margin: 0; padding: 0; box-sizing: border-box; }
+ body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f8fafc 0%, #ede9fe 50%, #f8fafc 100%); padding: 30px; }
+ .header { background: linear-gradient(135deg, var(--purple), var(--violet)); padding: 30px; border-radius: 18px; color: white; margin-bottom: 25px; }
+ .card { background: white; padding: 30px; border-radius: 18px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(109, 40, 217, 0.08); }
+ .btn { padding: 10px 20px; border-radius: 10px; background: linear-gradient(135deg, var(--purple), var(--violet)); color: white; border: none; font-weight: 600; cursor: pointer; width: 100%; }
+ input, select { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px; font-family: 'Inter', sans-serif; }
+ label { display: block; margin-bottom: 8px; font-weight: 600; color: #334155; }
+ .form-group { margin-bottom: 20px; }
+ </style>
+</head>
+<body>
+ <div class="header">
+ <h1><i class="fas fa-flask"></i> What-If Skill Improvement Simulation</h1>
+ <p style="margin-top: 10px;">See how skill improvements affect employability & placement chances</p>
+ </div>
+
+ <div class="card">
+ <form method="post">
+ {% csrf_token %}
+ <div class="form-group">
+ <label>Select Student</label>
+ <select name="student_id" required>
+ <option value="">Choose a student...</option>
+ {% for student in students %}
+ <option value="{{ student.student_id }}">{{ student.student_id }} - {{ student.name }}</option>
+ {% endfor %}
+ </select>
+ </div>
+ <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;">
+ <div class="form-group">
+ <label>Communication Improvement (+points)</label>
+ <input type="number" name="communication_improvement" min="0" max="10" step="0.5" value="0">
+ </div>
+ <div class="form-group">
+ <label>Technical Improvement (+points)</label>
+ <input type="number" name="technical_improvement" min="0" max="10" step="0.5" value="0">
+ </div>
+ <div class="form-group">
+ <label>Coding Improvement (+points)</label>
+ <input type="number" name="coding_improvement" min="0" max="10" step="0.5" value="0">
+ </div>
+ <div class="form-group">
+ <label>Aptitude Improvement (+points)</label>
+ <input type="number" name="aptitude_improvement" min="0" max="100" step="5" value="0">
+ </div>
+ <div class="form-group">
+ <label>Additional Projects</label>
+ <input type="number" name="projects_add" min="0" max="10" value="0">
+ </div>
+ <div class="form-group">
+ <label>Additional Internships</label>
+ <input type="number" name="internships_add" min="0" max="5" value="0">
+ </div>
+ </div>
+ <button type="submit" class="btn"><i class="fas fa-calculator"></i> Calculate Impact</button>
+ </form>
+ </div>
+
+ {% if result %}
+ <div class="card" style="background: linear-gradient(135deg, rgba(109, 40, 217, 0.05), rgba(168, 85, 247, 0.05)); border: 2px solid var(--violet);">
+ <h2 style="color: var(--purple); margin-bottom: 25px;"><i class="fas fa-chart-line"></i> Simulation Results</h2>
+ <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px;">
+ <div>
+ <h3 style="color: #64748b; font-size: 14px; margin-bottom: 10px;">Current Employability</h3>
+ <p style="font-size: 48px; font-weight: 700; color: var(--purple);">{{ result.current_score }}%</p>
+ </div>
+ <div>
+ <h3 style="color: #64748b; font-size: 14px; margin-bottom: 10px;">Projected Employability</h3>
+ <p style="font-size: 48px; font-weight: 700; color: #10b981;">{{ result.new_score }}%</p>
+ </div>
+ <div>
+ <h3 style="color: #64748b; font-size: 14px; margin-bottom: 10px;">Improvement</h3>
+ <p style="font-size: 32px; font-weight: 700; color: {% if result.improvement > 0 %}#10b981{% else %}#ef4444{% endif %};">
+ <i class="fas fa-arrow-up"></i> +{{ result.improvement }}%
+ </p>
+ </div>
+ <div>
+ <h3 style="color: #64748b; font-size: 14px; margin-bottom: 10px;">Additional Companies</h3>
+ <p style="font-size: 32px; font-weight: 700; color: var(--indigo);">+{{ result.additional_companies }}</p>
+ </div>
+ </div>
+ </div>
+ {% endif %}
+</body>
+</html>

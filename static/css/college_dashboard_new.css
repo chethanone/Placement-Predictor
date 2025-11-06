@@ -1,0 +1,136 @@
+:root {
+    --primary: #0EA5E9;    /* Sky blue */
+    --secondary: #14B8A6;  /* Teal */
+    --accent: #6366F1;     /* Indigo */
+    --background: #F8FAFC; /* Light gray */
+    --text: #1E293B;      /* Slate */
+    --success: #22C55E;   /* Green */
+    --warning: #F59E0B;   /* Amber */
+    --danger: #EF4444;    /* Red */
+}
+
+body {
+    font-family: 'Inter', 'Poppins', sans-serif;
+    background: var(--background);
+    color: var(--text);
+}
+
+/* Sidebar Styling */
+.college-sidebar {
+    background: white;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    border-radius: 0 2rem 2rem 0;
+    padding: 2rem;
+    height: 100vh;
+    position: fixed;
+    width: 250px;
+}
+
+/* Main Content Area */
+.college-main {
+    margin-left: 270px;
+    padding: 2rem;
+}
+
+/* Dashboard Cards */
+.stat-card {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+    transition: transform 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+/* Charts Container */
+.chart-container {
+    background: white;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+}
+
+/* Progress Indicators */
+.circular-progress {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: conic-gradient(var(--primary) var(--progress), #e2e8f0 var(--progress));
+}
+
+/* Student Table */
+.student-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: white;
+    border-radius: 1rem;
+    overflow: hidden;
+}
+
+.student-table th {
+    background: var(--primary);
+    color: white;
+    padding: 1rem;
+    text-align: left;
+}
+
+.student-table tr:hover {
+    background: #f1f5f9;
+    cursor: pointer;
+}
+
+/* Filters */
+.filter-container {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.filter-select {
+    padding: 0.5rem 1rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    background: white;
+}
+
+/* Heatmap */
+.heatmap {
+    display: grid;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 1rem;
+}
+
+/* Alerts */
+.alert {
+    padding: 1rem;
+    border-radius: 0.5rem;
+    margin-bottom: 1rem;
+    border-left: 4px solid;
+}
+
+.alert-warning {
+    background: #fef3c7;
+    border-color: var(--warning);
+}
+
+.alert-success {
+    background: #dcfce7;
+    border-color: var(--success);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+}

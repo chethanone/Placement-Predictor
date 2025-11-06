@@ -1,0 +1,247 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Your Results - Placement Predictor</title>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ <style>
+ :root {
+ --sage-green: #8FB9A8;
+ --cream: #FEFAD4;
+ --peach: #FCB9AA;
+ --rose: #F1828D;
+ --mauve: #765D69;
+ }
+ 
+ * { margin: 0; padding: 0; box-sizing: border-box; }
+ 
+ body {
+ font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+ background: linear-gradient(135deg, #e8f5f1 0%, #f5e6f3 100%);
+ color: #2c3e50;
+ min-height: 100vh;
+ padding: 20px;
+ }
+ 
+ .header {
+ max-width: 1200px;
+ margin: 0 auto 30px;
+ padding: 20px 30px;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ background: white;
+ border-radius: 16px;
+ box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+ }
+ 
+ .logo {
+ font-size: 24px;
+ font-weight: 700;
+ color: var(--sage-green);
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ }
+ 
+ .btn {
+ padding: 12px 24px;
+ background: linear-gradient(135deg, var(--sage-green), #6a9d88);
+ border-radius: 10px;
+ color: white;
+ text-decoration: none;
+ font-weight: 600;
+ transition: all 0.3s ease;
+ box-shadow: 0 4px 12px rgba(143, 185, 168, 0.3);
+ display: inline-flex;
+ align-items: center;
+ gap: 8px;
+ }
+ 
+ .btn:hover {
+ transform: translateY(-2px);
+ box-shadow: 0 8px 24px rgba(143, 185, 168, 0.5);
+ }
+ 
+ .container {
+ max-width: 1200px;
+ margin: 0 auto;
+ padding: 0 20px;
+ }
+ 
+ .hero {
+ text-align: center;
+ margin-bottom: 60px;
+ background: linear-gradient(135deg, var(--sage-green), #6a9d88);
+ padding: 60px 40px;
+ border-radius: 24px;
+ box-shadow: 0 10px 40px rgba(143, 185, 168, 0.3);
+ }
+ 
+ .hero h1 {
+ font-size: 56px;
+ font-weight: 700;
+ margin-bottom: 16px;
+ color: white;
+ }
+ 
+ .result-grid {
+ display: grid;
+ gap: 24px;
+ }
+ 
+ .result-card {
+ background: white;
+ border: 2px solid var(--cream);
+ border-radius: 20px;
+ padding: 32px;
+ transition: all 0.3s ease;
+ box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+ }
+ 
+ .result-card:hover {
+ transform: translateY(-4px);
+ border-color: var(--sage-green);
+ box-shadow: 0 12px 32px rgba(143, 185, 168, 0.2);
+ }
+ 
+ .result-header {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ margin-bottom: 24px;
+ }
+ 
+ .student-name {
+ font-size: 24px;
+ font-weight: 700;
+ color: var(--mauve);
+ }
+ 
+ .score-badge {
+ padding: 12px 24px;
+ background: linear-gradient(135deg, var(--sage-green), #6a9d88);
+ border-radius: 12px;
+ font-size: 28px;
+ font-weight: 700;
+ color: white;
+ box-shadow: 0 4px 12px rgba(143, 185, 168, 0.3);
+ }
+ 
+ .result-details {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+ gap: 16px;
+ margin-top: 20px;
+ }
+ 
+ .detail-item {
+ background: var(--cream);
+ padding: 16px;
+ border-radius: 12px;
+ border: 1px solid var(--peach);
+ }
+ 
+ .detail-label {
+ font-size: 12px;
+ color: #666;
+ text-transform: uppercase;
+ letter-spacing: 0.5px;
+ margin-bottom: 8px;
+ font-weight: 600;
+ }
+ 
+ .detail-value {
+ font-size: 20px;
+ font-weight: 700;
+ color: var(--mauve);
+ }
+ 
+ .empty-state {
+ text-align: center;
+ padding: 100px 20px;
+ background: white;
+ border-radius: 24px;
+ box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+ }
+ 
+ .empty-icon {
+ font-size: 80px;
+ margin-bottom: 24px;
+ }
+ 
+ .empty-text {
+ font-size: 24px;
+ color: #666;
+ margin-bottom: 32px;
+ font-weight: 600;
+ }
+ 
+ .btn-large {
+ padding: 16px 32px;
+ font-size: 18px;
+ }
+ 
+ @media (max-width: 768px) {
+ .hero h1 { font-size: 36px; }
+ .result-header { 
+ flex-direction: column; 
+ gap: 16px; 
+ align-items: flex-start; 
+ }
+ .header {
+ flex-direction: column;
+ gap: 16px;
+ }
+ }
+ </style>
+</head>
+<body>
+ <div class="header">
+ <div class="logo"><i class="fas fa-chart-bar"></i> Results</div>
+ <a href="{% url 'student_portal' %}" class="btn"><i class="fas fa-arrow-left"></i> Back to Portal</a>
+ </div>
+ 
+ <div class="container">
+ <div class="hero">
+ <h1>Your Results</h1>
+ </div>
+ 
+ {% if quizzes %}
+ <div class="result-grid">
+ {% for quiz in quizzes %}
+ <div class="result-card">
+ <div class="result-header">
+ <div class="student-name">{{ quiz.student_name }}</div>
+ <div class="score-badge">{{ quiz.score }}/25</div>
+ </div>
+ <div class="result-details">
+ <div class="detail-item">
+ <div class="detail-label">Percentage</div>
+ <div class="detail-value">{{ quiz.percentage|floatformat:1 }}%</div>
+ </div>
+ <div class="detail-item">
+ <div class="detail-label">Completed</div>
+ <div class="detail-value">{{ quiz.completed_at|date:"M d, Y" }}</div>
+ </div>
+ <div class="detail-item">
+ <div class="detail-label">Time</div>
+ <div class="detail-value">{{ quiz.completed_at|date:"H:i" }}</div>
+ </div>
+ </div>
+ </div>
+ {% endfor %}
+ </div>
+ {% else %}
+ <div class="empty-state">
+ <div class="empty-icon"><i class="fas fa-clipboard-list" style="color: var(--sage-green);"></i></div>
+ <div class="empty-text">No results yet</div>
+ <a href="{% url 'student_quiz_upload' %}" class="btn btn-large"><i class="fas fa-upload"></i> Take Your First Quiz</a>
+ </div>
+ {% endif %}
+ </div>
+</body>
+</html>

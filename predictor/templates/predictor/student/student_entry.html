@@ -1,0 +1,415 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Student Entry - Placement Predictor</title>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+ <style>
+ :root {
+ --sage-green: #8FB9A8;
+ --cream: #FEFAD4;
+ --peach: #FCB9AA;
+ --rose: #F1828D;
+ --mauve: #765D69;
+ }
+ 
+ * { 
+ margin: 0; 
+ padding: 0; 
+ box-sizing: border-box; 
+ }
+ 
+ body {
+ font-family: 'Inter', sans-serif;
+ background: linear-gradient(135deg, var(--sage-green) 0%, var(--mauve) 100%);
+ min-height: 100vh;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ padding: 20px;
+ position: relative;
+ overflow: hidden;
+ }
+ 
+ body::before {
+ content: '';
+ position: absolute;
+ width: 500px;
+ height: 500px;
+ background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+ border-radius: 50%;
+ top: -200px;
+ right: -200px;
+ animation: float 20s ease-in-out infinite;
+ }
+ 
+ @keyframes float {
+ 0%, 100% { transform: translateY(0); }
+ 50% { transform: translateY(-30px); }
+ }
+ 
+ .container {
+ max-width: 500px;
+ width: 100%;
+ position: relative;
+ z-index: 1;
+ animation: fadeInUp 0.6s ease-out;
+ }
+ 
+ @keyframes fadeInUp {
+ from {
+ opacity: 0;
+ transform: translateY(30px);
+ }
+ to {
+ opacity: 1;
+ transform: translateY(0);
+ }
+ }
+ 
+ .entry-card {
+ background: rgba(255, 255, 255, 0.98);
+ border-radius: 24px;
+ padding: 48px;
+ box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+ }
+ 
+ .logo {
+ text-align: center;
+ margin-bottom: 32px;
+ }
+ 
+ .logo-icon {
+ font-size: 64px;
+ margin-bottom: 16px;
+ animation: bounce 2s ease-in-out infinite;
+ }
+ 
+ @keyframes bounce {
+ 0%, 100% { transform: translateY(0); }
+ 50% { transform: translateY(-10px); }
+ }
+ 
+ h1 {
+ font-size: 28px;
+ color: var(--mauve);
+ text-align: center;
+ margin-bottom: 8px;
+ font-weight: 700;
+ }
+ 
+ .subtitle {
+ text-align: center;
+ color: #6b7280;
+ margin-bottom: 32px;
+ font-size: 14px;
+ }
+ 
+ .form-group {
+ margin-bottom: 24px;
+ }
+ 
+ label {
+ display: block;
+ margin-bottom: 8px;
+ font-weight: 600;
+ color: var(--mauve);
+ font-size: 14px;
+ }
+ 
+ input[type="text"] {
+ width: 100%;
+ padding: 14px 16px;
+ border: 2px solid #e5e7eb;
+ border-radius: 12px;
+ font-size: 15px;
+ transition: all 0.3s ease;
+ font-family: 'Inter', sans-serif;
+ }
+ 
+ input[type="text"]:focus {
+ outline: none;
+ border-color: var(--sage-green);
+ box-shadow: 0 0 0 3px rgba(143, 185, 168, 0.1);
+ }
+ 
+ .autocomplete-wrapper {
+ position: relative;
+ }
+ 
+ .autocomplete-results {
+ position: absolute;
+ top: 100%;
+ left: 0;
+ right: 0;
+ background: white;
+ border: 2px solid #e5e7eb;
+ border-top: none;
+ border-radius: 0 0 12px 12px;
+ max-height: 200px;
+ overflow-y: auto;
+ display: none;
+ z-index: 10;
+ box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+ }
+ 
+ .autocomplete-results.show {
+ display: block;
+ }
+ 
+ .autocomplete-item {
+ padding: 12px 16px;
+ cursor: pointer;
+ transition: background 0.2s ease;
+ font-size: 14px;
+ }
+ 
+ .autocomplete-item:hover {
+ background: var(--cream);
+ }
+ 
+ .submit-btn {
+ width: 100%;
+ padding: 16px;
+ background: linear-gradient(135deg, var(--sage-green), #6a9d88);
+ border: none;
+ border-radius: 12px;
+ color: white;
+ font-size: 16px;
+ font-weight: 600;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ margin-top: 8px;
+ }
+ 
+ .submit-btn:hover {
+ transform: translateY(-2px);
+ box-shadow: 0 8px 20px rgba(143, 185, 168, 0.4);
+ }
+ 
+ .submit-btn:disabled {
+ opacity: 0.6;
+ cursor: not-allowed;
+ transform: none;
+ }
+ 
+ .back-link {
+ display: block;
+ text-align: center;
+ margin-top: 24px;
+ color: var(--mauve);
+ text-decoration: none;
+ font-size: 14px;
+ transition: color 0.3s ease;
+ }
+ 
+ .back-link:hover {
+ color: var(--sage-green);
+ }
+ 
+ .error {
+ background: rgba(241, 130, 141, 0.1);
+ border: 2px solid var(--rose);
+ color: #c0392b;
+ padding: 16px 20px;
+ border-radius: 10px;
+ margin-bottom: 20px;
+ font-size: 14px;
+ font-weight: 600;
+ line-height: 1.6;
+ }
+ 
+ .error.access-denied {
+ background: rgba(252, 185, 170, 0.15);
+ border-color: var(--peach);
+ color: #d97706;
+ }
+ 
+ .error-icon {
+ font-size: 20px;
+ margin-right: 8px;
+ }
+ 
+ .helper-text {
+ font-size: 13px;
+ color: #6b7280;
+ margin-top: 6px;
+ }
+ 
+ .loading-indicator {
+ display: none;
+ color: #6b7280;
+ font-size: 12px;
+ margin-top: 4px;
+ font-style: italic;
+ }
+ 
+ .loading-indicator.show {
+ display: block;
+ }
+ </style>
+</head>
+<body>
+ <div class="container">
+ <div class="entry-card">
+ <div class="logo">
+ <div class="logo-icon"></div>
+ <h1>Student Portal</h1>
+ <p class="subtitle">Enter your details to continue</p>
+ </div>
+ 
+ {% if error %}
+ <div class="error {% if access_denied %}access-denied{% endif %}">
+ <span class="error-icon">{% if access_denied %}{% else %}{% endif %}</span>
+ {{ error }}
+ </div>
+ {% endif %}
+ 
+ <form method="post" id="entryForm">
+ {% csrf_token %}
+ 
+ <div class="form-group">
+ <label for="usn">Student USN/ID <span style="color: var(--rose);">*</span></label>
+ <input type="text" 
+ id="usn" 
+ name="usn" 
+ required 
+ placeholder="Enter your USN (e.g., 1MS21CS123)"
+ value="{{ usn }}">
+ <p class="helper-text">Your unique student identification number</p>
+ </div>
+ 
+ <div class="form-group">
+ <label for="college">College Name <span style="color: var(--rose);">*</span></label>
+ <div class="autocomplete-wrapper">
+ <input type="text" 
+ id="college" 
+ name="college" 
+ required 
+ placeholder="Start typing your college name..."
+ autocomplete="off"
+ value="{{ college }}">
+ <div class="autocomplete-results" id="collegeResults"></div>
+ </div>
+ <p class="helper-text">Search from thousands of colleges across India</p>
+ <p class="loading-indicator" id="loadingIndicator"> Searching...</p>
+ </div>
+ 
+ <button type="submit" class="submit-btn">
+ Continue to Dashboard →
+ </button>
+ </form>
+ 
+ <a href="{% url 'landing' %}" class="back-link">← Back to Home</a>
+ </div>
+ </div>
+ 
+ <script>
+ const collegeInput = document.getElementById('college');
+ const collegeResults = document.getElementById('collegeResults');
+ const loadingIndicator = document.getElementById('loadingIndicator');
+ let selectedCollege = '';
+ let debounceTimer;
+ let abortController = null;
+ 
+ collegeInput.addEventListener('input', function() {
+ const query = this.value.trim();
+ 
+ // Clear previous timer and abort previous request
+ clearTimeout(debounceTimer);
+ if (abortController) {
+ abortController.abort();
+ }
+ 
+ if (query.length < 2) {
+ collegeResults.classList.remove('show');
+ loadingIndicator.classList.remove('show');
+ return;
+ }
+ 
+ // Show loading indicator
+ loadingIndicator.classList.add('show');
+ 
+ // Debounce for better performance
+ debounceTimer = setTimeout(() => {
+ // Create new abort controller for this request
+ abortController = new AbortController();
+ 
+ // Fetch colleges from API
+ fetch(`/student/search-colleges/?q=${encodeURIComponent(query)}`, {
+ signal: abortController.signal
+ })
+ .then(response => response.json())
+ .then(data => {
+ loadingIndicator.classList.remove('show');
+ 
+ if (data.colleges && data.colleges.length > 0) {
+ collegeResults.innerHTML = data.colleges
+ .map(college => `<div class="autocomplete-item">${college}</div>`)
+ .join('');
+ collegeResults.classList.add('show');
+ 
+ // Add click handlers
+ document.querySelectorAll('.autocomplete-item').forEach(item => {
+ item.addEventListener('click', function() {
+ collegeInput.value = this.textContent;
+ selectedCollege = this.textContent;
+ collegeResults.classList.remove('show');
+ });
+ });
+ } else {
+ collegeResults.innerHTML = `
+ <div class="autocomplete-item" style="color: #666; cursor: default; font-style: italic;">
+ No matches found. You can type your college name.
+ </div>
+ `;
+ collegeResults.classList.add('show');
+ }
+ })
+ .catch(error => {
+ if (error.name !== 'AbortError') {
+ console.error('Error fetching colleges:', error);
+ loadingIndicator.classList.remove('show');
+ }
+ });
+ }, 400); // 400ms debounce - slightly longer for API calls
+ });
+ 
+ // Close dropdown when clicking outside
+ document.addEventListener('click', function(e) {
+ if (!collegeInput.contains(e.target) && !collegeResults.contains(e.target)) {
+ collegeResults.classList.remove('show');
+ }
+ });
+ 
+ // Form validation
+ document.getElementById('entryForm').addEventListener('submit', function(e) {
+ const usn = document.getElementById('usn').value.trim();
+ const college = document.getElementById('college').value.trim();
+ 
+ if (!usn || !college) {
+ e.preventDefault();
+ alert('Please fill in all required fields');
+ return false;
+ }
+ 
+ if (usn.length < 3) {
+ e.preventDefault();
+ alert('Please enter a valid USN (at least 3 characters)');
+ return false;
+ }
+ 
+ if (college.length < 5) {
+ e.preventDefault();
+ alert('Please enter a valid college name (at least 5 characters)');
+ return false;
+ }
+ });
+ 
+ // Auto-focus on first input
+ document.getElementById('usn').focus();
+ </script>
+</body>
+</html>

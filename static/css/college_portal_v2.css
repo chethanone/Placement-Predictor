@@ -1,0 +1,213 @@
+/* College Portal Specific Styles with New Color Palette */
+:root {
+    --mint-green: #8FB8A8;
+    --cream: #FEFAD4;
+    --light-pink: #F5C0DD;
+    --deep-purple: #765D69;
+}
+
+/* Main Layout */
+.college-portal-container {
+    background-color: var(--cream);
+    min-height: 100vh;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Navigation */
+.college-nav {
+    background-color: var(--mint-green);
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.college-nav .nav-link {
+    color: var(--deep-purple);
+    font-weight: 500;
+}
+
+.college-nav .nav-link:hover {
+    color: var(--light-pink);
+}
+
+/* Cards and Containers */
+.college-card {
+    background: white;
+    border-radius: 15px;
+    border: 1px solid var(--mint-green);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease;
+}
+
+.college-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--light-pink);
+}
+
+/* Tables */
+.college-table {
+    width: 100%;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid var(--mint-green);
+}
+
+.college-table th {
+    background: var(--mint-green);
+    color: var(--deep-purple);
+    padding: 1rem;
+    font-weight: 600;
+}
+
+.college-table td {
+    padding: 1rem;
+    border-bottom: 1px solid var(--cream);
+}
+
+.college-table tr:hover {
+    background: var(--cream);
+}
+
+/* Buttons */
+.college-btn {
+    background: var(--mint-green);
+    color: var(--deep-purple);
+    border: none;
+    padding: 0.5rem 1.5rem;
+    border-radius: 5px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.college-btn:hover {
+    background: var(--light-pink);
+    transform: translateY(-2px);
+}
+
+/* Stats Cards */
+.stats-card {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    border: 1px solid var(--mint-green);
+    text-align: center;
+}
+
+.stats-card .number {
+    font-size: 2rem;
+    color: var(--deep-purple);
+    font-weight: bold;
+}
+
+.stats-card .label {
+    color: var(--mint-green);
+    font-weight: 500;
+}
+
+/* Forms */
+.college-form-group {
+    margin-bottom: 1.5rem;
+}
+
+.college-form-group label {
+    color: var(--deep-purple);
+    margin-bottom: 0.5rem;
+    display: block;
+}
+
+.college-form-control {
+    border: 1px solid var(--mint-green);
+    border-radius: 5px;
+    padding: 0.5rem;
+    width: 100%;
+}
+
+.college-form-control:focus {
+    border-color: var(--light-pink);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(245, 192, 221, 0.2);
+}
+
+/* Alerts and Notifications */
+.college-alert {
+    padding: 1rem;
+    border-radius: 5px;
+    margin-bottom: 1rem;
+}
+
+.college-alert-success {
+    background: var(--mint-green);
+    color: var(--deep-purple);
+}
+
+.college-alert-warning {
+    background: var(--light-pink);
+    color: var(--deep-purple);
+}
+
+/* Dashboard Widgets */
+.dashboard-widget {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--mint-green);
+}
+
+.dashboard-widget h3 {
+    color: var(--deep-purple);
+    margin-bottom: 1rem;
+}
+
+/* Progress Bars */
+.college-progress {
+    height: 10px;
+    background: var(--cream);
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.college-progress-bar {
+    height: 100%;
+    background: var(--mint-green);
+    transition: width 0.3s ease;
+}
+
+/* Badges */
+.college-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 15px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.college-badge-success {
+    background: var(--mint-green);
+    color: var(--deep-purple);
+}
+
+.college-badge-warning {
+    background: var(--light-pink);
+    color: var(--deep-purple);
+}
+
+/* Charts Container */
+.chart-container {
+    background: white;
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--mint-green);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+}

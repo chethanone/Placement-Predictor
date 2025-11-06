@@ -1,0 +1,239 @@
+{% extends 'predictor/base.html' %}
+{% load static %}
+
+{% block title %}Pending Verifications - Teacher Portal{% endblock %}
+
+{% block content %}
+<div class="pending-verifications-container">
+ <div class="container">
+ <div class="page-header">
+ <a href="{% url 'teacher_dashboard' %}" class="back-btn">
+ <i class="fas fa-arrow-left"></i> Back to Dashboard
+ </a>
+ <h1><i class="fas fa-clock"></i> Pending Verifications</h1>
+ </div>
+
+ <div class="pending-list">
+ {% for verification in pending_verifications %}
+ <div class="verification-card">
+ <div class="card-header">
+ <div class="student-info">
+ <h3>{{ verification.student.user.get_full_name }}</h3>
+ <p>{{ verification.student.roll_number }} | {{ verification.student.stream }}</p>
+ </div>
+ <div class="timestamp">
+ <i class="fas fa-calendar"></i>
+ {{ verification.created_at|date:"M d, Y" }}
+ </div>
+ </div>
+ 
+ <div class="card-body">
+ <div class="scores-grid">
+ <div class="score-item">
+ <label>Technical Skills</label>
+ <span>{{ verification.original_technical|floatformat:1 }}/10</span>
+ </div>
+ <div class="score-item">
+ <label>Programming Skills</label>
+ <span>{{ verification.original_programming|floatformat:1 }}/10</span>
+ </div>
+ <div class="score-item">
+ <label>Aptitude Score</label>
+ <span>{{ verification.original_aptitude|floatformat:1 }}/100</span>
+ </div>
+ </div>
+ 
+ {% if verification.notes %}
+ <div class="notes">
+ <strong>Notes:</strong>
+ <p>{{ verification.notes }}</p>
+ </div>
+ {% endif %}
+ </div>
+ 
+ <div class="card-footer">
+ <a href="{% url 'teacher_verify_student' verification.student.id %}" 
+ class="btn-verify">
+ <i class="fas fa-edit"></i> Verify & Edit
+ </a>
+ </div>
+ </div>
+ {% empty %}
+ <div class="no-data">
+ <i class="fas fa-check-circle"></i>
+ <h3>All Clear!</h3>
+ <p>No pending verifications at the moment.</p>
+ </div>
+ {% endfor %}
+ </div>
+ </div>
+</div>
+
+<style>
+.pending-verifications-container {
+ padding: 30px 0;
+ min-height: 100vh;
+ background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.page-header {
+ margin-bottom: 30px;
+}
+
+.back-btn {
+ display: inline-flex;
+ align-items: center;
+ gap: 8px;
+ padding: 10px 20px;
+ background: white;
+ color: #667eea;
+ text-decoration: none;
+ border-radius: 8px;
+ margin-bottom: 15px;
+ font-weight: 600;
+ box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.back-btn:hover {
+ background: #667eea;
+ color: white;
+}
+
+.page-header h1 {
+ color: #333;
+ font-size: 2rem;
+}
+
+.pending-list {
+ display: grid;
+ gap: 20px;
+}
+
+.verification-card {
+ background: white;
+ border-radius: 15px;
+ box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+ overflow: hidden;
+ border-left: 5px solid #f093fb;
+}
+
+.verification-card .card-header {
+ background: #f8f9fa;
+ padding: 20px 25px;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+}
+
+.student-info h3 {
+ margin: 0 0 5px 0;
+ color: #333;
+}
+
+.student-info p {
+ margin: 0;
+ color: #666;
+ font-size: 0.9rem;
+}
+
+.timestamp {
+ color: #999;
+ display: flex;
+ align-items: center;
+ gap: 8px;
+}
+
+.card-body {
+ padding: 25px;
+}
+
+.scores-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+ gap: 20px;
+ margin-bottom: 20px;
+}
+
+.score-item {
+ display: flex;
+ flex-direction: column;
+ gap: 8px;
+}
+
+.score-item label {
+ font-weight: 600;
+ color: #666;
+ font-size: 0.9rem;
+}
+
+.score-item span {
+ font-size: 1.5rem;
+ font-weight: bold;
+ color: #667eea;
+}
+
+.notes {
+ background: #fff3cd;
+ padding: 15px;
+ border-radius: 8px;
+ border-left: 4px solid #ffc107;
+}
+
+.notes strong {
+ color: #856404;
+}
+
+.notes p {
+ margin: 10px 0 0 0;
+ color: #666;
+}
+
+.card-footer {
+ padding: 20px 25px;
+ background: #f8f9fa;
+ text-align: right;
+}
+
+.btn-verify {
+ padding: 12px 30px;
+ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+ color: white;
+ text-decoration: none;
+ border-radius: 8px;
+ display: inline-flex;
+ align-items: center;
+ gap: 10px;
+ font-weight: 600;
+ transition: all 0.3s;
+}
+
+.btn-verify:hover {
+ transform: translateY(-2px);
+ box-shadow: 0 5px 15px rgba(102,126,234,0.4);
+}
+
+.no-data {
+ text-align: center;
+ padding: 80px 20px;
+ background: white;
+ border-radius: 15px;
+ box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.no-data i {
+ font-size: 4rem;
+ color: #28a745;
+ margin-bottom: 20px;
+}
+
+.no-data h3 {
+ color: #333;
+ margin-bottom: 10px;
+}
+
+.no-data p {
+ color: #666;
+ font-size: 1.1rem;
+}
+</style>
+{% endblock %}

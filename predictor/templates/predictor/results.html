@@ -1,0 +1,214 @@
+{% extends 'predictor/base.html' %}
+{% load static %}
+
+{% block title %}Results - {{ student.name }}{% endblock %}
+
+{% block content %}
+<div class="hero-section results-hero">
+ <div class="container">
+ <h1 class="hero-title"> Results for {{ student.name }}</h1>
+ </div>
+</div>
+
+<div class="container results-container">
+ <!-- Placement Result -->
+ <div class="result-card {% if prediction == 'Yes' %}success{% else %}warning{% endif %}">
+ <div class="result-icon">
+ {% if prediction == 'Yes' %}
+ <i class="fas fa-check-circle"></i>
+ {% else %}
+ <i class="fas fa-exclamation-triangle"></i>
+ {% endif %}
+ </div>
+ <h2 class="result-title">
+ {% if prediction == 'Yes' %}
+ High Placement Probability
+ {% else %}
+ Low Placement Probability
+ {% endif %}
+ </h2>
+ <div class="result-percentage">{{ probability|floatformat:1 }}%</div>
+ <p class="result-confidence">Confidence: {{ probability|floatformat:1 }}%</p>
+ </div>
+
+ <!-- Key Metrics -->
+ <div class="metrics-grid">
+ <div class="metric-card gradient-1">
+ <div class="metric-icon"><i class="fas fa-chart-line"></i></div>
+ <div class="metric-content">
+ <div class="metric-label">Employability Score</div>
+ <div class="metric-value">{{ student.employability_score|floatformat:0 }}/100</div>
+ </div>
+ </div>
+ <div class="metric-card gradient-2">
+ <div class="metric-icon"><i class="fas fa-project-diagram"></i></div>
+ <div class="metric-content">
+ <div class="metric-label">Projects</div>
+ <div class="metric-value">{{ student.projects_completed }}</div>
+ </div>
+ </div>
+ <div class="metric-card gradient-3">
+ <div class="metric-icon"><i class="fas fa-graduation-cap"></i></div>
+ <div class="metric-content">
+ <div class="metric-label">CGPA</div>
+ <div class="metric-value">{{ student.cgpa|floatformat:2 }}</div>
+ </div>
+ </div>
+ <div class="metric-card gradient-4">
+ <div class="metric-icon"><i class="fas fa-certificate"></i></div>
+ <div class="metric-content">
+ <div class="metric-label">Certifications</div>
+ <div class="metric-value">
+ {% if student.has_certificates %}
+ <i class="fas fa-check-circle" style="color: #11998e;"></i> Yes
+ {% else %}
+ <i class="fas fa-times-circle" style="color: #f5576c;"></i> No
+ {% endif %}
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <!-- Profile Overview -->
+ <div class="profile-section">
+ <h2 class="section-title">
+ <i class="fas fa-user"></i>
+ Your Profile Overview
+ </h2>
+ <div class="profile-grid">
+ <div class="profile-item">
+ <span class="profile-label"><i class="fas fa-comments"></i> Communication Skills</span>
+ <div class="progress-bar">
+ <div class="progress-fill" style="width: {{ student.communication_skills }}0%"></div>
+ <span class="progress-text">{{ student.communication_skills }}/10</span>
+ </div>
+ </div>
+ <div class="profile-item">
+ <span class="profile-label"><i class="fas fa-brain"></i> IQ Score</span>
+ <div class="progress-bar">
+ <div class="progress-fill" style="width: {% widthratio student.iq_score 150 100 %}%"></div>
+ <span class="progress-text">{{ student.iq_score }}/150</span>
+ </div>
+ </div>
+ <div class="profile-item">
+ <span class="profile-label"><i class="fas fa-book-open"></i> Previous Semester</span>
+ <div class="progress-bar">
+ <div class="progress-fill" style="width: {{ student.prev_sem_score }}0%"></div>
+ <span class="progress-text">{{ student.prev_sem_score }}/10</span>
+ </div>
+ </div>
+ <div class="profile-item">
+ <span class="profile-label"><i class="fas fa-running"></i> Extra-Curricular</span>
+ <div class="progress-bar">
+ <div class="progress-fill" style="width: {{ student.extra_curricular_score }}0%"></div>
+ <span class="progress-text">{{ student.extra_curricular_score }}/10</span>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <!-- Certificates Display -->
+ {% if student.has_certificates and certificates %}
+ <div class="certificates-section">
+ <h2 class="section-title">
+ <i class="fas fa-certificate"></i>
+ Your Certifications
+ </h2>
+ <div class="certificates-list">
+ {% for cert in certificates %}
+ {% if cert %}
+ <div class="certificate-item">
+ <i class="fas fa-award"></i>
+ <span>{{ cert }}</span>
+ </div>
+ {% endif %}
+ {% endfor %}
+ </div>
+ </div>
+ {% endif %}
+
+ <!-- Recommendations -->
+ <div class="recommendations-section">
+ <h2 class="section-title">
+ <i class="fas fa-lightbulb"></i>
+ Personalized Recommendations
+ </h2>
+ 
+ {% if recommendations %}
+ <div class="recommendations-grid">
+ {% for rec in recommendations %}
+ <div class="recommendation-card priority-{{ rec.priority|lower }}">
+ <div class="rec-header">
+ <h3 class="rec-title">{{ rec.title }}</h3>
+ <span class="rec-priority">{{ rec.priority }}</span>
+ </div>
+ <p class="rec-description">{{ rec.description }}</p>
+ <div class="rec-footer">
+ <span class="rec-impact">
+ <i class="fas fa-chart-line"></i>
+ Impact: <strong>{{ rec.impact }}</strong>
+ </span>
+ </div>
+ </div>
+ {% endfor %}
+ </div>
+ {% else %}
+ <div class="success-message">
+ <i class="fas fa-trophy"></i>
+ <h3>Excellent Profile!</h3>
+ <p>Your profile is very strong. Keep up the great work and continue improving!</p>
+ </div>
+ {% endif %}
+ </div>
+
+ <!-- Action Plan -->
+ <div class="action-plan-section">
+ <h2 class="section-title">
+ <i class="fas fa-tasks"></i>
+ Your Action Plan
+ </h2>
+ <div class="action-plan-card">
+ {% if probability < 40 %}
+ <h3><i class="fas fa-exclamation-circle"></i> Immediate Actions (Next 2-4 weeks)</h3>
+ <ul class="action-list">
+ <li><i class="fas fa-check"></i> Focus on communication skills through daily practice</li>
+ <li><i class="fas fa-check"></i> Start building at least 2 quality projects</li>
+ <li><i class="fas fa-check"></i> Improve academic performance in current semester</li>
+ <li><i class="fas fa-check"></i> Practice aptitude tests daily (2 hours)</li>
+ <li><i class="fas fa-check"></i> Join coding platforms (LeetCode, HackerRank)</li>
+ </ul>
+ {% elif probability < 70 %}
+ <h3><i class="fas fa-chart-line"></i> Growth Actions (Next 1-2 months)</h3>
+ <ul class="action-list">
+ <li><i class="fas fa-check"></i> Complete pending certifications in your domain</li>
+ <li><i class="fas fa-check"></i> Build 1-2 more advanced projects</li>
+ <li><i class="fas fa-check"></i> Participate in hackathons or competitions</li>
+ <li><i class="fas fa-check"></i> Network with professionals on LinkedIn</li>
+ <li><i class="fas fa-check"></i> Prepare resume and practice mock interviews</li>
+ </ul>
+ {% else %}
+ <h3><i class="fas fa-trophy"></i> Excellence Actions</h3>
+ <ul class="action-list">
+ <li><i class="fas fa-check"></i> Target top product-based companies (FAANG, etc.)</li>
+ <li><i class="fas fa-check"></i> Practice system design and advanced DSA</li>
+ <li><i class="fas fa-check"></i> Build portfolio/personal website</li>
+ <li><i class="fas fa-check"></i> Prepare for technical interviews intensively</li>
+ <li><i class="fas fa-check"></i> Consider contributing to open source projects</li>
+ </ul>
+ {% endif %}
+ </div>
+ </div>
+
+ <!-- Actions -->
+ <div class="form-actions">
+ <a href="{% url 'home' %}" class="btn btn-secondary">
+ <i class="fas fa-arrow-left"></i>
+ Back to Form
+ </a>
+ <a href="{% url 'dashboard' %}" class="btn btn-primary">
+ <i class="fas fa-chart-bar"></i>
+ View Analytics Dashboard
+ </a>
+ </div>
+</div>
+{% endblock %}

@@ -1,0 +1,81 @@
+{% extends 'predictor/base.html' %}
+{% load static %}
+
+{% block title %}Syllabus Assessment - AI Placement Predictor{% endblock %}
+
+{% block content %}
+<div class="hero-section assessment-hero">
+ <div class="container">
+ <h1 class="hero-title"> Syllabus Assessment</h1>
+ <p class="hero-subtitle">Answer the questions based on your syllabus content</p>
+ </div>
+</div>
+
+<div class="container">
+ <div class="assessment-card">
+ <form method="POST" action="{% url 'submit_assessment' assessment.id %}" id="assessmentForm">
+ {% csrf_token %}
+ 
+ <!-- Questions -->
+ {% for question in questions %}
+ <div class="question-card">
+ <h3 class="question-number">Question {{ forloop.counter }}</h3>
+ <p class="question-text">{{ question.question_text }}</p>
+ <div class="answer-input">
+ <textarea name="answer_{{ question.id }}" class="form-control" rows="3" required></textarea>
+ </div>
+ </div>
+ {% endfor %}
+ 
+ <!-- Submit Button -->
+ <div class="form-actions">
+ <button type="submit" class="btn btn-primary btn-large">
+ <i class="fas fa-check-circle"></i>
+ Submit Assessment
+ </button>
+ </div>
+ </form>
+ </div>
+</div>
+
+<style>
+.assessment-hero {
+ background: linear-gradient(135deg, #3B82F6 0%, #1E40AF 100%);
+}
+.assessment-card {
+ background: white;
+ border-radius: 12px;
+ padding: 2rem;
+ box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+ margin: 2rem 0;
+}
+.question-card {
+ border: 1px solid #E5E7EB;
+ border-radius: 8px;
+ padding: 1.5rem;
+ margin-bottom: 1.5rem;
+}
+.question-number {
+ color: #3B82F6;
+ font-size: 1.125rem;
+ margin-bottom: 0.5rem;
+}
+.question-text {
+ font-size: 1rem;
+ color: #1F2937;
+ margin-bottom: 1rem;
+}
+.answer-input textarea {
+ width: 100%;
+ padding: 0.75rem;
+ border: 1px solid #D1D5DB;
+ border-radius: 6px;
+ resize: vertical;
+}
+.answer-input textarea:focus {
+ outline: none;
+ border-color: #3B82F6;
+ box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+</style>
+{% endblock %}

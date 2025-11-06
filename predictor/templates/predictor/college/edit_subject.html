@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+ <title>Edit Subject - College Portal</title>
+ <style>
+ body { font-family: Arial; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 20px; }
+ .container { max-width: 800px; margin: 0 auto; }
+ .card { background: white; padding: 40px; border-radius: 10px; }
+ input, select { width: 100%; padding: 12px; margin: 10px 0; border: 2px solid #e0e0e0; border-radius: 5px; }
+ button { width: 100%; padding: 15px; background: #f5576c; color: white; border: none; border-radius: 5px; font-size: 16px; cursor: pointer; }
+ label { font-weight: 600; color: #333; }
+ .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+ </style>
+</head>
+<body>
+ <div class="container">
+ <a href="{% url 'manage_subjects' %}" style="color: white;">← Back</a>
+ <div class="card">
+ <h1> Edit Subject</h1>
+ <form method="POST">
+ {% csrf_token %}
+ <label>Subject Code *</label>
+ <input type="text" name="subject_code" value="{{ subject.subject_code }}" required>
+ 
+ <label>Subject Name *</label>
+ <input type="text" name="subject_name" value="{{ subject.subject_name }}" required>
+ 
+ <div class="form-row">
+ <div>
+ <label>Branch *</label>
+ <select name="branch" required>
+ {% for code, name in branches %}
+ <option value="{{ code }}" {% if code == subject.branch %}selected{% endif %}>{{ name }}</option>
+ {% endfor %}
+ </select>
+ </div>
+ 
+ <div>
+ <label>Semester *</label>
+ <select name="semester" required>
+ {% for sem in semesters %}
+ <option value="{{ sem }}" {% if sem == subject.semester %}selected{% endif %}>Semester {{ sem }}</option>
+ {% endfor %}
+ </select>
+ </div>
+ </div>
+ 
+ <label>Credits *</label>
+ <input type="number" name="credits" value="{{ subject.credits }}" required min="1" max="6">
+ 
+ <button type="submit">Update Subject</button>
+ </form>
+ </div>
+ </div>
+</body>
+</html>

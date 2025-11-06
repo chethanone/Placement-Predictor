@@ -1,0 +1,290 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}
+<link rel="stylesheet" type="text/css" href="{% static "admin/css/login.css" %}">
+{{ form.media }}
+<style>
+/* Django Admin Default Styling */
+body.login {
+background: #f8f8f8;
+font-family: "Roboto","Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+margin: 0;
+padding: 0;
+}
+
+.login #container {
+background: #fff;
+border: 1px solid #ccc;
+border-radius: 4px;
+overflow: hidden;
+width: 28em;
+min-height: 400px;
+margin: 100px auto;
+box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.login #content {
+padding: 20px 20px 0;
+}
+
+.login #content-main {
+width: 100%;
+}
+
+.login h1 {
+font-weight: 300;
+margin: 0 0 20px;
+padding: 0;
+font-size: 18px;
+text-align: center;
+}
+
+.login h1 a {
+color: #417690;
+text-decoration: none;
+}
+
+.login form {
+margin-top: 1em;
+}
+
+.login .form-row {
+padding: 4px 0;
+margin-bottom: 15px;
+}
+
+.login .form-row label {
+display: block;
+line-height: 2em;
+font-size: 13px;
+font-weight: bold;
+color: #333;
+}
+
+.login .form-row input[type="text"],
+.login .form-row input[type="password"] {
+padding: 8px 6px;
+width: 100%;
+box-sizing: border-box;
+border: 1px solid #ccc;
+border-radius: 4px;
+font-size: 14px;
+font-family: "Roboto","Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
+}
+
+.login .form-row input[type="text"]:focus,
+.login .form-row input[type="password"]:focus {
+border-color: #417690;
+outline: none;
+box-shadow: 0 0 0 2px rgba(65,118,144,0.15);
+}
+
+.login .submit-row {
+padding: 1em 0 0 0;
+margin: 20px 0 0 0;
+border-top: 1px solid #eee;
+background: none;
+text-align: right;
+}
+
+.login input[type="submit"] {
+background: #417690;
+border: none;
+border-radius: 4px;
+padding: 10px 15px;
+color: #fff;
+cursor: pointer;
+font-size: 13px;
+font-weight: bold;
+text-transform: uppercase;
+letter-spacing: 0.5px;
+}
+
+.login input[type="submit"]:hover,
+.login input[type="submit"]:focus {
+background: #305766;
+}
+
+.login input[type="submit"]:active {
+background: #2c4d59;
+}
+
+.login .errornote {
+display: block;
+padding: 10px 12px;
+margin: 0 0 10px 0;
+font-size: 13px;
+font-weight: bold;
+color: #ba2121;
+background: #ffefef;
+border: 1px solid #ba2121;
+border-radius: 4px;
+}
+
+.login .errornote ul {
+margin: 0;
+padding: 0;
+list-style: none;
+}
+
+.login ul.errorlist {
+margin: 0 0 4px;
+padding: 0;
+color: #ba2121;
+background: #ffefef;
+border: 1px solid #ba2121;
+border-radius: 4px;
+list-style: none;
+}
+
+.login ul.errorlist li {
+padding: 5px 10px;
+font-size: 12px;
+}
+
+.login #footer {
+clear: both;
+padding: 10px;
+}
+
+/* Header styling */
+.login #header {
+background: #417690;
+color: #ffc;
+overflow: hidden;
+padding: 10px 20px;
+}
+
+.login #branding h1 {
+margin: 0;
+padding: 0;
+font-size: 18px;
+font-weight: normal;
+text-align: left;
+}
+
+.login #branding h1,
+.login #branding h1 a {
+color: #f5dd5d;
+}
+
+.login #branding h1 a:hover {
+color: #ffc;
+}
+
+/* Password reset link */
+.login .password-reset-link {
+text-align: center;
+margin-top: 10px;
+font-size: 12px;
+}
+
+.login .password-reset-link a {
+color: #447e9b;
+}
+
+@media (max-width: 768px) {
+.login #container {
+width: 90%;
+margin-top: 50px;
+}
+}
+
+@media (prefers-color-scheme: dark) {
+body.login {
+background: #121212;
+}
+
+.login #container {
+background: #1e1e1e;
+border-color: #2d2d2d;
+}
+
+.login #header {
+background: #2d4a5a;
+}
+
+.login .form-row label {
+color: #ddd;
+}
+
+.login .form-row input[type="text"],
+.login .form-row input[type="password"] {
+background: #2d2d2d;
+border-color: #3d3d3d;
+color: #ddd;
+}
+
+.login .form-row input[type="text"]:focus,
+.login .form-row input[type="password"]:focus {
+border-color: #5c9abe;
+background: #333;
+}
+}
+</style>
+{% endblock %}
+
+{% block bodyclass %}{{ block.super }} login{% endblock %}
+
+{% block usertools %}{% endblock %}
+
+{% block nav-global %}{% endblock %}
+
+{% block nav-sidebar %}{% endblock %}
+
+{% block content_title %}{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+<div id="content-main">
+
+{% if form.errors and not form.non_field_errors %}
+<p class="errornote">
+{% if form.errors.items|length == 1 %}{% translate "Please correct the error below." %}{% else %}{% translate "Please correct the errors below." %}{% endif %}
+</p>
+{% endif %}
+
+{% if form.non_field_errors %}
+{% for error in form.non_field_errors %}
+<p class="errornote">{{ error }}</p>
+{% endfor %}
+{% endif %}
+
+{% if user.is_authenticated %}
+<p class="errornote">
+{% blocktranslate trimmed %}
+You are authenticated as {{ username }}, but are not authorized to
+access this page. Would you like to login to a different account?
+{% endblocktranslate %}
+</p>
+{% endif %}
+
+<div id="container">
+<form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
+<div id="content">
+<h1>{% translate 'Django administration' %}</h1>
+
+<div class="form-row">
+{{ form.username.errors }}
+{{ form.username.label_tag }}
+{{ form.username }}
+</div>
+
+<div class="form-row">
+{{ form.password.errors }}
+{{ form.password.label_tag }}
+{{ form.password }}
+<input type="hidden" name="next" value="{{ next }}">
+</div>
+
+<div class="submit-row">
+<input type="submit" value="{% translate 'Log in' %}">
+</div>
+</div>
+</form>
+</div>
+
+</div>
+{% endblock %}

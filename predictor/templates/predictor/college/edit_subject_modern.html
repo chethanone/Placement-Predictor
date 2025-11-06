@@ -1,0 +1,582 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Edit Subject - College Portal</title>
+ <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&display=swap">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ <style>
+ :root {
+ --sage-green: #8FB9A8;
+ --cream: #FEFAD4;
+ --peach: #FCB9AA;
+ --rose: #F1828D;
+ --mauve: #765D69;
+ --dark-text: #2d3748;
+ --light-bg: #f7fafc;
+ }
+
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ }
+
+ body {
+ font-family: 'Inter', sans-serif;
+ background: linear-gradient(135deg, var(--cream) 0%, var(--light-bg) 100%);
+ color: var(--dark-text);
+ min-height: 100vh;
+ }
+
+ /* Sidebar */
+ .sidebar {
+ position: fixed;
+ left: 0;
+ top: 0;
+ height: 100vh;
+ width: 260px;
+ background: linear-gradient(180deg, var(--mauve) 0%, var(--sage-green) 100%);
+ padding: 30px 20px;
+ box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+ z-index: 100;
+ }
+
+ .logo {
+ text-align: center;
+ margin-bottom: 40px;
+ animation: slideDown 0.6s ease;
+ }
+
+ .logo i {
+ font-size: 48px;
+ color: white;
+ margin-bottom: 10px;
+ }
+
+ .logo h2 {
+ color: white;
+ font-size: 20px;
+ font-weight: 600;
+ font-family: 'Poppins', sans-serif;
+ }
+
+ .logo p {
+ color: rgba(255,255,255,0.8);
+ font-size: 12px;
+ margin-top: 5px;
+ }
+
+ .nav-section {
+ padding: 20px 0;
+ }
+
+ .nav-item {
+ margin: 5px 15px;
+ }
+
+ .nav-link {
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ padding: 14px 20px;
+ color: rgba(255, 255, 255, 0.9);
+ text-decoration: none;
+ border-radius: 12px;
+ transition: all 0.3s ease;
+ font-weight: 500;
+ }
+
+ .nav-link:hover, .nav-link.active {
+ background: rgba(255, 255, 255, 0.15);
+ color: white;
+ transform: translateX(5px);
+ }
+
+ .nav-link i {
+ width: 24px;
+ text-align: center;
+ font-size: 18px;
+ }
+
+ /* Main Content */
+ .main-content {
+ margin-left: 260px;
+ padding: 40px;
+ animation: fadeIn 0.8s ease;
+ }
+
+ .page-header {
+ margin-bottom: 40px;
+ }
+
+ .page-header h1 {
+ font-family: 'Poppins', sans-serif;
+ font-size: 32px;
+ color: var(--mauve);
+ margin-bottom: 8px;
+ }
+
+ .page-header p {
+ color: #718096;
+ font-size: 15px;
+ }
+
+ .breadcrumb {
+ display: flex;
+ align-items: center;
+ gap: 8px;
+ margin-top: 12px;
+ font-size: 14px;
+ color: #718096;
+ }
+
+ .breadcrumb a {
+ color: var(--sage-green);
+ text-decoration: none;
+ }
+
+ .breadcrumb a:hover {
+ text-decoration: underline;
+ }
+
+ /* Form Container */
+ .form-container {
+ background: white;
+ border-radius: 20px;
+ padding: 40px;
+ box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+ animation: slideUp 0.6s ease;
+ max-width: 900px;
+ }
+
+ .form-header {
+ margin-bottom: 30px;
+ padding-bottom: 20px;
+ border-bottom: 2px solid var(--light-bg);
+ }
+
+ .form-header h2 {
+ font-family: 'Poppins', sans-serif;
+ color: var(--mauve);
+ font-size: 24px;
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ }
+
+ .form-header h2 i {
+ color: var(--sage-green);
+ }
+
+ .form-grid {
+ display: grid;
+ grid-template-columns: repeat(2, 1fr);
+ gap: 25px;
+ margin-bottom: 30px;
+ }
+
+ .form-group {
+ display: flex;
+ flex-direction: column;
+ }
+
+ .form-group.full-width {
+ grid-column: span 2;
+ }
+
+ .form-label {
+ font-weight: 600;
+ color: var(--mauve);
+ margin-bottom: 8px;
+ font-size: 14px;
+ display: flex;
+ align-items: center;
+ gap: 6px;
+ }
+
+ .form-label i {
+ color: var(--sage-green);
+ font-size: 12px;
+ }
+
+ .required {
+ color: var(--rose);
+ margin-left: 2px;
+ }
+
+ .form-input, .form-select {
+ padding: 14px 16px;
+ border: 2px solid #e2e8f0;
+ border-radius: 12px;
+ font-size: 14px;
+ font-family: 'Inter', sans-serif;
+ transition: all 0.3s ease;
+ background: white;
+ }
+
+ .form-input:focus, .form-select:focus {
+ outline: none;
+ border-color: var(--sage-green);
+ box-shadow: 0 0 0 3px rgba(143, 185, 168, 0.1);
+ }
+
+ .form-input::placeholder {
+ color: #a0aec0;
+ }
+
+ .form-help {
+ font-size: 12px;
+ color: #718096;
+ margin-top: 6px;
+ }
+
+ /* Buttons */
+ .form-actions {
+ display: flex;
+ gap: 15px;
+ margin-top: 30px;
+ padding-top: 20px;
+ border-top: 2px solid var(--light-bg);
+ }
+
+ .btn {
+ padding: 14px 30px;
+ border: none;
+ border-radius: 12px;
+ font-size: 15px;
+ font-weight: 600;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ display: inline-flex;
+ align-items: center;
+ gap: 8px;
+ font-family: 'Inter', sans-serif;
+ text-decoration: none;
+ }
+
+ .btn-primary {
+ background: linear-gradient(135deg, var(--sage-green) 0%, var(--mauve) 100%);
+ color: white;
+ }
+
+ .btn-primary:hover {
+ transform: translateY(-2px);
+ box-shadow: 0 8px 20px rgba(143, 185, 168, 0.3);
+ }
+
+ .btn-secondary {
+ background: #e2e8f0;
+ color: var(--dark-text);
+ }
+
+ .btn-secondary:hover {
+ background: #cbd5e0;
+ transform: translateY(-2px);
+ }
+
+ /* Messages */
+ .messages {
+ margin-bottom: 25px;
+ }
+
+ .alert {
+ padding: 16px 20px;
+ border-radius: 12px;
+ margin-bottom: 15px;
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ animation: slideDown 0.4s ease;
+ }
+
+ .alert i {
+ font-size: 20px;
+ }
+
+ .alert-success {
+ background: rgba(143, 185, 168, 0.15);
+ color: var(--sage-green);
+ border-left: 4px solid var(--sage-green);
+ }
+
+ .alert-error {
+ background: rgba(241, 130, 141, 0.15);
+ color: var(--rose);
+ border-left: 4px solid var(--rose);
+ }
+
+ /* Animations */
+ @keyframes fadeIn {
+ from { opacity: 0; }
+ to { opacity: 1; }
+ }
+
+ @keyframes slideDown {
+ from {
+ opacity: 0;
+ transform: translateY(-20px);
+ }
+ to {
+ opacity: 1;
+ transform: translateY(0);
+ }
+ }
+
+ @keyframes slideUp {
+ from {
+ opacity: 0;
+ transform: translateY(20px);
+ }
+ to {
+ opacity: 1;
+ transform: translateY(0);
+ }
+ }
+
+ /* Responsive */
+ @media (max-width: 768px) {
+ .sidebar {
+ transform: translateX(-100%);
+ }
+
+ .main-content {
+ margin-left: 0;
+ padding: 20px;
+ }
+
+ .form-grid {
+ grid-template-columns: 1fr;
+ }
+
+ .form-group.full-width {
+ grid-column: span 1;
+ }
+ }
+ </style>
+</head>
+<body>
+ <!-- Sidebar -->
+ <aside class="sidebar">
+ <div class="logo">
+ <i class="fas fa-university"></i>
+ <h2>College Portal</h2>
+ <p>Subject Management</p>
+ </div>
+
+ <nav class="nav-section">
+ <div class="nav-item">
+ <a href="{% url 'college_dashboard' %}" class="nav-link">
+ <i class="fas fa-home"></i>
+ <span>Dashboard</span>
+ </a>
+ </div>
+ <div class="nav-item">
+ <a href="{% url 'college_manage_students' %}" class="nav-link">
+ <i class="fas fa-users"></i>
+ <span>Manage Students</span>
+ </a>
+ </div>
+ <div class="nav-item">
+ <a href="{% url 'manage_subjects' %}" class="nav-link active">
+ <i class="fas fa-book"></i>
+ <span>Manage Subjects</span>
+ </a>
+ </div>
+ <div class="nav-item">
+ <a href="{% url 'college_analytics' %}" class="nav-link">
+ <i class="fas fa-chart-line"></i>
+ <span>Analytics</span>
+ </a>
+ </div>
+ <div class="nav-item">
+ <a href="{% url 'college_reports' %}" class="nav-link">
+ <i class="fas fa-file-alt"></i>
+ <span>Reports</span>
+ </a>
+ </div>
+ <div class="nav-item">
+ <a href="{% url 'college_notifications' %}" class="nav-link">
+ <i class="fas fa-bell"></i>
+ <span>Notifications</span>
+ </a>
+ </div>
+ <div class="nav-item">
+ <a href="{% url 'college_logout' %}" class="nav-link">
+ <i class="fas fa-sign-out-alt"></i>
+ <span>Logout</span>
+ </a>
+ </div>
+ </nav>
+ </aside>
+
+ <!-- Main Content -->
+ <main class="main-content">
+ <div class="page-header">
+ <h1>Edit Subject</h1>
+ <p>Update subject details in the database</p>
+ <div class="breadcrumb">
+ <a href="{% url 'college_dashboard' %}"><i class="fas fa-home"></i> Home</a>
+ <span>/</span>
+ <a href="{% url 'manage_subjects' %}">Subjects</a>
+ <span>/</span>
+ <span>Edit Subject</span>
+ </div>
+ </div>
+
+ {% if messages %}
+ <div class="messages">
+ {% for message in messages %}
+ <div class="alert alert-{{ message.tags }}">
+ <i class="fas fa-{% if message.tags == 'success' %}check-circle{% else %}exclamation-circle{% endif %}"></i>
+ <span>{{ message }}</span>
+ </div>
+ {% endfor %}
+ </div>
+ {% endif %}
+
+ <div class="form-container">
+ <div class="form-header">
+ <h2>
+ <i class="fas fa-edit"></i>
+ Edit Subject Information
+ </h2>
+ </div>
+
+ <form method="POST" id="subjectForm">
+ {% csrf_token %}
+ 
+ <div class="form-grid">
+ <div class="form-group">
+ <label class="form-label">
+ <i class="fas fa-code"></i>
+ Subject Code
+ <span class="required">*</span>
+ </label>
+ <input 
+ type="text" 
+ name="subject_code" 
+ class="form-input" 
+ placeholder="e.g., CS101" 
+ required
+ pattern="[A-Z]{2,3}[0-9]{3,4}"
+ title="Format: 2-3 letters followed by 3-4 digits (e.g., CS101)"
+ value="{{ subject.subject_code }}"
+ >
+ <small class="form-help">Format: 2-3 letters followed by 3-4 digits</small>
+ </div>
+
+ <div class="form-group">
+ <label class="form-label">
+ <i class="fas fa-graduation-cap"></i>
+ Credits
+ <span class="required">*</span>
+ </label>
+ <input 
+ type="number" 
+ name="credits" 
+ class="form-input" 
+ placeholder="e.g., 3" 
+ required
+ min="1"
+ max="6"
+ value="{{ subject.credits }}"
+ >
+ <small class="form-help">Credit hours (1-6)</small>
+ </div>
+
+ <div class="form-group full-width">
+ <label class="form-label">
+ <i class="fas fa-book-open"></i>
+ Subject Name
+ <span class="required">*</span>
+ </label>
+ <input 
+ type="text" 
+ name="subject_name" 
+ class="form-input" 
+ placeholder="e.g., Data Structures and Algorithms" 
+ required
+ value="{{ subject.subject_name }}"
+ >
+ </div>
+
+ <div class="form-group">
+ <label class="form-label">
+ <i class="fas fa-code-branch"></i>
+ Branch
+ <span class="required">*</span>
+ </label>
+ <select name="branch" class="form-select" required>
+ <option value="">Select Branch</option>
+ {% for code, name in branches %}
+ <option value="{{ code }}" {% if code == subject.branch %}selected{% endif %}>{{ name }}</option>
+ {% endfor %}
+ </select>
+ </div>
+
+ <div class="form-group">
+ <label class="form-label">
+ <i class="fas fa-calendar-alt"></i>
+ Semester
+ <span class="required">*</span>
+ </label>
+ <select name="semester" class="form-select" required>
+ <option value="">Select Semester</option>
+ {% for sem in semesters %}
+ <option value="{{ sem }}" {% if sem == subject.semester %}selected{% endif %}>Semester {{ sem }}</option>
+ {% endfor %}
+ </select>
+ </div>
+ </div>
+
+ <div class="form-actions">
+ <button type="submit" class="btn btn-primary">
+ <i class="fas fa-save"></i>
+ Update Subject
+ </button>
+ <a href="{% url 'manage_subjects' %}" class="btn btn-secondary">
+ <i class="fas fa-times"></i>
+ Cancel
+ </a>
+ </div>
+ </form>
+ </div>
+ </main>
+
+ <script>
+ // Auto-uppercase subject code
+ const subjectCodeInput = document.querySelector('input[name="subject_code"]');
+ if (subjectCodeInput) {
+ subjectCodeInput.addEventListener('input', function() {
+ this.value = this.value.toUpperCase();
+ });
+ }
+
+ // Form validation
+ document.getElementById('subjectForm').addEventListener('submit', function(e) {
+ const subjectCode = document.querySelector('input[name="subject_code"]').value;
+ const subjectName = document.querySelector('input[name="subject_name"]').value;
+ const branch = document.querySelector('select[name="branch"]').value;
+ const semester = document.querySelector('select[name="semester"]').value;
+ const credits = document.querySelector('input[name="credits"]').value;
+
+ if (!subjectCode || !subjectName || !branch || !semester || !credits) {
+ e.preventDefault();
+ alert('Please fill in all required fields!');
+ return;
+ }
+
+ // Validate subject code format
+ const codePattern = /^[A-Z]{2,3}[0-9]{3,4}$/;
+ if (!codePattern.test(subjectCode)) {
+ e.preventDefault();
+ alert('Invalid subject code format! Use 2-3 letters followed by 3-4 digits (e.g., CS101)');
+ return;
+ }
+ });
+ </script>
+</body>
+</html>

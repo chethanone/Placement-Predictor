@@ -1,0 +1,29 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+ <title>Import Students - TPO Portal</title>
+ <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+ <style>
+ * { margin: 0; padding: 0; box-sizing: border-box; }
+ body { font-family: 'Inter', sans-serif; background: #f8fafc; padding: 30px; }
+ .container { max-width: 600px; margin: 0 auto; background: white; padding: 40px; border-radius: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+ h1 { color: #6d28d9; margin-bottom: 20px; }
+ .message { padding: 15px; border-radius: 10px; margin-bottom: 20px; }
+ .success { background: rgba(16, 185, 129, 0.1); color: #059669; }
+ .error { background: rgba(239, 68, 68, 0.1); color: #dc2626; }
+ .btn { padding: 10px 20px; background: #6d28d9; color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; text-decoration: none; display: inline-block; }
+ </style>
+</head>
+<body>
+ <div class="container">
+ <h1>Import Complete</h1>
+ {% if messages %}
+ {% for message in messages %}
+ <div class="message {% if message.tags %}{{ message.tags }}{% endif %}">{{ message }}</div>
+ {% endfor %}
+ {% endif %}
+ <a href="{% url 'data_management' %}" class="btn">Back to Data Management</a>
+ </div>
+</body>
+</html>

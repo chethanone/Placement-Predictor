@@ -1,0 +1,86 @@
+:root {
+    --primary-color: #8FB9A8;
+    --secondary-color: #FEFAD4;
+    --accent-color: #F1C0DD;
+    --text-color: #765D69;
+    --light-text: #FFFFFF;
+    --hover-color: #A8C7B9;
+}
+
+/* Base styles */
+body {
+    background-color: var(--secondary-color);
+    color: var(--text-color);
+}
+
+/* Navigation */
+.navbar {
+    background-color: var(--primary-color);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.navbar a {
+    color: var(--light-text);
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: var(--text-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--hover-color);
+    border-color: var(--hover-color);
+}
+
+/* Cards and Containers */
+.card {
+    background-color: #FFFFFF;
+    border: none;
+    box-shadow: 0 2px 8px rgba(118, 93, 105, 0.1);
+}
+
+/* Form elements */
+.form-control:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 0.2rem rgba(241, 192, 221, 0.25);
+}
+
+/* Progress bars */
+.progress-bar {
+    background-color: var(--primary-color);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+    color: var(--text-color);
+}
+
+/* Links */
+a {
+    color: var(--text-color);
+}
+
+a:hover {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+/* Alerts and notifications */
+.alert-success {
+    background-color: var(--primary-color);
+    color: var(--light-text);
+    border: none;
+}
+
+/* Tables */
+.table thead th {
+    background-color: var(--primary-color);
+    color: var(--light-text);
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(143, 185, 168, 0.1);
+}

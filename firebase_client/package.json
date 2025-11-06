@@ -1,0 +1,24 @@
+{
+  "name": "placement-predictor-firebase",
+  "version": "1.0.0",
+  "description": "Firebase client for Placement Predictor",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node server.js",
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "firebase": "^10.7.1",
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.3.1"
+  },
+  "keywords": [
+    "firebase",
+    "placement",
+    "predictor"
+  ],
+  "author": "",
+  "license": "ISC"
+}

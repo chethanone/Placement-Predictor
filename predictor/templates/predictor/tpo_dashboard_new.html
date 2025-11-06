@@ -1,0 +1,211 @@
+{% extends 'predictor/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link href="{% static 'css/tpo_portal.css' %}" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="tpo-dashboard">
+ <div class="container">
+ <!-- Summary Cards Row -->
+ <div class="row mb-4">
+ <div class="col-md-3">
+ <div class="summary-card">
+ <div class="title">Overall Readiness</div>
+ <div class="circular-progress" style="--progress: {{ overall_readiness }}%">
+ <div class="value">{{ overall_readiness }}%</div>
+ </div>
+ </div>
+ </div>
+ <div class="col-md-3">
+ <div class="summary-card">
+ <div class="title">Total Students</div>
+ <div class="value">{{ total_students }}</div>
+ <div class="trend">↑ 12% from last batch</div>
+ </div>
+ </div>
+ <div class="col-md-3">
+ <div class="summary-card">
+ <div class="title">Top Department</div>
+ <div class="value">{{ top_department }}</div>
+ <div class="trend">{{ top_department_score }}% success rate</div>
+ </div>
+ </div>
+ <div class="col-md-3">
+ <div class="summary-card">
+ <div class="title">Active Companies</div>
+ <div class="value">{{ active_companies }}</div>
+ <div class="trend">{{ new_companies }} new this month</div>
+ </div>
+ </div>
+ </div>
+
+ <!-- Charts Row -->
+ <div class="row mb-4">
+ <div class="col-md-6">
+ <div class="chart-container">
+ <h3>Department Performance</h3>
+ <canvas id="deptChart"></canvas>
+ </div>
+ </div>
+ <div class="col-md-6">
+ <div class="chart-container">
+ <h3>Skill Distribution</h3>
+ <canvas id="skillChart"></canvas>
+ </div>
+ </div>
+ </div>
+
+ <!-- Student List Section -->
+ <div class="row">
+ <div class="col-12">
+ <div class="filter-container">
+ <select class="filter-select" id="deptFilter">
+ <option value="">All Departments</option>
+ {% for dept in departments %}
+ <option value="{{ dept }}">{{ dept }}</option>
+ {% endfor %}
+ </select>
+ <select class="filter-select" id="statusFilter">
+ <option value="">All Status</option>
+ <option value="high">High Readiness</option>
+ <option value="medium">Medium Readiness</option>
+ <option value="low">Low Readiness</option>
+ </select>
+ <button class="tpo-btn" onclick="applyFilters()">Apply Filters</button>
+ </div>
+
+ <div class="student-table-container">
+ <table class="student-table">
+ <thead>
+ <tr>
+ <th>Student Name</th>
+ <th>Department</th>
+ <th>CGPA</th>
+ <th>Placement Probability</th>
+ <th>Status</th>
+ <th>Actions</th>
+ </tr>
+ </thead>
+ <tbody>
+ {% for student in students %}
+ <tr onclick="viewStudentProfile('{{ student.id }}')">
+ <td>{{ student.name }}</td>
+ <td>{{ student.department }}</td>
+ <td>{{ student.cgpa }}</td>
+ <td>{{ student.placement_probability }}%</td>
+ <td>
+ <span class="status-badge {{ student.status_class }}">
+ {{ student.status }}
+ </span>
+ </td>
+ <td>
+ <button class="tpo-btn" onclick="event.stopPropagation(); viewDetails('{{ student.id }}')">
+ View Details
+ </button>
+ </td>
+ </tr>
+ {% endfor %}
+ </tbody>
+ </table>
+ </div>
+ </div>
+ </div>
+
+ <!-- AI Recommendations -->
+ <div class="row mt-4">
+ <div class="col-12">
+ <div class="recommendations">
+ <h3>AI Recommendations</h3>
+ {% for rec in recommendations %}
+ <div class="recommendation-item">
+ <i class="fas fa-lightbulb"></i>
+ {{ rec.message }}
+ </div>
+ {% endfor %}
+ </div>
+ </div>
+ </div>
+ </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+ // Initialize Department Performance Chart
+ const deptChart = new Chart(
+ document.getElementById('deptChart'),
+ {
+ type: 'bar',
+ data: {
+ labels: {{ dept_labels|safe }},
+ datasets: [{
+ label: 'Placement Probability',
+ data: {{ dept_data|safe }},
+ backgroundColor: '#8FB8A8'
+ }]
+ },
+ options: {
+ responsive: true,
+ plugins: {
+ legend: {
+ position: 'top',
+ },
+ title: {
+ display: true,
+ text: 'Department-wise Performance'
+ }
+ }
+ }
+ }
+ );
+
+ // Initialize Skill Distribution Chart
+ const skillChart = new Chart(
+ document.getElementById('skillChart'),
+ {
+ type: 'radar',
+ data: {
+ labels: ['Technical', 'Communication', 'Aptitude', 'Soft Skills'],
+ datasets: [{
+ label: 'Average Scores',
+ data: {{ skill_data|safe }},
+ backgroundColor: 'rgba(143, 184, 168, 0.2)',
+ borderColor: '#8FB8A8'
+ }]
+ },
+ options: {
+ responsive: true,
+ scales: {
+ r: {
+ angleLines: {
+ color: '#765D69'
+ },
+ grid: {
+ color: '#F5C0DD'
+ }
+ }
+ }
+ }
+ }
+ );
+
+ // Functions
+ function applyFilters() {
+ const dept = document.getElementById('deptFilter').value;
+ const status = document.getElementById('statusFilter').value;
+ // Add your filter logic here
+ }
+
+ function viewStudentProfile(studentId) {
+ window.location.href = `/tpo/student/${studentId}`;
+ }
+
+ function viewDetails(studentId) {
+ // Add your detail view logic here
+ }
+</script>
+{% endblock %}

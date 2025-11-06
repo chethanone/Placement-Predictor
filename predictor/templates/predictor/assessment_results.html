@@ -1,0 +1,184 @@
+{% extends 'predictor/base.html' %}
+{% load static %}
+
+{% block title %}Assessment Results - AI Placement Predictor{% endblock %}
+
+{% block content %}
+<div class="hero-section results-hero">
+ <div class="container">
+ <h1 class="hero-title"> Assessment Results</h1>
+ <p class="hero-subtitle">Your syllabus understanding and recommendations</p>
+ </div>
+</div>
+
+<div class="container">
+ <!-- Score Overview -->
+ <div class="results-card">
+ <div class="score-overview">
+ <div class="score-circle" style="--score: {{ score }}">
+ <div class="score-text">
+ <span class="score-value">{{ score }}%</span>
+ <span class="score-label">Score</span>
+ </div>
+ </div>
+ <div class="score-details">
+ <h3>Assessment Summary</h3>
+ <p>Based on your answers to {{ total_questions }} questions from your syllabus</p>
+ <div class="score-breakdown">
+ <div class="breakdown-item">
+ <span class="label">Correct Answers:</span>
+ <span class="value">{{ correct_answers }}</span>
+ </div>
+ <div class="breakdown-item">
+ <span class="label">Incorrect Answers:</span>
+ <span class="value">{{ incorrect_answers }}</span>
+ </div>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <!-- Recommendations -->
+ <div class="recommendations-section">
+ <h2 class="section-title"> Study Recommendations</h2>
+ <div class="recommendations-grid">
+ {% for recommendation in recommendations %}
+ <div class="recommendation-card priority-{{ recommendation.priority }}">
+ <div class="recommendation-header">
+ <h3>{{ recommendation.topic }}</h3>
+ <span class="priority-badge">{{ recommendation.priority|title }} Priority</span>
+ </div>
+ <p class="recommendation-description">{{ recommendation.description }}</p>
+ <div class="resources-section">
+ <h4>Recommended Resources:</h4>
+ <ul class="resources-list">
+ {% for platform in recommendation.resources.video_platforms %}
+ <li><i class="fas fa-video"></i> {{ platform }}</li>
+ {% endfor %}
+ {% for site in recommendation.resources.practice_websites %}
+ <li><i class="fas fa-laptop-code"></i> {{ site }}</li>
+ {% endfor %}
+ {% for doc in recommendation.resources.documentation %}
+ <li><i class="fas fa-book"></i> {{ doc }}</li>
+ {% endfor %}
+ </ul>
+ </div>
+ </div>
+ {% endfor %}
+ </div>
+ </div>
+</div>
+
+<style>
+.results-hero {
+ background: linear-gradient(135deg, #059669 0%, #047857 100%);
+}
+.results-card {
+ background: white;
+ border-radius: 12px;
+ padding: 2rem;
+ box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+ margin: 2rem 0;
+}
+.score-overview {
+ display: flex;
+ gap: 2rem;
+ align-items: center;
+}
+.score-circle {
+ width: 160px;
+ height: 160px;
+ border-radius: 50%;
+ background: conic-gradient(#059669 calc(var(--score) * 1%), #E5E7EB 0);
+ display: flex;
+ align-items: center;
+ justify-content: center;
+}
+.score-text {
+ background: white;
+ width: 120px;
+ height: 120px;
+ border-radius: 50%;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ justify-content: center;
+}
+.score-value {
+ font-size: 2rem;
+ font-weight: 700;
+ color: #059669;
+}
+.score-label {
+ font-size: 0.875rem;
+ color: #6B7280;
+}
+.score-details {
+ flex: 1;
+}
+.score-breakdown {
+ display: grid;
+ grid-template-columns: repeat(2, 1fr);
+ gap: 1rem;
+ margin-top: 1rem;
+}
+.breakdown-item {
+ background: #F9FAFB;
+ padding: 1rem;
+ border-radius: 8px;
+}
+.recommendations-section {
+ margin: 2rem 0;
+}
+.recommendations-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+ gap: 1.5rem;
+ margin-top: 1.5rem;
+}
+.recommendation-card {
+ background: white;
+ border-radius: 12px;
+ padding: 1.5rem;
+ box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+.recommendation-card.priority-high { border-left: 4px solid #DC2626; }
+.recommendation-card.priority-medium { border-left: 4px solid #F59E0B; }
+.recommendation-card.priority-low { border-left: 4px solid #059669; }
+.recommendation-header {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ margin-bottom: 1rem;
+}
+.priority-badge {
+ padding: 0.25rem 0.75rem;
+ border-radius: 999px;
+ font-size: 0.75rem;
+ font-weight: 600;
+}
+.priority-high .priority-badge { background: #FEE2E2; color: #DC2626; }
+.priority-medium .priority-badge { background: #FEF3C7; color: #F59E0B; }
+.priority-low .priority-badge { background: #ECFDF5; color: #059669; }
+.resources-section {
+ margin-top: 1rem;
+ padding-top: 1rem;
+ border-top: 1px solid #E5E7EB;
+}
+.resources-list {
+ list-style: none;
+ padding: 0;
+ margin: 0.5rem 0 0;
+}
+.resources-list li {
+ display: flex;
+ align-items: center;
+ gap: 0.5rem;
+ padding: 0.25rem 0;
+ color: #4B5563;
+}
+.resources-list i {
+ color: #6B7280;
+}
+</style>
+{% endblock %}

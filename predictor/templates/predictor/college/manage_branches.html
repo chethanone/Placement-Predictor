@@ -1,0 +1,568 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Manage Branches - College Portal</title>
+ 
+ <!-- Google Fonts -->
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+ 
+ <!-- Font Awesome -->
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ 
+ <style>
+ :root {
+ --sage-green: #8FB9A8;
+ --cream: #FEFAD4;
+ --peach: #FCB9AA;
+ --rose: #F1828D;
+ --mauve: #765D69;
+ --dark-text: #2c3e50;
+ --light-bg: #f8f9fa;
+ --white: #ffffff;
+ --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+ --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+ --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+ }
+
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ }
+
+ body {
+ font-family: 'Inter', 'Poppins', sans-serif;
+ background: linear-gradient(135deg, var(--cream) 0%, #fff 50%, var(--cream) 100%);
+ color: var(--dark-text);
+ min-height: 100vh;
+ }
+
+ /* Sidebar Navigation */
+ .sidebar {
+ position: fixed;
+ left: 0;
+ top: 0;
+ height: 100vh;
+ width: 280px;
+ background: linear-gradient(180deg, var(--sage-green) 0%, var(--mauve) 100%);
+ box-shadow: var(--shadow-lg);
+ z-index: 1000;
+ transition: all 0.3s ease;
+ overflow-y: auto;
+ }
+
+ .sidebar-header {
+ padding: 30px 20px;
+ border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+ }
+
+ .logo {
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ color: white;
+ font-size: 20px;
+ font-weight: 700;
+ font-family: 'Poppins', sans-serif;
+ }
+
+ .logo i {
+ font-size: 28px;
+ }
+
+ .nav-menu {
+ padding: 20px 0;
+ }
+
+ .nav-item {
+ margin: 5px 15px;
+ }
+
+ .nav-link {
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ padding: 14px 20px;
+ color: rgba(255, 255, 255, 0.9);
+ text-decoration: none;
+ border-radius: 12px;
+ transition: all 0.3s ease;
+ font-weight: 500;
+ }
+
+ .nav-link:hover, .nav-link.active {
+ background: rgba(255, 255, 255, 0.15);
+ color: white;
+ transform: translateX(5px);
+ }
+
+ .nav-link i {
+ width: 24px;
+ text-align: center;
+ font-size: 18px;
+ }
+
+ /* Main Content */
+ .main-content {
+ margin-left: 280px;
+ padding: 30px;
+ min-height: 100vh;
+ }
+
+ /* Top Bar */
+ .top-bar {
+ background: white;
+ padding: 25px 30px;
+ border-radius: 20px;
+ box-shadow: var(--shadow-sm);
+ margin-bottom: 30px;
+ animation: slideDown 0.5s ease;
+ }
+
+ @keyframes slideDown {
+ from {
+ opacity: 0;
+ transform: translateY(-20px);
+ }
+ to {
+ opacity: 1;
+ transform: translateY(0);
+ }
+ }
+
+ .page-title {
+ display: flex;
+ align-items: center;
+ gap: 15px;
+ }
+
+ .page-title i {
+ font-size: 32px;
+ color: var(--sage-green);
+ }
+
+ .page-title h1 {
+ font-size: 28px;
+ font-weight: 700;
+ color: var(--mauve);
+ }
+
+ /* Messages */
+ .messages {
+ margin-bottom: 20px;
+ }
+
+ .alert {
+ padding: 15px 20px;
+ border-radius: 12px;
+ margin-bottom: 10px;
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ animation: slideDown 0.5s ease;
+ }
+
+ .alert-success {
+ background: rgba(143, 185, 168, 0.2);
+ color: var(--sage-green);
+ border-left: 4px solid var(--sage-green);
+ }
+
+ .alert-error {
+ background: rgba(241, 130, 141, 0.2);
+ color: var(--rose);
+ border-left: 4px solid var(--rose);
+ }
+
+ /* Add Branch Form */
+ .form-card {
+ background: white;
+ padding: 30px;
+ border-radius: 20px;
+ box-shadow: var(--shadow-sm);
+ margin-bottom: 30px;
+ animation: fadeIn 0.6s ease;
+ }
+
+ @keyframes fadeIn {
+ from {
+ opacity: 0;
+ transform: translateY(20px);
+ }
+ to {
+ opacity: 1;
+ transform: translateY(0);
+ }
+ }
+
+ .form-title {
+ font-size: 20px;
+ font-weight: 600;
+ color: var(--mauve);
+ margin-bottom: 20px;
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ }
+
+ .form-grid {
+ display: grid;
+ grid-template-columns: 1fr 2fr auto;
+ gap: 15px;
+ align-items: end;
+ }
+
+ .form-group {
+ display: flex;
+ flex-direction: column;
+ }
+
+ .form-label {
+ font-weight: 600;
+ color: var(--dark-text);
+ margin-bottom: 8px;
+ font-size: 14px;
+ }
+
+ .form-input {
+ padding: 12px 15px;
+ border: 2px solid var(--sage-green);
+ border-radius: 10px;
+ font-size: 15px;
+ transition: all 0.3s ease;
+ }
+
+ .form-input:focus {
+ outline: none;
+ border-color: var(--mauve);
+ box-shadow: 0 0 0 3px rgba(118, 93, 105, 0.1);
+ }
+
+ .btn {
+ padding: 12px 24px;
+ border-radius: 12px;
+ font-weight: 600;
+ transition: all 0.3s ease;
+ display: inline-flex;
+ align-items: center;
+ gap: 8px;
+ font-size: 14px;
+ border: none;
+ cursor: pointer;
+ text-decoration: none;
+ }
+
+ .btn-primary {
+ background: linear-gradient(135deg, var(--sage-green), var(--mauve));
+ color: white;
+ }
+
+ .btn-primary:hover {
+ transform: translateY(-2px);
+ box-shadow: 0 8px 20px rgba(143, 185, 168, 0.3);
+ }
+
+ .btn-delete {
+ background: linear-gradient(135deg, var(--rose), #e17280);
+ color: white;
+ padding: 8px 16px;
+ font-size: 13px;
+ }
+
+ .btn-delete:hover {
+ transform: translateY(-2px);
+ box-shadow: var(--shadow-md);
+ }
+
+ /* Branches Table */
+ .table-card {
+ background: white;
+ padding: 30px;
+ border-radius: 20px;
+ box-shadow: var(--shadow-sm);
+ animation: fadeIn 0.8s ease;
+ }
+
+ .table-header {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ margin-bottom: 20px;
+ }
+
+ .table-title {
+ font-size: 20px;
+ font-weight: 600;
+ color: var(--mauve);
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ }
+
+ .branch-count {
+ background: linear-gradient(135deg, var(--sage-green), var(--mauve));
+ color: white;
+ padding: 4px 12px;
+ border-radius: 20px;
+ font-size: 14px;
+ }
+
+ table {
+ width: 100%;
+ border-collapse: collapse;
+ }
+
+ thead th {
+ text-align: left;
+ padding: 15px;
+ color: var(--mauve);
+ font-weight: 600;
+ font-size: 13px;
+ text-transform: uppercase;
+ letter-spacing: 0.5px;
+ border-bottom: 2px solid #f0f0f0;
+ }
+
+ tbody tr {
+ border-bottom: 1px solid #f5f5f5;
+ transition: all 0.2s ease;
+ }
+
+ tbody tr:hover {
+ background: rgba(143, 185, 168, 0.05);
+ transform: scale(1.01);
+ }
+
+ tbody td {
+ padding: 15px;
+ color: var(--dark-text);
+ }
+
+ .branch-code {
+ font-weight: 600;
+ color: var(--sage-green);
+ font-family: 'Courier New', monospace;
+ }
+
+ .no-data {
+ text-align: center;
+ padding: 60px 20px;
+ color: #999;
+ }
+
+ .no-data i {
+ font-size: 64px;
+ color: var(--sage-green);
+ margin-bottom: 20px;
+ }
+
+ @media (max-width: 768px) {
+ .sidebar {
+ transform: translateX(-100%);
+ }
+
+ .main-content {
+ margin-left: 0;
+ padding: 15px;
+ }
+
+ .form-grid {
+ grid-template-columns: 1fr;
+ }
+
+ table {
+ font-size: 13px;
+ }
+ }
+ </style>
+</head>
+<body>
+ <!-- Sidebar Navigation -->
+ <aside class="sidebar">
+ <div class="sidebar-header">
+ <div class="logo">
+ <i class="fas fa-university"></i>
+ <span>College Portal</span>
+ </div>
+ </div>
+ 
+ <nav class="nav-menu">
+ <div class="nav-item">
+ <a href="{% url 'college_dashboard' %}" class="nav-link">
+ <i class="fas fa-chart-line"></i>
+ <span>Dashboard</span>
+ </a>
+ </div>
+ <div class="nav-item">
+ <a href="{% url 'college_manage_students' %}" class="nav-link">
+ <i class="fas fa-users"></i>
+ <span>Manage Students</span>
+ </a>
+ </div>
+ <div class="nav-item">
+ <a href="{% url 'manage_subjects' %}" class="nav-link">
+ <i class="fas fa-book"></i>
+ <span>Manage Subjects</span>
+ </a>
+ </div>
+ <div class="nav-item">
+ <a href="{% url 'college_add_student' %}" class="nav-link">
+ <i class="fas fa-user-plus"></i>
+ <span>Add Student</span>
+ </a>
+ </div>
+ <div class="nav-item">
+ <a href="{% url 'manage_branches' %}" class="nav-link active">
+ <i class="fas fa-code-branch"></i>
+ <span>Manage Branches</span>
+ </a>
+ </div>
+ <div class="nav-item">
+ <a href="{% url 'college_analytics' %}" class="nav-link">
+ <i class="fas fa-chart-pie"></i>
+ <span>Analytics</span>
+ </a>
+ </div>
+ <div class="nav-item">
+ <a href="{% url 'college_reports' %}" class="nav-link">
+ <i class="fas fa-file-export"></i>
+ <span>Reports</span>
+ </a>
+ </div>
+ <div class="nav-item">
+ <a href="{% url 'college_notifications' %}" class="nav-link">
+ <i class="fas fa-bell"></i>
+ <span>Notifications</span>
+ </a>
+ </div>
+ <div class="nav-item">
+ <a href="{% url 'college_logout' %}" class="nav-link">
+ <i class="fas fa-sign-out-alt"></i>
+ <span>Logout</span>
+ </a>
+ </div>
+ </nav>
+ </aside>
+
+ <!-- Main Content -->
+ <main class="main-content">
+ <!-- Top Bar -->
+ <div class="top-bar">
+ <div class="page-title">
+ <i class="fas fa-code-branch"></i>
+ <div>
+ <h1>Manage Branches</h1>
+ <p style="font-size: 14px; color: #666; margin-top: 5px;">Add and manage department branches</p>
+ </div>
+ </div>
+ </div>
+
+ <!-- Messages -->
+ {% if messages %}
+ <div class="messages">
+ {% for message in messages %}
+ <div class="alert alert-{{ message.tags }}">
+ <i class="fas fa-{% if message.tags == 'success' %}check-circle{% elif message.tags == 'error' %}exclamation-circle{% endif %}"></i>
+ <span>{{ message }}</span>
+ </div>
+ {% endfor %}
+ </div>
+ {% endif %}
+
+ <!-- Add Branch Form -->
+ <div class="form-card">
+ <h2 class="form-title">
+ <i class="fas fa-plus-circle"></i>
+ Add New Branch
+ </h2>
+ 
+ <form method="POST" action="{% url 'add_branch' %}">
+ {% csrf_token %}
+ <div class="form-grid">
+ <div class="form-group">
+ <label class="form-label">Branch Code</label>
+ <input type="text" name="code" class="form-input" placeholder="e.g., CSE" required maxlength="10" style="text-transform: uppercase;">
+ </div>
+ 
+ <div class="form-group">
+ <label class="form-label">Branch Name</label>
+ <input type="text" name="name" class="form-input" placeholder="e.g., Computer Science Engineering" required maxlength="200">
+ </div>
+ 
+ <button type="submit" class="btn btn-primary">
+ <i class="fas fa-plus"></i>
+ Add Branch
+ </button>
+ </div>
+ </form>
+ </div>
+
+ <!-- Branches Table -->
+ <div class="table-card">
+ <div class="table-header">
+ <h2 class="table-title">
+ <i class="fas fa-list"></i>
+ All Branches
+ <span class="branch-count">{{ branches.count }}</span>
+ </h2>
+ </div>
+
+ {% if branches %}
+ <table>
+ <thead>
+ <tr>
+ <th>Branch Code</th>
+ <th>Branch Name</th>
+ <th>Status</th>
+ <th>Created Date</th>
+ <th>Action</th>
+ </tr>
+ </thead>
+ <tbody>
+ {% for branch in branches %}
+ <tr>
+ <td><span class="branch-code">{{ branch.code }}</span></td>
+ <td>{{ branch.name }}</td>
+ <td>
+ {% if branch.is_active %}
+ <span style="color: var(--sage-green); font-weight: 600;">Active</span>
+ {% else %}
+ <span style="color: #999; font-weight: 600;">Inactive</span>
+ {% endif %}
+ </td>
+ <td>{{ branch.created_at|date:"M d, Y" }}</td>
+ <td>
+ <form method="POST" action="{% url 'delete_branch' branch.code %}" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this branch?');">
+ {% csrf_token %}
+ <button type="submit" class="btn btn-delete">
+ <i class="fas fa-trash"></i> Delete
+ </button>
+ </form>
+ </td>
+ </tr>
+ {% endfor %}
+ </tbody>
+ </table>
+ {% else %}
+ <div class="no-data">
+ <i class="fas fa-code-branch"></i>
+ <p>No branches found</p>
+ <small>Add your first branch using the form above</small>
+ </div>
+ {% endif %}
+ </div>
+ </main>
+
+ <script>
+ // Auto-uppercase branch code input
+ document.querySelector('input[name="code"]').addEventListener('input', function() {
+ this.value = this.value.toUpperCase();
+ });
+ </script>
+</body>
+</html>

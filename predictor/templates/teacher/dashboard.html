@@ -1,0 +1,483 @@
+{% extends 'predictor/base.html' %}
+{% load static %}
+
+{% block title %}Teacher Dashboard - Placement Predictor{% endblock %}
+
+{% block content %}
+<div class="teacher-dashboard">
+ <div class="container">
+ <!-- Header -->
+ <div class="dashboard-header">
+ <h1><i class="fas fa-chalkboard-teacher"></i> Teacher Dashboard</h1>
+ <p>Welcome, <strong>{{ teacher.user.get_full_name }}</strong> ({{ teacher.employee_id }})</p>
+ </div>
+
+ <!-- Statistics Cards -->
+ <div class="stats-grid">
+ <div class="stat-card stat-total">
+ <div class="stat-icon"><i class="fas fa-users"></i></div>
+ <div class="stat-content">
+ <div class="stat-number">{{ total_students }}</div>
+ <div class="stat-label">Total Students</div>
+ </div>
+ </div>
+
+ <div class="stat-card stat-pending">
+ <div class="stat-icon"><i class="fas fa-clock"></i></div>
+ <div class="stat-content">
+ <div class="stat-number">{{ pending_verifications }}</div>
+ <div class="stat-label">Pending Verifications</div>
+ </div>
+ </div>
+
+ <div class="stat-card stat-verified">
+ <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+ <div class="stat-content">
+ <div class="stat-number">{{ verified_students }}</div>
+ <div class="stat-label">Verified Students</div>
+ </div>
+ </div>
+
+ <div class="stat-card stat-firebase">
+ <div class="stat-icon"><i class="fas fa-database"></i></div>
+ <div class="stat-content">
+ <div class="stat-number">{{ firebase_pending|length }}</div>
+ <div class="stat-label">Firebase Pending</div>
+ </div>
+ </div>
+ </div>
+
+ <!-- Quick Actions -->
+ <div class="quick-actions">
+ <h2><i class="fas fa-bolt"></i> Quick Actions</h2>
+ <div class="action-buttons">
+ <a href="{% url 'teacher_pending_verifications' %}" class="action-btn btn-primary">
+ <i class="fas fa-tasks"></i>
+ View Pending Verifications
+ </a>
+ <a href="{% url 'teacher_all_students' %}" class="action-btn btn-secondary">
+ <i class="fas fa-users"></i>
+ All Students
+ </a>
+ <a href="{% url 'dashboard' %}" class="action-btn btn-info">
+ <i class="fas fa-chart-bar"></i>
+ Analytics Dashboard
+ </a>
+ </div>
+ </div>
+
+ <!-- Recent Quiz Submissions -->
+ <div class="recent-submissions">
+ <h2><i class="fas fa-file-alt"></i> Recent Quiz Submissions</h2>
+ <div class="submissions-table-container">
+ <table class="submissions-table">
+ <thead>
+ <tr>
+ <th>Student</th>
+ <th>Roll Number</th>
+ <th>Quiz Date</th>
+ <th>Score</th>
+ <th>Status</th>
+ <th>Actions</th>
+ </tr>
+ </thead>
+ <tbody>
+ {% for quiz in recent_quizzes %}
+ <tr>
+ <td>{{ quiz.student.user.get_full_name }}</td>
+ <td>{{ quiz.student.roll_number }}</td>
+ <td>{{ quiz.completed_at|date:"M d, Y" }}</td>
+ <td>
+ <span class="score-badge {% if quiz.score >= 70 %}high{% elif quiz.score >= 50 %}medium{% else %}low{% endif %}">
+ {{ quiz.score|floatformat:1 }}%
+ </span>
+ </td>
+ <td>
+ <span class="status-badge status-{{ quiz.status }}">
+ {{ quiz.get_status_display }}
+ </span>
+ </td>
+ <td>
+ <a href="{% url 'teacher_verify_student' quiz.student.id %}" class="btn-small btn-verify">
+ <i class="fas fa-check"></i> Verify
+ </a>
+ </td>
+ </tr>
+ {% empty %}
+ <tr>
+ <td colspan="6" class="no-data">No recent quiz submissions</td>
+ </tr>
+ {% endfor %}
+ </tbody>
+ </table>
+ </div>
+ </div>
+
+ <!-- Firebase Pending (if any) -->
+ {% if firebase_pending %}
+ <div class="firebase-pending">
+ <h2><i class="fas fa-cloud"></i> Firebase Pending Verifications</h2>
+ <div class="firebase-cards">
+ {% for item in firebase_pending %}
+ <div class="firebase-card">
+ <div class="card-header">
+ <h3>{{ item.name }}</h3>
+ <span class="time">{{ item.timestamp }}</span>
+ </div>
+ <div class="card-body">
+ <div class="info-row">
+ <span class="label">CGPA:</span>
+ <span class="value">{{ item.cgpa|floatformat:2 }}</span>
+ </div>
+ <div class="info-row">
+ <span class="label">Probability:</span>
+ <span class="value">{{ item.probability|floatformat:1 }}%</span>
+ </div>
+ <div class="info-row">
+ <span class="label">Technical:</span>
+ <span class="value">{{ item.technical_skills|floatformat:1 }}/10</span>
+ </div>
+ </div>
+ <div class="card-footer">
+ <button class="btn-verify-firebase" data-id="{{ item.id }}">
+ <i class="fas fa-check-circle"></i> Verify
+ </button>
+ </div>
+ </div>
+ {% endfor %}
+ </div>
+ </div>
+ {% endif %}
+ </div>
+</div>
+
+<style>
+.teacher-dashboard {
+ padding: 30px 0;
+ min-height: 100vh;
+ background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.dashboard-header {
+ text-align: center;
+ margin-bottom: 40px;
+ padding: 30px;
+ background: white;
+ border-radius: 15px;
+ box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.dashboard-header h1 {
+ color: #667eea;
+ margin-bottom: 10px;
+ font-size: 2.5rem;
+}
+
+.stats-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+ gap: 20px;
+ margin-bottom: 40px;
+}
+
+.stat-card {
+ background: white;
+ border-radius: 15px;
+ padding: 25px;
+ display: flex;
+ align-items: center;
+ gap: 20px;
+ box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+ transition: transform 0.3s;
+}
+
+.stat-card:hover {
+ transform: translateY(-5px);
+}
+
+.stat-icon {
+ font-size: 3rem;
+ width: 80px;
+ height: 80px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ border-radius: 15px;
+}
+
+.stat-total .stat-icon {
+ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+ color: white;
+}
+
+.stat-pending .stat-icon {
+ background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+ color: white;
+}
+
+.stat-verified .stat-icon {
+ background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+ color: white;
+}
+
+.stat-firebase .stat-icon {
+ background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+ color: white;
+}
+
+.stat-number {
+ font-size: 2.5rem;
+ font-weight: bold;
+ color: #333;
+}
+
+.stat-label {
+ color: #666;
+ font-size: 0.9rem;
+}
+
+.quick-actions {
+ background: white;
+ border-radius: 15px;
+ padding: 30px;
+ margin-bottom: 40px;
+ box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.quick-actions h2 {
+ margin-bottom: 20px;
+ color: #333;
+}
+
+.action-buttons {
+ display: flex;
+ gap: 15px;
+ flex-wrap: wrap;
+}
+
+.action-btn {
+ padding: 15px 30px;
+ border-radius: 10px;
+ text-decoration: none;
+ font-weight: bold;
+ display: inline-flex;
+ align-items: center;
+ gap: 10px;
+ transition: all 0.3s;
+}
+
+.btn-primary {
+ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+ color: white;
+}
+
+.btn-secondary {
+ background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+ color: white;
+}
+
+.btn-info {
+ background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+ color: white;
+}
+
+.action-btn:hover {
+ transform: translateY(-3px);
+ box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.recent-submissions {
+ background: white;
+ border-radius: 15px;
+ padding: 30px;
+ margin-bottom: 40px;
+ box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.recent-submissions h2 {
+ margin-bottom: 20px;
+ color: #333;
+}
+
+.submissions-table {
+ width: 100%;
+ border-collapse: collapse;
+}
+
+.submissions-table th,
+.submissions-table td {
+ padding: 15px;
+ text-align: left;
+ border-bottom: 1px solid #eee;
+}
+
+.submissions-table th {
+ background: #f8f9fa;
+ font-weight: 600;
+ color: #333;
+}
+
+.score-badge {
+ padding: 5px 12px;
+ border-radius: 20px;
+ font-weight: bold;
+ font-size: 0.9rem;
+}
+
+.score-badge.high {
+ background: #d4edda;
+ color: #155724;
+}
+
+.score-badge.medium {
+ background: #fff3cd;
+ color: #856404;
+}
+
+.score-badge.low {
+ background: #f8d7da;
+ color: #721c24;
+}
+
+.status-badge {
+ padding: 5px 12px;
+ border-radius: 20px;
+ font-size: 0.85rem;
+ font-weight: 600;
+}
+
+.status-completed {
+ background: #d1ecf1;
+ color: #0c5460;
+}
+
+.status-pending {
+ background: #fff3cd;
+ color: #856404;
+}
+
+.status-verified {
+ background: #d4edda;
+ color: #155724;
+}
+
+.btn-small {
+ padding: 8px 15px;
+ border-radius: 5px;
+ text-decoration: none;
+ font-size: 0.85rem;
+ display: inline-flex;
+ align-items: center;
+ gap: 5px;
+}
+
+.btn-verify {
+ background: #667eea;
+ color: white;
+}
+
+.btn-verify:hover {
+ background: #764ba2;
+}
+
+.no-data {
+ text-align: center;
+ padding: 40px !important;
+ color: #999;
+}
+
+.firebase-pending {
+ background: white;
+ border-radius: 15px;
+ padding: 30px;
+ box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.firebase-cards {
+ display: grid;
+ grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+ gap: 20px;
+ margin-top: 20px;
+}
+
+.firebase-card {
+ border: 2px solid #667eea;
+ border-radius: 10px;
+ overflow: hidden;
+}
+
+.firebase-card .card-header {
+ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+ color: white;
+ padding: 15px;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+}
+
+.firebase-card .card-body {
+ padding: 20px;
+}
+
+.info-row {
+ display: flex;
+ justify-content: space-between;
+ padding: 8px 0;
+ border-bottom: 1px solid #eee;
+}
+
+.info-row .label {
+ font-weight: 600;
+ color: #666;
+}
+
+.firebase-card .card-footer {
+ padding: 15px;
+ background: #f8f9fa;
+ text-align: center;
+}
+
+.btn-verify-firebase {
+ background: #28a745;
+ color: white;
+ border: none;
+ padding: 10px 25px;
+ border-radius: 5px;
+ cursor: pointer;
+ font-weight: bold;
+}
+
+.btn-verify-firebase:hover {
+ background: #218838;
+}
+</style>
+
+<script>
+document.querySelectorAll('.btn-verify-firebase').forEach(btn => {
+ btn.addEventListener('click', function() {
+ const id = this.dataset.id;
+ if (confirm('Verify this student\'s scores?')) {
+ // Handle Firebase verification
+ fetch(`http://localhost:3000/api/verify-scores/${id}`, {
+ method: 'POST',
+ headers: {
+ 'Content-Type': 'application/json',
+ },
+ body: JSON.stringify({
+ teacherId: '{{ teacher.employee_id }}',
+ verifiedData: { status: 'verified' }
+ })
+ })
+ .then(response => response.json())
+ .then(data => {
+ if (data.success) {
+ alert('Verified successfully!');
+ location.reload();
+ }
+ })
+ .catch(error => console.error('Error:', error));
+ }
+ });
+});
+</script>
+{% endblock %}

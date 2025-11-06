@@ -1,0 +1,34 @@
+{% extends 'predictor/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link href="{% static 'css/college_portal_v2.css' %}" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="college-portal-container">
+ <!-- Navigation -->
+ <nav class="college-nav">
+ <div class="container d-flex justify-content-between align-items-center">
+ <h1 class="h4 mb-0">College Portal</h1>
+ <div class="nav-links">
+ <a href="{% url 'college_dashboard' %}" class="nav-link">Dashboard</a>
+ <a href="{% url 'college_manage_students' %}" class="nav-link">Students</a>
+ <a href="{% url 'analytics' %}" class="nav-link">Analytics</a>
+ <a href="{% url 'logout' %}" class="nav-link">Logout</a>
+ </div>
+ </div>
+ </nav>
+
+ <!-- Main Content -->
+ <div class="container py-4">
+ {% block college_content %}
+ {% endblock %}
+ </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Any additional JavaScript -->
+{% endblock %}

@@ -1,0 +1,58 @@
+﻿from django.contrib import admin
+from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
+from predictor import views, views_college, views_placement
+
+urlpatterns = [
+    path("admin/", admin.site.urls),
+    path("", views.landing, name="landing"),
+    path("student/", views.student_portal, name="student_portal"),
+    path("student/entry/", views.student_entry, name="student_entry"),
+    path("student/search-colleges/", views.search_colleges_api, name="search_colleges_api"),
+    path("student/predict/", views.student_predict, name="student_predict"),
+    path("student/quiz/", views.student_quiz_upload, name="student_quiz_upload"),
+    path("student/quiz/<int:quiz_id>/", views.student_take_quiz, name="student_take_quiz"),
+    path("student/quiz/<int:quiz_id>/submit/", views.student_submit_quiz, name="student_submit_quiz"),
+    path("student/quiz/<int:quiz_id>/results/", views.student_quiz_results, name="student_quiz_results"),
+    path("student/results/", views.student_results, name="student_results"),
+    path("college/login/", views_college.college_login, name="college_login"),
+    path("college/", views_college.college_dashboard, name="college_dashboard"),
+    path("college/students/", views_college.manage_students, name="college_manage_students"),
+    path("college/student/add/", views_college.add_student, name="college_add_student"),
+    path("college/student/<str:student_id>/edit/", views_college.edit_student, name="college_edit_student"),
+    path("college/student/<str:student_id>/delete/", views_college.delete_student, name="college_delete_student"),
+    path("college/student/<str:student_id>/marks/", views_college.enter_student_marks, name="college_enter_marks"),
+    path("college/subjects/", views_college.manage_subjects, name="manage_subjects"),
+    path("college/subject/add/", views_college.add_subject, name="add_subject"),
+    path("college/subject/<int:subject_id>/edit/", views_college.edit_subject, name="edit_subject"),
+    path("college/subject/<int:subject_id>/delete/", views_college.delete_subject, name="delete_subject"),
+    path("college/notifications/", views_college.college_notifications, name="college_notifications"),
+    path("college/analytics/", views_college.college_analytics, name="college_analytics"),
+    path("college/reports/", views_college.college_reports, name="college_reports"),
+    path("college/reports/download/<str:report_type>/<str:format>/", views_college.download_report, name="download_report"),
+    path("college/reports/custom/", views_college.generate_custom_report, name="generate_custom_report"),
+    path("college/branches/", views_college.manage_branches, name="manage_branches"),
+    path("college/branch/add/", views_college.add_branch, name="add_branch"),
+    path("college/branch/<str:code>/delete/", views_college.delete_branch, name="delete_branch"),
+    path("college/logout/", views_college.college_logout, name="college_logout"),
+    path("placement/login/", views_placement.placement_login, name="placement_login"),
+    path("placement/", views_placement.placement_dashboard, name="placement_dashboard"),
+    path("placement/tpo/", views_placement.tpo_dashboard, name="tpo_dashboard"),
+    path("placement/students/", views_placement.student_list, name="student_list"),
+    path("placement/student/<str:student_id>/", views_placement.student_detail, name="student_detail"),
+    path("placement/recommendations/", views_placement.ai_recommendations, name="ai_recommendations"),
+    path("placement/what-if/", views_placement.what_if_simulation, name="what_if_simulation"),
+    path("placement/report/department/", views_placement.generate_department_report, name="generate_department_report"),
+    path("placement/student/<str:student_id>/recommend/", views_placement.recommend_session, name="placement_recommend_sessions"),
+    path("placement/analytics/", views_placement.placement_analytics, name="placement_analytics"),
+    path("placement/sessions/", views_placement.manage_training_sessions, name="manage_training_sessions"),
+    path("placement/session/add/", views_placement.add_training_session, name="add_training_session"),
+    path("placement/session/<int:session_id>/edit/", views_placement.edit_training_session, name="edit_training_session"),
+    path("placement/session/<int:session_id>/delete/", views_placement.delete_training_session, name="delete_training_session"),
+    path("placement/logout/", views_placement.placement_logout, name="placement_logout"),
+]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

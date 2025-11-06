@@ -1,0 +1,279 @@
+{% extends 'predictor/base.html' %}
+{% load static %}
+
+{% block title %}Student Portal - AI Placement Predictor{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+ <div class="container">
+ <h1 class="hero-title"> AI Placement Predictor</h1>
+ <p class="hero-subtitle">Predict your placement chances and get personalized recommendations</p>
+ </div>
+</div>
+
+<div class="container">
+ <div class="form-card">
+ <h2 class="section-title">
+ <i class="fas fa-user-graduate"></i>
+ Enter Your Details
+ </h2>
+ 
+ <form method="POST" action="{% url 'predict' %}" enctype="multipart/form-data" id="predictionForm">
+ {% csrf_token %}
+ 
+ <!-- Loading Overlay -->
+ <div id="loadingOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 9999; justify-content: center; align-items: center;">
+ <div style="text-align: center; color: white;">
+ <div class="spinner" style="width: 60px; height: 60px; border: 5px solid rgba(255,255,255,0.3); border-top: 5px solid #fff; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
+ <h2>Processing Your Prediction...</h2>
+ <p>Analyzing your profile with AI </p>
+ </div>
+ </div>
+ 
+ <!-- Personal Information -->
+ <div class="form-section">
+ <h3 class="form-section-title">
+ <i class="fas fa-id-card"></i>
+ Personal Information
+ </h3>
+ <div class="form-row">
+ <div class="form-group">
+ <label for="name">Full Name <span class="required">*</span></label>
+ <input type="text" id="name" name="name" class="form-control" placeholder="Enter your full name" required>
+ </div>
+ <div class="form-group">
+ <label for="age">Age <span class="required">*</span></label>
+ <input type="number" id="age" name="age" class="form-control" min="17" max="30" value="20" required>
+ </div>
+ <div class="form-group">
+ <label for="gender">Gender <span class="required">*</span></label>
+ <select id="gender" name="gender" class="form-control" required>
+ <option value="">Select gender</option>
+ <option value="Male">Male</option>
+ <option value="Female">Female</option>
+ <option value="Other">Other</option>
+ </select>
+ </div>
+ </div>
+ </div>
+
+ <!-- Academic Performance -->
+ <div class="form-section">
+ <h3 class="form-section-title">
+ <i class="fas fa-book"></i>
+ Academic Performance
+ </h3>
+ <div class="form-row">
+ <div class="form-group">
+ <label for="cgpa">Current CGPA <span class="required">*</span></label>
+ <input type="number" id="cgpa" name="cgpa" class="form-control" min="0" max="10" step="0.1" value="7.5" required>
+ <small class="form-help">Your cumulative grade point average (0-10 scale)</small>
+ </div>
+ <div class="form-group">
+ <label for="prev_sem">Previous Semester Score <span class="required">*</span></label>
+ <input type="number" id="prev_sem" name="prev_sem" class="form-control" min="0" max="10" step="0.1" value="7.0" required>
+ <small class="form-help">Your last semester grade (0-10 scale)</small>
+ </div>
+ </div>
+ </div>
+
+ <!-- Skills & Abilities -->
+ <div class="form-section">
+ <h3 class="form-section-title">
+ <i class="fas fa-lightbulb"></i>
+ Skills & Abilities
+ </h3>
+ <div class="form-row">
+ <div class="form-group">
+ <label for="communication">Communication Skills <span class="required">*</span></label>
+ <input type="range" id="communication" name="communication" class="form-range" min="0" max="10" step="0.5" value="7" oninput="this.nextElementSibling.value = this.value" required>
+ <output class="range-value">7</output>
+ <small class="form-help">Rate your communication skills (0-10)</small>
+ </div>
+ <div class="form-group">
+ <label for="iq">IQ Score <span class="required">*</span></label>
+ <input type="number" id="iq" name="iq" class="form-control" min="70" max="150" value="100" required>
+ <small class="form-help">Your IQ score from any standard test</small>
+ </div>
+ </div>
+ </div>
+
+ <!-- Projects & Activities -->
+ <div class="form-section">
+ <h3 class="form-section-title">
+ <i class="fas fa-project-diagram"></i>
+ Projects & Activities
+ </h3>
+ <div class="form-row">
+ <div class="form-group">
+ <label for="projects">Number of Projects Completed <span class="required">*</span></label>
+ <input type="number" id="projects" name="projects" class="form-control" min="0" max="20" value="2" required>
+ <small class="form-help">Total academic/personal projects</small>
+ </div>
+ <div class="form-group">
+ <label for="extra_curricular">Extra-Curricular Score <span class="required">*</span></label>
+ <input type="range" id="extra_curricular" name="extra_curricular" class="form-range" min="0" max="10" step="0.5" value="5" oninput="this.nextElementSibling.value = this.value" required>
+ <output class="range-value">5</output>
+ <small class="form-help">Rate your participation in activities (0-10)</small>
+ </div>
+ </div>
+ </div>
+
+ <!-- Syllabus Assessment -->
+ <div class="form-section">
+ <h3 class="form-section-title">
+ <i class="fas fa-file-alt"></i>
+ Syllabus Assessment
+ </h3>
+ <div class="form-row">
+ <div class="form-group full-width">
+ <label for="syllabus_file">Upload Your Syllabus <span class="required">*</span></label>
+ <div class="file-upload-wrapper">
+ <input type="file" id="syllabus_file" name="syllabus_file" class="file-input" accept=".pdf,.ppt,.pptx" onchange="updateSyllabusFileName(this)" required>
+ <label for="syllabus_file" class="file-upload-label">
+ <i class="fas fa-cloud-upload-alt"></i>
+ <span class="file-name">Upload syllabus (PDF/PPT)</span>
+ </label>
+ </div>
+ <small class="form-help">Upload your course syllabus to get personalized assessment and recommendations</small>
+ </div>
+ </div>
+ </div>
+
+ <!-- Institution Details -->
+ <div class="form-section">
+ <h3 class="form-section-title">
+ <i class="fas fa-university"></i>
+ Institution Details
+ </h3>
+ <div class="form-row">
+ <div class="form-group full-width">
+ <label for="college_tier">College Tier <span class="required">*</span></label>
+ <select id="college_tier" name="college_tier" class="form-control" required>
+ <option value="">Select college tier</option>
+ <option value="1">Tier 1 (Top colleges - IITs, NITs, BITS)</option>
+ <option value="2">Tier 2 (Good colleges - State Universities)</option>
+ <option value="3">Tier 3 (Average colleges)</option>
+ </select>
+ <small class="form-help">Select based on rankings and reputation</small>
+ </div>
+ </div>
+ </div>
+
+ <!-- Certifications -->
+ <div class="form-section">
+ <h3 class="form-section-title">
+ <i class="fas fa-certificate"></i>
+ Professional Certifications
+ </h3>
+ <div class="form-row">
+ <div class="form-group full-width">
+ <label>Do you have any professional certifications?</label>
+ <div class="radio-group">
+ <label class="radio-label">
+ <input type="radio" name="has_certificates" value="no" checked onchange="toggleCertificates()">
+ <span class="radio-custom"></span>
+ <span>No</span>
+ </label>
+ <label class="radio-label">
+ <input type="radio" name="has_certificates" value="yes" onchange="toggleCertificates()">
+ <span class="radio-custom"></span>
+ <span>Yes</span>
+ </label>
+ </div>
+ </div>
+ </div>
+
+ <div id="certificateFields" class="certificate-fields" style="display: none;">
+ <div class="form-row">
+ <div class="form-group full-width">
+ <label for="certificate_names">Certification Names</label>
+ <textarea id="certificate_names" name="certificate_names" class="form-control" rows="4" placeholder="List your certifications (one per line)&#10;e.g.,&#10;AWS Certified Solutions Architect&#10;Google Data Analytics Certificate&#10;Microsoft Azure Fundamentals"></textarea>
+ <small class="form-help">Enter one certification per line</small>
+ </div>
+ </div>
+ <div class="form-row">
+ <div class="form-group full-width">
+ <label for="certificate_file">Upload Certificate(s) <span class="optional">(Optional)</span></label>
+ <div class="file-upload-wrapper">
+ <input type="file" id="certificate_file" name="certificate_file" class="file-input" accept=".pdf,.jpg,.jpeg,.png" onchange="updateFileName(this)">
+ <label for="certificate_file" class="file-upload-label">
+ <i class="fas fa-cloud-upload-alt"></i>
+ <span class="file-name">Choose file (PDF, JPG, PNG)</span>
+ </label>
+ </div>
+ <small class="form-help">Upload your certificate document (optional)</small>
+ </div>
+ </div>
+ </div>
+ </div>
+
+ <!-- Submit Button -->
+ <div class="form-actions">
+ <button type="submit" class="btn btn-primary btn-large">
+ <i class="fas fa-rocket"></i>
+ Get My Prediction & Recommendations
+ </button>
+ </div>
+ </form>
+ </div>
+
+ <!-- Info Cards -->
+ <div class="info-section">
+ <div class="info-card">
+ <div class="info-icon">
+ <i class="fas fa-check-circle"></i>
+ </div>
+ <h3>99.8% Accuracy</h3>
+ <p>Our AI model is trained on 10,000+ student records with exceptional accuracy</p>
+ </div>
+ <div class="info-card">
+ <div class="info-icon">
+ <i class="fas fa-lightbulb"></i>
+ </div>
+ <h3>Smart Recommendations</h3>
+ <p>Get personalized action plans based on your profile and placement probability</p>
+ </div>
+ <div class="info-card">
+ <div class="info-icon">
+ <i class="fas fa-chart-line"></i>
+ </div>
+ <h3>Detailed Analytics</h3>
+ <p>Visualize your strengths and areas for improvement with interactive charts</p>
+ </div>
+ </div>
+</div>
+
+<script>
+function toggleCertificates() {
+ const hasCert = document.querySelector('input[name="has_certificates"]:checked').value;
+ const certFields = document.getElementById('certificateFields');
+ 
+ if (hasCert === 'yes') {
+ certFields.style.display = 'block';
+ certFields.style.animation = 'slideDown 0.3s ease';
+ } else {
+ certFields.style.display = 'none';
+ }
+}
+
+function updateFileName(input) {
+ const fileName = input.files[0] ? input.files[0].name : 'Choose file (PDF, JPG, PNG)';
+ input.nextElementSibling.querySelector('.file-name').textContent = fileName;
+}
+
+// Form validation and loading indicator
+document.getElementById('predictionForm').addEventListener('submit', function(e) {
+ const name = document.getElementById('name').value.trim();
+ if (!name) {
+ e.preventDefault();
+ alert('Please enter your name!');
+ document.getElementById('name').focus();
+ return false;
+ }
+ 
+ // Show loading overlay
+ document.getElementById('loadingOverlay').style.display = 'flex';
+});
+</script>
+{% endblock %}

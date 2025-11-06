@@ -1,0 +1,998 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>TPO Dashboard - Placement Portal</title>
+ 
+ <!-- Google Fonts -->
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+ 
+ <!-- Font Awesome -->
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ 
+ <!-- Chart.js -->
+ <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+ 
+ <style>
+ :root {
+ --purple: #6d28d9;
+ --violet: #a855f7;
+ --indigo: #4f46e5;
+ --amber: #f59e0b;
+ --slate: #334155;
+ --light-gray: #f8fafc;
+ --white: #ffffff;
+ --success: #10b981;
+ --warning: #f59e0b;
+ --danger: #ef4444;
+ --shadow-sm: 0 2px 8px rgba(109, 40, 217, 0.08);
+ --shadow-md: 0 4px 16px rgba(109, 40, 217, 0.12);
+ --shadow-lg: 0 8px 32px rgba(109, 40, 217, 0.16);
+ }
+
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ }
+
+ body {
+ font-family: 'Inter', 'Poppins', sans-serif;
+ background: linear-gradient(135deg, var(--light-gray) 0%, #ede9fe 50%, var(--light-gray) 100%);
+ color: var(--slate);
+ min-height: 100vh;
+ }
+
+ /* Sidebar Navigation */
+ .sidebar {
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 280px;
+ height: 100vh;
+ background: linear-gradient(180deg, var(--purple), var(--indigo));
+ padding: 30px 0;
+ color: white;
+ overflow-y: auto;
+ box-shadow: var(--shadow-lg);
+ z-index: 1000;
+ animation: slideInLeft 0.5s ease;
+ }
+
+ .sidebar::-webkit-scrollbar {
+ width: 6px;
+ }
+
+ .sidebar::-webkit-scrollbar-track {
+ background: rgba(255, 255, 255, 0.1);
+ }
+
+ .sidebar::-webkit-scrollbar-thumb {
+ background: rgba(255, 255, 255, 0.3);
+ border-radius: 3px;
+ }
+
+ @keyframes slideInLeft {
+ from {
+ transform: translateX(-100%);
+ opacity: 0;
+ }
+ to {
+ transform: translateX(0);
+ opacity: 1;
+ }
+ }
+
+ .sidebar-header {
+ padding: 0 25px 30px;
+ border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+ }
+
+ .sidebar-header h2 {
+ font-size: 24px;
+ font-weight: 700;
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ margin-bottom: 8px;
+ }
+
+ .sidebar-header p {
+ font-size: 13px;
+ color: rgba(255, 255, 255, 0.8);
+ font-weight: 500;
+ }
+
+ .sidebar-menu {
+ padding: 20px 0;
+ }
+
+ .menu-item {
+ display: flex;
+ align-items: center;
+ gap: 15px;
+ padding: 15px 25px;
+ color: rgba(255, 255, 255, 0.9);
+ text-decoration: none;
+ transition: all 0.3s ease;
+ font-weight: 500;
+ font-size: 15px;
+ }
+
+ .menu-item:hover, .menu-item.active {
+ background: rgba(255, 255, 255, 0.15);
+ border-left: 4px solid var(--amber);
+ padding-left: 21px;
+ }
+
+ .menu-item i {
+ font-size: 18px;
+ width: 25px;
+ }
+
+ /* Main Content */
+ .main-content {
+ margin-left: 280px;
+ padding: 30px;
+ max-width: calc(100vw - 280px);
+ animation: fadeIn 0.8s ease;
+ }
+
+ @keyframes fadeIn {
+ from { opacity: 0; }
+ to { opacity: 1; }
+ }
+
+ /* Header */
+ .header {
+ background: linear-gradient(135deg, var(--purple), var(--violet));
+ padding: 35px 40px;
+ border-radius: 20px;
+ margin-bottom: 30px;
+ box-shadow: var(--shadow-lg);
+ color: white;
+ position: relative;
+ overflow: hidden;
+ }
+
+ .header::before {
+ content: '';
+ position: absolute;
+ top: -50%;
+ right: -10%;
+ width: 400px;
+ height: 400px;
+ background: rgba(245, 158, 11, 0.1);
+ border-radius: 50%;
+ }
+
+ .header-content {
+ position: relative;
+ z-index: 1;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ }
+
+ .header-title h1 {
+ font-size: 32px;
+ font-weight: 700;
+ margin-bottom: 8px;
+ }
+
+ .header-title p {
+ font-size: 15px;
+ color: rgba(255, 255, 255, 0.9);
+ }
+
+ /* Summary Cards */
+ .summary-cards {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+ gap: 25px;
+ margin-bottom: 35px;
+ }
+
+ .summary-card {
+ background: white;
+ padding: 30px;
+ border-radius: 18px;
+ box-shadow: var(--shadow-sm);
+ transition: all 0.3s ease;
+ position: relative;
+ overflow: hidden;
+ animation: scaleIn 0.5s ease;
+ }
+
+ @keyframes scaleIn {
+ from {
+ opacity: 0;
+ transform: scale(0.9);
+ }
+ to {
+ opacity: 1;
+ transform: scale(1);
+ }
+ }
+
+ .summary-card::before {
+ content: '';
+ position: absolute;
+ top: 0;
+ left: 0;
+ right: 0;
+ height: 5px;
+ background: linear-gradient(90deg, var(--purple), var(--violet));
+ }
+
+ .summary-card:nth-child(2)::before {
+ background: linear-gradient(90deg, var(--violet), var(--indigo));
+ }
+
+ .summary-card:nth-child(3)::before {
+ background: linear-gradient(90deg, var(--indigo), var(--amber));
+ }
+
+ .summary-card:nth-child(4)::before {
+ background: linear-gradient(90deg, var(--amber), var(--purple));
+ }
+
+ .summary-card:hover {
+ transform: translateY(-5px);
+ box-shadow: var(--shadow-md);
+ }
+
+ .card-header {
+ display: flex;
+ justify-content: space-between;
+ align-items: flex-start;
+ margin-bottom: 20px;
+ }
+
+ .card-icon {
+ width: 60px;
+ height: 60px;
+ border-radius: 15px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ font-size: 28px;
+ background: linear-gradient(135deg, var(--purple), var(--violet));
+ color: white;
+ }
+
+ .summary-card:nth-child(2) .card-icon {
+ background: linear-gradient(135deg, var(--violet), var(--indigo));
+ }
+
+ .summary-card:nth-child(3) .card-icon {
+ background: linear-gradient(135deg, var(--indigo), var(--amber));
+ }
+
+ .summary-card:nth-child(4) .card-icon {
+ background: linear-gradient(135deg, var(--amber), var(--purple));
+ }
+
+ .card-value {
+ font-size: 42px;
+ font-weight: 700;
+ color: var(--purple);
+ line-height: 1;
+ margin-bottom: 10px;
+ }
+
+ .card-label {
+ font-size: 14px;
+ color: var(--slate);
+ font-weight: 600;
+ text-transform: uppercase;
+ letter-spacing: 0.5px;
+ }
+
+ .card-trend {
+ display: flex;
+ align-items: center;
+ gap: 8px;
+ margin-top: 15px;
+ font-size: 13px;
+ font-weight: 600;
+ }
+
+ .trend-up {
+ color: var(--success);
+ }
+
+ .trend-down {
+ color: var(--danger);
+ }
+
+ /* Charts Section */
+ .charts-section {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+ gap: 25px;
+ margin-bottom: 35px;
+ }
+
+ .chart-card {
+ background: white;
+ padding: 30px;
+ border-radius: 18px;
+ box-shadow: var(--shadow-sm);
+ }
+
+ .chart-header {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ margin-bottom: 25px;
+ padding-bottom: 15px;
+ border-bottom: 2px solid #e2e8f0;
+ }
+
+ .chart-title {
+ font-size: 20px;
+ font-weight: 700;
+ color: var(--purple);
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ }
+
+ .chart-title i {
+ color: var(--violet);
+ }
+
+ .chart-container {
+ position: relative;
+ height: 300px;
+ width: 100%;
+ }
+
+ /* Tables */
+ .table-card {
+ background: white;
+ padding: 30px;
+ border-radius: 18px;
+ box-shadow: var(--shadow-sm);
+ margin-bottom: 30px;
+ }
+
+ .table-header {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ margin-bottom: 20px;
+ padding-bottom: 15px;
+ border-bottom: 2px solid #e2e8f0;
+ }
+
+ .table-title {
+ font-size: 20px;
+ font-weight: 700;
+ color: var(--purple);
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ }
+
+ .table-wrapper {
+ max-height: 500px;
+ overflow-y: auto;
+ }
+
+ .table-wrapper::-webkit-scrollbar {
+ width: 8px;
+ }
+
+ .table-wrapper::-webkit-scrollbar-track {
+ background: #f1f5f9;
+ border-radius: 4px;
+ }
+
+ .table-wrapper::-webkit-scrollbar-thumb {
+ background: var(--violet);
+ border-radius: 4px;
+ }
+
+ .btn {
+ padding: 10px 20px;
+ border-radius: 10px;
+ border: none;
+ font-weight: 600;
+ font-size: 14px;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ display: inline-flex;
+ align-items: center;
+ gap: 8px;
+ text-decoration: none;
+ }
+
+ .btn-primary {
+ background: linear-gradient(135deg, var(--purple), var(--violet));
+ color: white;
+ }
+
+ .btn-primary:hover {
+ transform: translateY(-2px);
+ box-shadow: 0 8px 20px rgba(109, 40, 217, 0.3);
+ }
+
+ table {
+ width: 100%;
+ border-collapse: collapse;
+ }
+
+ thead th {
+ text-align: left;
+ padding: 15px;
+ color: var(--purple);
+ font-weight: 600;
+ font-size: 13px;
+ text-transform: uppercase;
+ letter-spacing: 0.5px;
+ border-bottom: 2px solid #e2e8f0;
+ }
+
+ tbody tr {
+ border-bottom: 1px solid #f1f5f9;
+ transition: all 0.2s ease;
+ }
+
+ tbody tr:hover {
+ background: rgba(109, 40, 217, 0.05);
+ }
+
+ tbody td {
+ padding: 15px;
+ color: var(--slate);
+ font-size: 14px;
+ }
+
+ .badge {
+ display: inline-block;
+ padding: 6px 12px;
+ border-radius: 20px;
+ font-weight: 600;
+ font-size: 12px;
+ }
+
+ .badge-excellent {
+ background: rgba(16, 185, 129, 0.1);
+ color: #059669;
+ }
+
+ .badge-good {
+ background: rgba(59, 130, 246, 0.1);
+ color: #2563eb;
+ }
+
+ .badge-average {
+ background: rgba(245, 158, 11, 0.1);
+ color: #d97706;
+ }
+
+ .badge-needs-improvement {
+ background: rgba(239, 68, 68, 0.1);
+ color: #dc2626;
+ }
+
+ @media (max-width: 1024px) {
+ .sidebar {
+ transform: translateX(-100%);
+ }
+
+ .main-content {
+ margin-left: 0;
+ }
+
+ .charts-section {
+ grid-template-columns: 1fr;
+ }
+ }
+
+ @media (max-width: 768px) {
+ body {
+ padding: 15px;
+ }
+
+ .header {
+ padding: 25px 20px;
+ }
+
+ .summary-cards {
+ grid-template-columns: 1fr;
+ }
+ }
+ </style>
+</head>
+<body>
+ <!-- Sidebar -->
+ <div class="sidebar">
+ <div class="sidebar-header">
+ <h2>
+ <i class="fas fa-briefcase"></i>
+ TPO Portal
+ </h2>
+ <p>Training & Placement Officer Dashboard</p>
+ </div>
+ 
+ <nav class="sidebar-menu">
+ <a href="{% url 'tpo_dashboard' %}" class="menu-item active">
+ <i class="fas fa-th-large"></i>
+ <span>Dashboard</span>
+ </a>
+ <a href="{% url 'student_list' %}" class="menu-item">
+ <i class="fas fa-users"></i>
+ <span>Student Records</span>
+ </a>
+ <a href="{% url 'ai_recommendations' %}" class="menu-item">
+ <i class="fas fa-robot"></i>
+ <span>AI Recommendations</span>
+ </a>
+ <a href="{% url 'what_if_simulation' %}" class="menu-item">
+ <i class="fas fa-flask"></i>
+ <span>What-If Analysis</span>
+ </a>
+ <a href="{% url 'generate_department_report' %}" class="menu-item">
+ <i class="fas fa-file-pdf"></i>
+ <span>Generate Reports</span>
+ </a>
+ <a href="{% url 'manage_training_sessions' %}" class="menu-item">
+ <i class="fas fa-chalkboard-teacher"></i>
+ <span>Training Sessions</span>
+ </a>
+ <a href="{% url 'placement_analytics' %}" class="menu-item">
+ <i class="fas fa-chart-pie"></i>
+ <span>Analytics</span>
+ </a>
+ <a href="{% url 'placement_logout' %}" class="menu-item">
+ <i class="fas fa-sign-out-alt"></i>
+ <span>Logout</span>
+ </a>
+ </nav>
+ </div>
+
+ <!-- Main Content -->
+ <div class="main-content">
+ <!-- Header -->
+ <div class="header">
+ <div class="header-content">
+ <div class="header-title">
+ <h1>Welcome, Training & Placement Officer</h1>
+ <p>Comprehensive Placement Analytics & Management</p>
+ </div>
+ </div>
+ </div>
+
+ <!-- Summary Cards -->
+ <div class="summary-cards">
+ <div class="summary-card">
+ <div class="card-header">
+ <div>
+ <div class="card-value">{{ total_students }}</div>
+ <p class="card-label">Total Students</p>
+ </div>
+ <div class="card-icon">
+ <i class="fas fa-graduation-cap"></i>
+ </div>
+ </div>
+ <div class="card-trend trend-up">
+ <i class="fas fa-arrow-up"></i>
+ <span>Active & Enrolled</span>
+ </div>
+ </div>
+
+ <div class="summary-card">
+ <div class="card-header">
+ <div>
+ <div class="card-value">{{ overall_placement_readiness }}%</div>
+ <p class="card-label">Placement Readiness</p>
+ </div>
+ <div class="card-icon">
+ <i class="fas fa-chart-line"></i>
+ </div>
+ </div>
+ <div class="card-trend {% if overall_placement_readiness >= 70 %}trend-up{% else %}trend-down{% endif %}">
+ <i class="fas fa-{% if overall_placement_readiness >= 70 %}arrow-up{% else %}arrow-down{% endif %}"></i>
+ <span>{{ excellent_count|add:good_count }} students ready</span>
+ </div>
+ </div>
+
+ <div class="summary-card">
+ <div class="card-header">
+ <div>
+ <div class="card-value">{{ avg_employability|floatformat:1 }}%</div>
+ <p class="card-label">Avg Employability</p>
+ </div>
+ <div class="card-icon">
+ <i class="fas fa-star"></i>
+ </div>
+ </div>
+ <div class="card-trend trend-up">
+ <i class="fas fa-check-circle"></i>
+ <span>Overall Performance</span>
+ </div>
+ </div>
+
+ <div class="summary-card">
+ <div class="card-header">
+ <div>
+ <div class="card-value">{{ total_companies }}</div>
+ <p class="card-label">Active Companies</p>
+ </div>
+ <div class="card-icon">
+ <i class="fas fa-building"></i>
+ </div>
+ </div>
+ <div class="card-trend trend-up">
+ <i class="fas fa-handshake"></i>
+ <span>Available Opportunities</span>
+ </div>
+ </div>
+ </div>
+
+ <!-- Placement Readiness Distribution -->
+ <div class="chart-card" style="margin-bottom: 30px;">
+ <div class="chart-header">
+ <h3 class="chart-title">
+ <i class="fas fa-chart-pie"></i>
+ Placement Readiness Distribution
+ </h3>
+ </div>
+ <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
+ <div style="text-align: center; padding: 20px; background: rgba(16, 185, 129, 0.1); border-radius: 12px;">
+ <div style="font-size: 36px; font-weight: 700; color: #059669;">{{ excellent_count }}</div>
+ <p style="color: #059669; font-weight: 600; margin-top: 8px;">Excellent (90-100%)</p>
+ </div>
+ <div style="text-align: center; padding: 20px; background: rgba(59, 130, 246, 0.1); border-radius: 12px;">
+ <div style="font-size: 36px; font-weight: 700; color: #2563eb;">{{ good_count }}</div>
+ <p style="color: #2563eb; font-weight: 600; margin-top: 8px;">Good (70-89%)</p>
+ </div>
+ <div style="text-align: center; padding: 20px; background: rgba(245, 158, 11, 0.1); border-radius: 12px;">
+ <div style="font-size: 36px; font-weight: 700; color: #d97706;">{{ average_count }}</div>
+ <p style="color: #d97706; font-weight: 600; margin-top: 8px;">Average (50-69%)</p>
+ </div>
+ <div style="text-align: center; padding: 20px; background: rgba(239, 68, 68, 0.1); border-radius: 12px;">
+ <div style="font-size: 36px; font-weight: 700; color: #dc2626;">{{ needs_improvement_count }}</div>
+ <p style="color: #dc2626; font-weight: 600; margin-top: 8px;">Needs Work (<50%)</p>
+ </div>
+ </div>
+ </div>
+
+ <!-- Charts Section -->
+ <div class="charts-section">
+ <div class="chart-card">
+ <div class="chart-header">
+ <h3 class="chart-title">
+ <i class="fas fa-chart-bar"></i>
+ Department-wise Employability
+ </h3>
+ </div>
+ <div class="chart-container">
+ <canvas id="departmentChart"></canvas>
+ </div>
+ </div>
+
+ <div class="chart-card">
+ <div class="chart-header">
+ <h3 class="chart-title">
+ <i class="fas fa-bullseye"></i>
+ Skill Gap Analysis
+ </h3>
+ </div>
+ <div class="chart-container">
+ <canvas id="skillsChart"></canvas>
+ </div>
+ </div>
+ </div>
+
+ <!-- Top Department -->
+ {% if top_department %}
+ <div class="table-card">
+ <div class="table-header">
+ <h3 class="table-title">
+ <i class="fas fa-trophy"></i>
+ Top Performing Department
+ </h3>
+ </div>
+ <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 20px; background: linear-gradient(135deg, rgba(109, 40, 217, 0.05), rgba(168, 85, 247, 0.05)); border-radius: 12px;">
+ <div style="text-align: center;">
+ <div style="font-size: 28px; font-weight: 700; color: var(--purple); margin-bottom: 8px;">{{ top_department.name }}</div>
+ <p style="color: var(--slate); font-weight: 600;">Department</p>
+ </div>
+ <div style="text-align: center;">
+ <div style="font-size: 28px; font-weight: 700; color: var(--violet); margin-bottom: 8px;">{{ top_department.avg_employability }}%</div>
+ <p style="color: var(--slate); font-weight: 600;">Avg Employability</p>
+ </div>
+ <div style="text-align: center;">
+ <div style="font-size: 28px; font-weight: 700; color: var(--indigo); margin-bottom: 8px;">{{ top_department.placement_ready }}/{{ top_department.total_students }}</div>
+ <p style="color: var(--slate); font-weight: 600;">Placement Ready</p>
+ </div>
+ </div>
+ </div>
+ {% endif %}
+
+ <!-- Top Recruiters -->
+ {% if top_recruiters %}
+ <div class="table-card">
+ <div class="table-header">
+ <h3 class="table-title">
+ <i class="fas fa-building"></i>
+ Top Recruiters
+ </h3>
+ <a href="{% url 'student_list' %}" class="btn btn-primary">
+ <i class="fas fa-eye"></i>
+ View All
+ </a>
+ </div>
+ <div class="table-wrapper">
+ <table>
+ <thead>
+ <tr>
+ <th>Company Name</th>
+ <th>Type</th>
+ <th>Package Range</th>
+ <th>Total Placements</th>
+ </tr>
+ </thead>
+ <tbody>
+ {% for company in top_recruiters %}
+ <tr>
+ <td><strong>{{ company.name }}</strong></td>
+ <td>
+ <span class="badge badge-good">{{ company.get_company_type_display }}</span>
+ </td>
+ <td>{{ company.package_min }} - {{ company.package_max }} LPA</td>
+ <td><strong style="color: var(--purple);">{{ company.total_placements }}</strong></td>
+ </tr>
+ {% endfor %}
+ </tbody>
+ </table>
+ </div>
+ </div>
+ {% endif %}
+
+ <!-- Students Needing Attention -->
+ {% if students_needing_attention %}
+ <div class="table-card">
+ <div class="table-header">
+ <h3 class="table-title">
+ <i class="fas fa-exclamation-triangle"></i>
+ Students Needing Attention
+ </h3>
+ <a href="{% url 'ai_recommendations' %}" class="btn btn-primary">
+ <i class="fas fa-lightbulb"></i>
+ Get Recommendations
+ </a>
+ </div>
+ <div class="table-wrapper">
+ <table>
+ <thead>
+ <tr>
+ <th>Student ID</th>
+ <th>Name</th>
+ <th>Branch</th>
+ <th>CGPA</th>
+ <th>Employability</th>
+ <th>Status</th>
+ <th>Action</th>
+ </tr>
+ </thead>
+ <tbody>
+ {% for emp in students_needing_attention %}
+ <tr>
+ <td><strong>{{ emp.student.student_id }}</strong></td>
+ <td>{{ emp.student.name }}</td>
+ <td>{{ emp.student.get_branch_display }}</td>
+ <td>{{ emp.student.cgpa }}</td>
+ <td><strong style="color: var(--danger);">{{ emp.overall_employability|floatformat:1 }}%</strong></td>
+ <td>
+ <span class="badge badge-needs-improvement">Needs Improvement</span>
+ </td>
+ <td>
+ <a href="{% url 'student_detail' emp.student.student_id %}" class="btn btn-primary" style="padding: 6px 12px; font-size: 12px;">
+ View Details
+ </a>
+ </td>
+ </tr>
+ {% endfor %}
+ </tbody>
+ </table>
+ </div>
+ </div>
+ {% endif %}
+ </div>
+
+ <script>
+ // Department-wise Employability Chart
+ const deptCtx = document.getElementById('departmentChart');
+ if (deptCtx) {
+ const ctx = deptCtx.getContext('2d');
+ 
+ // Prepare data
+ const deptLabels = [{% for branch in branch_data %}'{{ branch.name|escapejs }}',{% endfor %}];
+ const deptValues = [{% for branch in branch_data %}{{ branch.avg_employability|default:0 }},{% endfor %}];
+ 
+ // Only create chart if we have data
+ if (deptLabels.length > 0 && deptValues.length > 0) {
+ const deptData = {
+ labels: deptLabels,
+ datasets: [{
+ label: 'Avg Employability %',
+ data: deptValues,
+ backgroundColor: [
+ 'rgba(109, 40, 217, 0.8)',
+ 'rgba(168, 85, 247, 0.8)',
+ 'rgba(79, 70, 229, 0.8)',
+ 'rgba(245, 158, 11, 0.8)',
+ 'rgba(109, 40, 217, 0.6)',
+ 'rgba(168, 85, 247, 0.6)',
+ 'rgba(79, 70, 229, 0.6)',
+ ],
+ borderColor: [
+ 'rgba(109, 40, 217, 1)',
+ 'rgba(168, 85, 247, 1)',
+ 'rgba(79, 70, 229, 1)',
+ 'rgba(245, 158, 11, 1)',
+ 'rgba(109, 40, 217, 1)',
+ 'rgba(168, 85, 247, 1)',
+ 'rgba(79, 70, 229, 1)',
+ ],
+ borderWidth: 2,
+ borderRadius: 8,
+ }]
+ };
+
+ new Chart(ctx, {
+ type: 'bar',
+ data: deptData,
+ options: {
+ responsive: true,
+ maintainAspectRatio: true,
+ aspectRatio: 2,
+ plugins: {
+ legend: {
+ display: false
+ },
+ tooltip: {
+ callbacks: {
+ label: function(context) {
+ return 'Employability: ' + context.parsed.y.toFixed(1) + '%';
+ }
+ }
+ }
+ },
+ scales: {
+ y: {
+ beginAtZero: true,
+ max: 100,
+ ticks: {
+ callback: function(value) {
+ return value + '%';
+ },
+ font: {
+ size: 12
+ }
+ },
+ grid: {
+ color: 'rgba(0, 0, 0, 0.05)'
+ }
+ },
+ x: {
+ ticks: {
+ font: {
+ size: 12,
+ weight: '600'
+ }
+ },
+ grid: {
+ display: false
+ }
+ }
+ }
+ }
+ });
+ } else {
+ // Show no data message
+ const container = deptCtx.closest('.chart-card');
+ const chartContainer = container.querySelector('.chart-container');
+ chartContainer.innerHTML = '<div style="text-align: center; padding: 60px; color: #9ca3af;"><i class="fas fa-chart-bar" style="font-size: 48px; margin-bottom: 15px; opacity: 0.3;"></i><p style="font-size: 16px; font-weight: 600;">No department data available</p></div>';
+ }
+ }
+
+ // Skills Gap Chart
+ const skillsCtx = document.getElementById('skillsChart');
+ if (skillsCtx) {
+ const ctx = skillsCtx.getContext('2d');
+ 
+ // Prepare skills data
+ const commScore = {{ avg_skills.communication|default:0 }};
+ const techScore = {{ avg_skills.technical|default:0 }};
+ const codeScore = {{ avg_skills.coding|default:0 }};
+ const aptScore = {{ avg_skills.aptitude|default:0 }} / 10; // Scale to 10
+ const softScore = {{ avg_skills.soft_skills|default:0 }};
+ 
+ // Check if we have any skills data
+ const hasSkillsData = commScore > 0 || techScore > 0 || codeScore > 0 || aptScore > 0 || softScore > 0;
+ 
+ if (hasSkillsData) {
+ const skillsData = {
+ labels: ['Communication', 'Technical', 'Coding', 'Aptitude', 'Soft Skills'],
+ datasets: [{
+ label: 'Average Score',
+ data: [commScore, techScore, codeScore, aptScore, softScore],
+ backgroundColor: 'rgba(168, 85, 247, 0.2)',
+ borderColor: 'rgba(168, 85, 247, 1)',
+ borderWidth: 3,
+ pointBackgroundColor: 'rgba(109, 40, 217, 1)',
+ pointBorderColor: '#fff',
+ pointHoverBackgroundColor: '#fff',
+ pointHoverBorderColor: 'rgba(109, 40, 217, 1)',
+ pointRadius: 5,
+ pointHoverRadius: 7,
+ }]
+ };
+
+ new Chart(ctx, {
+ type: 'radar',
+ data: skillsData,
+ options: {
+ responsive: true,
+ maintainAspectRatio: true,
+ aspectRatio: 1.5,
+ scales: {
+ r: {
+ beginAtZero: true,
+ max: 10,
+ min: 0,
+ ticks: {
+ stepSize: 2,
+ font: {
+ size: 11
+ },
+ backdropColor: 'transparent'
+ },
+ grid: {
+ color: 'rgba(0, 0, 0, 0.1)'
+ },
+ angleLines: {
+ color: 'rgba(0, 0, 0, 0.1)'
+ },
+ pointLabels: {
+ font: {
+ size: 12,
+ weight: '600'
+ }
+ }
+ }
+ },
+ plugins: {
+ legend: {
+ display: false
+ },
+ tooltip: {
+ callbacks: {
+ label: function(context) {
+ return context.label + ': ' + context.parsed.r.toFixed(1) + '/10';
+ }
+ }
+ }
+ }
+ }
+ });
+ } else {
+ // Show no data message
+ const container = skillsCtx.closest('.chart-card');
+ const chartContainer = container.querySelector('.chart-container');
+ chartContainer.innerHTML = '<div style="text-align: center; padding: 60px; color: #9ca3af;"><i class="fas fa-bullseye" style="font-size: 48px; margin-bottom: 15px; opacity: 0.3;"></i><p style="font-size: 16px; font-weight: 600;">No skills data available</p><p style="font-size: 14px; margin-top: 8px;">Assess students to see skill gaps</p></div>';
+ }
+ }
+ </script>
+</body>
+</html>

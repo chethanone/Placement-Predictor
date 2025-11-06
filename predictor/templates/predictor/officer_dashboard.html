@@ -1,0 +1,246 @@
+{% extends 'predictor/base.html' %}
+{% load static %}
+
+{% block title %}College Placement Officer Dashboard{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.css">
+{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+ <!-- Sidebar -->
+ <div class="sidebar">
+ <div class="sidebar-header">
+ <i class="fas fa-university"></i>
+ <span>Officer Dashboard</span>
+ </div>
+ <nav class="sidebar-nav">
+ <a href="#overview" class="active">
+ <i class="fas fa-chart-line"></i> Overview
+ </a>
+ <a href="#departments">
+ <i class="fas fa-building"></i> Departments
+ </a>
+ <a href="#students">
+ <i class="fas fa-user-graduate"></i> Students
+ </a>
+ <a href="#upload">
+ <i class="fas fa-upload"></i> Upload Data
+ </a>
+ <a href="#insights">
+ <i class="fas fa-brain"></i> AI Insights
+ </a>
+ </nav>
+ </div>
+
+ <!-- Main Content -->
+ <div class="main-dashboard">
+ <!-- Header -->
+ <div class="dashboard-header">
+ <h1>Placement Overview</h1>
+ <div class="header-actions">
+ <button class="btn btn-primary" onclick="downloadReport()">
+ <i class="fas fa-download"></i> Download Report
+ </button>
+ </div>
+ </div>
+
+ <!-- Quick Stats -->
+ <div class="stats-grid">
+ <div class="stats-card">
+ <div class="stats-icon">
+ <i class="fas fa-percentage"></i>
+ </div>
+ <div class="stats-info">
+ <h3>Overall Readiness</h3>
+ <div class="stats-number">78%</div>
+ <div class="progress">
+ <div class="progress-bar" style="width: 78%"></div>
+ </div>
+ </div>
+ </div>
+
+ <div class="stats-card">
+ <div class="stats-icon">
+ <i class="fas fa-users"></i>
+ </div>
+ <div class="stats-info">
+ <h3>Total Students</h3>
+ <div class="stats-number">1,245</div>
+ </div>
+ </div>
+
+ <div class="stats-card">
+ <div class="stats-icon">
+ <i class="fas fa-check-circle"></i>
+ </div>
+ <div class="stats-info">
+ <h3>Placed Students</h3>
+ <div class="stats-number">856</div>
+ </div>
+ </div>
+
+ <div class="stats-card">
+ <div class="stats-icon">
+ <i class="fas fa-building"></i>
+ </div>
+ <div class="stats-info">
+ <h3>Companies Visited</h3>
+ <div class="stats-number">42</div>
+ </div>
+ </div>
+ </div>
+
+ <!-- Department Performance -->
+ <div class="chart-grid">
+ <div class="chart-card">
+ <h3>Department-wise Performance</h3>
+ <canvas id="deptChart"></canvas>
+ </div>
+ <div class="chart-card">
+ <h3>Placement Distribution</h3>
+ <canvas id="placementPie"></canvas>
+ </div>
+ </div>
+
+ <!-- Student List -->
+ <div class="table-card">
+ <div class="card-header">
+ <h3>Student Performance</h3>
+ <div class="card-actions">
+ <input type="text" class="form-control" placeholder="Search students...">
+ <select class="form-control">
+ <option>All Departments</option>
+ <option>Computer Science</option>
+ <option>Electronics</option>
+ <option>Mechanical</option>
+ </select>
+ </div>
+ </div>
+ <div class="table-responsive">
+ <table class="table table-hover">
+ <thead>
+ <tr>
+ <th>Student ID</th>
+ <th>Name</th>
+ <th>Department</th>
+ <th>CGPA</th>
+ <th>Employability Score</th>
+ <th>Placement Chance</th>
+ <th>Actions</th>
+ </tr>
+ </thead>
+ <tbody>
+ <!-- Sample data -->
+ <tr>
+ <td>CS001</td>
+ <td>John Doe</td>
+ <td>Computer Science</td>
+ <td>8.9</td>
+ <td>
+ <div class="progress">
+ <div class="progress-bar" style="width: 85%">85%</div>
+ </div>
+ </td>
+ <td><span class="badge badge-success">High</span></td>
+ <td>
+ <button class="btn btn-sm btn-outline-primary">View</button>
+ </td>
+ </tr>
+ <!-- More rows... -->
+ </tbody>
+ </table>
+ </div>
+ </div>
+
+ <!-- Upload Section -->
+ <div class="upload-card">
+ <h3>Upload Student Data</h3>
+ <div class="upload-area">
+ <i class="fas fa-file-upload"></i>
+ <p>Drag and drop CSV file or click to upload</p>
+ <input type="file" id="csvUpload" accept=".csv" class="file-input">
+ <button class="btn btn-primary mt-3">Process Data</button>
+ </div>
+ </div>
+
+ <!-- AI Insights -->
+ <div class="insights-card">
+ <h3>AI Recommendations</h3>
+ <div class="insights-grid">
+ <div class="insight-item">
+ <i class="fas fa-lightbulb"></i>
+ <h4>Skill Gap Analysis</h4>
+ <p>75% of students need additional training in communication skills</p>
+ </div>
+ <div class="insight-item">
+ <i class="fas fa-chart-bar"></i>
+ <h4>Industry Trends</h4>
+ <p>Growing demand for cloud computing skills (+45% YoY)</p>
+ </div>
+ <div class="insight-item">
+ <i class="fas fa-graduation-cap"></i>
+ <h4>Training Recommendation</h4>
+ <p>Schedule mock interviews for final year students</p>
+ </div>
+ </div>
+ </div>
+ </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+<script>
+// Department Performance Chart
+const deptCtx = document.getElementById('deptChart').getContext('2d');
+new Chart(deptCtx, {
+ type: 'bar',
+ data: {
+ labels: ['CSE', 'ECE', 'ME', 'CE', 'IT'],
+ datasets: [{
+ label: 'Placement Rate',
+ data: [85, 78, 65, 72, 80],
+ backgroundColor: '#E74C3C',
+ borderRadius: 5
+ }]
+ },
+ options: {
+ responsive: true,
+ plugins: {
+ legend: {
+ position: 'top',
+ }
+ }
+ }
+});
+
+// Placement Distribution Pie Chart
+const pieCtx = document.getElementById('placementPie').getContext('2d');
+new Chart(pieCtx, {
+ type: 'doughnut',
+ data: {
+ labels: ['Placed', 'In Process', 'Not Started'],
+ datasets: [{
+ data: [65, 20, 15],
+ backgroundColor: ['#27AE60', '#F39C12', '#ECF0F1'],
+ }]
+ },
+ options: {
+ responsive: true,
+ plugins: {
+ legend: {
+ position: 'right'
+ }
+ }
+ }
+});
+
+// Download Report Function
+function downloadReport() {
+ // Implementation for report download
+ alert('Generating placement report...');
+}
+</script>
+{% endblock %}

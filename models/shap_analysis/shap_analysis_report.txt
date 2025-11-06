@@ -1,0 +1,44 @@
+======================================================================
+SHAP MODEL EXPLAINABILITY REPORT
+Generated: 2025-11-03 14:57:08.010433
+======================================================================
+
+MODEL INFORMATION
+----------------------------------------------------------------------
+Model Type: RandomForestClassifier
+Total Samples: 10000
+Total Features: 15
+
+TOP 10 FEATURES BY IMPORTANCE
+----------------------------------------------------------------------
+ 1. Communication_Skills           0.127599
+ 3. IQ                             0.082697
+ 4. CGPA                           0.074996
+ 2. Projects_Completed             0.073015
+ 5. Prev_Sem_Result                0.038370
+ 7. IQ_div_Prev_Sem_Result         0.017642
+ 6. IQ_x_Prev_Sem_Result           0.016991
+ 9. Prev_Sem_Result_x_CGPA         0.007433
+ 8. avg_academic_score             0.006747
+11. College_ID_div_IQ              0.003562
+
+CONCENTRATION ANALYSIS
+----------------------------------------------------------------------
+Top feature: Communication_Skills
+Contribution: 27.8%
+
+Top 3 features: 62.2%
+
+GOOD: Balanced feature usage
+
+GENERATED FILES
+----------------------------------------------------------------------
+1. models\shap_analysis\shap_summary_plot.png
+2. models\shap_analysis\shap_bar_plot.png
+3. models\shap_analysis\global_feature_importance.csv
+4. Dependence plots (top 5 features)
+5. Waterfall plots (5 sample explanations)
+
+======================================================================
+END OF REPORT
+======================================================================

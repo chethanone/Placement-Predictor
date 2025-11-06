@@ -1,0 +1,171 @@
+{% extends 'predictor/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+<link href="{% static 'css/college_dashboard_new.css' %}" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+{% endblock %}
+
+{% block content %}
+<div class="college-layout">
+ <!-- Sidebar -->
+ <div class="college-sidebar">
+ <div class="sidebar-header">
+ <img src="{% static 'images/college_logo.png' %}" alt="College Logo" class="w-32 mb-8">
+ <h2 class="text-xl font-semibold mb-8">Placement Officer Portal</h2>
+ </div>
+ 
+ <nav class="sidebar-nav">
+ <a href="#dashboard" class="nav-item active">
+ <i class="fas fa-chart-line"></i>
+ Dashboard
+ </a>
+ <a href="#students" class="nav-item">
+ <i class="fas fa-users"></i>
+ Students
+ </a>
+ <a href="#analytics" class="nav-item">
+ <i class="fas fa-chart-bar"></i>
+ Analytics
+ </a>
+ <a href="#reports" class="nav-item">
+ <i class="fas fa-file-alt"></i>
+ Reports
+ </a>
+ </nav>
+ </div>
+
+ <!-- Main Content -->
+ <div class="college-main">
+ <!-- Top Stats -->
+ <div class="grid grid-cols-4 gap-6 mb-8">
+ <div class="stat-card">
+ <h3 class="text-gray-600">Overall Readiness</h3>
+ <div class="circular-progress" style="--progress: 75%">
+ <span class="text-3xl font-bold">75%</span>
+ </div>
+ </div>
+ <div class="stat-card">
+ <h3 class="text-gray-600">Total Students</h3>
+ <p class="text-3xl font-bold">486</p>
+ <p class="text-sm text-green-500">↑ 12% from last batch</p>
+ </div>
+ <div class="stat-card">
+ <h3 class="text-gray-600">Top Department</h3>
+ <p class="text-3xl font-bold">CSE</p>
+ <p class="text-sm text-green-500">92% placement rate</p>
+ </div>
+ <div class="stat-card">
+ <h3 class="text-gray-600">Pending Actions</h3>
+ <p class="text-3xl font-bold">8</p>
+ <p class="text-sm text-amber-500">Requires attention</p>
+ </div>
+ </div>
+
+ <!-- Charts Section -->
+ <div class="grid grid-cols-2 gap-6 mb-8">
+ <div class="chart-container">
+ <h3 class="text-xl font-semibold mb-4">Department Performance</h3>
+ <canvas id="deptChart"></canvas>
+ </div>
+ <div class="chart-container">
+ <h3 class="text-xl font-semibold mb-4">Skill Distribution</h3>
+ <canvas id="skillChart"></canvas>
+ </div>
+ </div>
+
+ <!-- Alerts Section -->
+ <div class="mb-8">
+ <h3 class="text-xl font-semibold mb-4">Recent Alerts</h3>
+ <div class="alert alert-warning">
+ <h4 class="font-semibold">Low Communication Scores</h4>
+ <p>ECE department shows 15% decrease in communication assessment scores</p>
+ </div>
+ <div class="alert alert-success">
+ <h4 class="font-semibold">Achievement Unlocked</h4>
+ <p>CSE department reached 90% technical assessment completion</p>
+ </div>
+ </div>
+
+ <!-- Student List Preview -->
+ <div class="mb-8">
+ <div class="flex justify-between items-center mb-4">
+ <h3 class="text-xl font-semibold">Recent Assessments</h3>
+ <a href="#" class="text-primary hover:underline">View All</a>
+ </div>
+ <div class="filter-container">
+ <select class="filter-select">
+ <option>All Departments</option>
+ <option>CSE</option>
+ <option>ECE</option>
+ <option>Mechanical</option>
+ </select>
+ <select class="filter-select">
+ <option>All Status</option>
+ <option>High Readiness</option>
+ <option>Medium Readiness</option>
+ <option>Low Readiness</option>
+ </select>
+ </div>
+ <table class="student-table">
+ <thead>
+ <tr>
+ <th>Student Name</th>
+ <th>Department</th>
+ <th>CGPA</th>
+ <th>Placement Probability</th>
+ <th>Status</th>
+ </tr>
+ </thead>
+ <tbody>
+ <!-- Sample data - Replace with dynamic data -->
+ <tr>
+ <td>John Doe</td>
+ <td>CSE</td>
+ <td>8.5</td>
+ <td>92%</td>
+ <td><span class="badge badge-success">High</span></td>
+ </tr>
+ </tbody>
+ </table>
+ </div>
+ </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+ // Sample chart initialization
+ const deptChart = new Chart(
+ document.getElementById('deptChart'),
+ {
+ type: 'bar',
+ data: {
+ labels: ['CSE', 'ECE', 'Mechanical', 'Civil'],
+ datasets: [{
+ label: 'Placement Probability',
+ data: [92, 85, 78, 72],
+ backgroundColor: '#0EA5E9'
+ }]
+ }
+ }
+ );
+
+ const skillChart = new Chart(
+ document.getElementById('skillChart'),
+ {
+ type: 'radar',
+ data: {
+ labels: ['Technical', 'Communication', 'Aptitude', 'Soft Skills'],
+ datasets: [{
+ label: 'Average Scores',
+ data: [85, 75, 82, 78],
+ backgroundColor: 'rgba(14, 165, 233, 0.2)',
+ borderColor: '#0EA5E9'
+ }]
+ }
+ }
+ );
+</script>
+{% endblock %}

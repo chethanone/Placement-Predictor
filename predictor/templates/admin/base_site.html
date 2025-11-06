@@ -1,0 +1,409 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | Placement Predictor Admin{% endblock %}
+
+{% block branding %}
+<div class="admin-branding">
+    <h1 id="site-name">
+        <i class="fas fa-graduation-cap"></i>
+        <a href="{% url 'admin:index' %}">Placement Predictor Admin</a>
+    </h1>
+</div>
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --sage-green: #8FB9A8;
+        --sage-green-dark: #6a9d88;
+        --cream: #FEFAD4;
+        --peach: #FCB9AA;
+        --rose: #F1828D;
+        --mauve: #765D69;
+    }
+    
+    /* Global Styles */
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+        background: linear-gradient(135deg, #e8f5f1 0%, #f5e6f3 100%) !important;
+        color: #2c3e50 !important;
+    }
+    
+    /* Header */
+    #header {
+        background: linear-gradient(135deg, var(--sage-green) 0%, var(--sage-green-dark) 100%) !important;
+        color: white !important;
+        padding: 20px 30px !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+    }
+    
+    .admin-branding h1 {
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+    
+    #site-name a {
+        color: white !important;
+        text-decoration: none !important;
+        font-size: 24px !important;
+        font-weight: 700 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 12px !important;
+    }
+    
+    #site-name a:hover {
+        color: var(--cream) !important;
+    }
+    
+    /* User Tools */
+    #user-tools {
+        color: white !important;
+        text-align: right !important;
+        padding: 10px 0 !important;
+    }
+    
+    #user-tools a {
+        color: white !important;
+        font-weight: 600 !important;
+        padding: 8px 16px !important;
+        border-radius: 8px !important;
+        transition: all 0.3s ease !important;
+        text-decoration: none !important;
+    }
+    
+    #user-tools a:hover {
+        background: rgba(255, 255, 255, 0.2) !important;
+    }
+    
+    /* Breadcrumbs */
+    .breadcrumbs {
+        background: white !important;
+        padding: 15px 30px !important;
+        border-radius: 12px !important;
+        margin: 20px 30px !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+    }
+    
+    .breadcrumbs a {
+        color: var(--sage-green) !important;
+        font-weight: 600 !important;
+        text-decoration: none !important;
+    }
+    
+    .breadcrumbs a:hover {
+        color: var(--mauve) !important;
+    }
+    
+    /* Content */
+    #content {
+        padding: 30px !important;
+        max-width: 1400px !important;
+        margin: 0 auto !important;
+    }
+    
+    /* Modules (Dashboard Cards) */
+    .module {
+        background: white !important;
+        border-radius: 16px !important;
+        padding: 24px !important;
+        margin-bottom: 24px !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+        border: 2px solid var(--cream) !important;
+    }
+    
+    .module h2, .module caption {
+        background: var(--cream) !important;
+        color: var(--mauve) !important;
+        padding: 12px 20px !important;
+        border-radius: 10px !important;
+        margin: -24px -24px 20px -24px !important;
+        font-weight: 700 !important;
+        font-size: 18px !important;
+    }
+    
+    /* Tables */
+    #result_list {
+        border-radius: 12px !important;
+        overflow: hidden !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+    }
+    
+    #result_list thead th {
+        background: var(--sage-green) !important;
+        color: white !important;
+        padding: 16px !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        font-size: 13px !important;
+        letter-spacing: 0.5px !important;
+    }
+    
+    #result_list tbody tr {
+        transition: all 0.2s ease !important;
+    }
+    
+    #result_list tbody tr:hover {
+        background: var(--cream) !important;
+    }
+    
+    #result_list tbody td {
+        padding: 14px 16px !important;
+        border-bottom: 1px solid #e0e0e0 !important;
+    }
+    
+    #result_list tbody tr:nth-child(even) {
+        background: #f8f9fa !important;
+    }
+    
+    /* Forms */
+    .form-row {
+        padding: 16px !important;
+        border-bottom: 1px solid #e0e0e0 !important;
+    }
+    
+    input[type="text"],
+    input[type="email"],
+    input[type="number"],
+    input[type="password"],
+    input[type="url"],
+    input[type="date"],
+    input[type="time"],
+    select,
+    textarea {
+        padding: 10px 14px !important;
+        border: 2px solid #e0e0e0 !important;
+        border-radius: 8px !important;
+        font-family: 'Inter', sans-serif !important;
+        transition: all 0.3s ease !important;
+    }
+    
+    input:focus,
+    select:focus,
+    textarea:focus {
+        outline: none !important;
+        border-color: var(--sage-green) !important;
+        box-shadow: 0 0 0 3px rgba(143, 185, 168, 0.1) !important;
+    }
+    
+    /* Buttons */
+    .submit-row input,
+    .button,
+    input[type="submit"],
+    input[type="button"],
+    .submit-row a {
+        background: linear-gradient(135deg, var(--sage-green), var(--sage-green-dark)) !important;
+        color: white !important;
+        padding: 12px 28px !important;
+        border: none !important;
+        border-radius: 10px !important;
+        font-weight: 700 !important;
+        cursor: pointer !important;
+        transition: all 0.3s ease !important;
+        box-shadow: 0 4px 12px rgba(143, 185, 168, 0.3) !important;
+        text-decoration: none !important;
+        display: inline-block !important;
+    }
+    
+    .submit-row input:hover,
+    .button:hover,
+    input[type="submit"]:hover,
+    input[type="button"]:hover {
+        transform: translateY(-2px) !important;
+        box-shadow: 0 6px 20px rgba(143, 185, 168, 0.5) !important;
+    }
+    
+    .deletelink,
+    .deletelink-box {
+        background: linear-gradient(135deg, var(--rose), #e06b76) !important;
+        box-shadow: 0 4px 12px rgba(241, 130, 141, 0.3) !important;
+    }
+    
+    .deletelink:hover,
+    .deletelink-box:hover {
+        box-shadow: 0 6px 20px rgba(241, 130, 141, 0.5) !important;
+    }
+    
+    /* Action Bar */
+    .actions {
+        background: white !important;
+        padding: 16px !important;
+        border-radius: 10px !important;
+        margin-bottom: 20px !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+    }
+    
+    .actions select {
+        padding: 10px 14px !important;
+        border: 2px solid var(--sage-green) !important;
+        border-radius: 8px !important;
+    }
+    
+    .actions button {
+        background: var(--sage-green) !important;
+        color: white !important;
+        padding: 10px 20px !important;
+        border-radius: 8px !important;
+        border: none !important;
+        font-weight: 600 !important;
+    }
+    
+    /* Filters */
+    #changelist-filter {
+        background: white !important;
+        border-radius: 16px !important;
+        padding: 20px !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08) !important;
+        border: 2px solid var(--cream) !important;
+    }
+    
+    #changelist-filter h2 {
+        background: var(--sage-green) !important;
+        color: white !important;
+        padding: 10px 16px !important;
+        border-radius: 8px !important;
+        margin: -20px -20px 16px -20px !important;
+        font-weight: 700 !important;
+    }
+    
+    #changelist-filter h3 {
+        color: var(--mauve) !important;
+        font-weight: 600 !important;
+        margin-top: 16px !important;
+        padding: 8px 0 !important;
+        border-bottom: 2px solid var(--cream) !important;
+    }
+    
+    #changelist-filter a {
+        color: #666 !important;
+        text-decoration: none !important;
+        transition: color 0.2s ease !important;
+    }
+    
+    #changelist-filter a:hover {
+        color: var(--sage-green) !important;
+    }
+    
+    #changelist-filter li.selected a {
+        color: var(--sage-green) !important;
+        font-weight: 700 !important;
+    }
+    
+    /* Search Bar */
+    #changelist-search {
+        background: white !important;
+        padding: 20px !important;
+        border-radius: 12px !important;
+        margin-bottom: 20px !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+    }
+    
+    #searchbar {
+        width: 100% !important;
+        padding: 12px 16px !important;
+        border: 2px solid var(--sage-green) !important;
+        border-radius: 10px !important;
+        font-size: 15px !important;
+    }
+    
+    /* Pagination */
+    .paginator {
+        background: white !important;
+        padding: 16px !important;
+        border-radius: 10px !important;
+        margin-top: 20px !important;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.06) !important;
+    }
+    
+    .paginator a {
+        color: var(--sage-green) !important;
+        font-weight: 600 !important;
+        padding: 8px 14px !important;
+        border-radius: 6px !important;
+        transition: all 0.2s ease !important;
+        text-decoration: none !important;
+    }
+    
+    .paginator a:hover {
+        background: var(--cream) !important;
+    }
+    
+    /* Dashboard */
+    #content-main .app-list {
+        display: grid !important;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)) !important;
+        gap: 24px !important;
+    }
+    
+    .app-list .module {
+        transition: all 0.3s ease !important;
+    }
+    
+    .app-list .module:hover {
+        transform: translateY(-4px) !important;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.12) !important;
+        border-color: var(--sage-green) !important;
+    }
+    
+    /* Messages */
+    .messagelist {
+        border-radius: 12px !important;
+        overflow: hidden !important;
+        margin: 20px 0 !important;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+    }
+    
+    .messagelist li {
+        padding: 16px 24px !important;
+        font-weight: 600 !important;
+    }
+    
+    .messagelist .success {
+        background: #d1fae5 !important;
+        color: #065f46 !important;
+        border-left: 4px solid var(--sage-green) !important;
+    }
+    
+    .messagelist .warning {
+        background: #fef3c7 !important;
+        color: #92400e !important;
+        border-left: 4px solid var(--peach) !important;
+    }
+    
+    .messagelist .error {
+        background: #fee2e2 !important;
+        color: #991b1b !important;
+        border-left: 4px solid var(--rose) !important;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        #content {
+            padding: 15px !important;
+        }
+        
+        .breadcrumbs {
+            margin: 15px !important;
+        }
+        
+        #content-main .app-list {
+            grid-template-columns: 1fr !important;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block footer %}
+<div id="footer" style="background: white; padding: 20px; text-align: center; border-radius: 12px; margin: 20px 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); color: #666;">
+    <p style="margin: 0;">
+        <strong style="color: var(--sage-green);">Placement Predictor</strong> Administration Panel | 
+        Powered by Django
+    </p>
+</div>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

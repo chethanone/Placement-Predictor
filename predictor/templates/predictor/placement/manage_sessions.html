@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Training Sessions Management - TPO Portal</title>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ <style>
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ }
+
+ body {
+ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+ min-height: 100vh;
+ }
+
+ .container {
+ display: flex;
+ min-height: 100vh;
+ }
+
+ /* Sidebar */
+ .sidebar {
+ width: 260px;
+ background: rgba(255, 255, 255, 0.95);
+ backdrop-filter: blur(10px);
+ box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+ padding: 20px 0;
+ position: fixed;
+ height: 100vh;
+ overflow-y: auto;
+ }
+
+ .logo {
+ padding: 0 20px 20px;
+ border-bottom: 2px solid #e2e8f0;
+ margin-bottom: 20px;
+ }
+
+ .logo h2 {
+ color: #6d28d9;
+ font-size: 24px;
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ }
+
+ .nav-menu {
+ list-style: none;
+ }
+
+ .nav-item {
+ margin: 5px 10px;
+ }
+
+ .nav-link {
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ padding: 12px 15px;
+ color: #4b5563;
+ text-decoration: none;
+ border-radius: 8px;
+ transition: all 0.3s ease;
+ }
+
+ .nav-link:hover {
+ background: linear-gradient(135deg, #6d28d9 0%, #a855f7 100%);
+ color: white;
+ transform: translateX(5px);
+ }
+
+ .nav-link.active {
+ background: linear-gradient(135deg, #6d28d9 0%, #a855f7 100%);
+ color: white;
+ }
+
+ .nav-link i {
+ width: 20px;
+ text-align: center;
+ }
+
+ /* Main Content */
+ .main-content {
+ flex: 1;
+ margin-left: 260px;
+ padding: 30px;
+ }
+
+ .header {
+ background: white;
+ padding: 25px 30px;
+ border-radius: 15px;
+ box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+ margin-bottom: 30px;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ }
+
+ .header h1 {
+ color: #1f2937;
+ font-size: 28px;
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ }
+
+ .header-actions {
+ display: flex;
+ gap: 15px;
+ }
+
+ .btn {
+ padding: 10px 20px;
+ border: none;
+ border-radius: 8px;
+ cursor: pointer;
+ font-size: 14px;
+ font-weight: 600;
+ text-decoration: none;
+ display: inline-flex;
+ align-items: center;
+ gap: 8px;
+ transition: all 0.3s ease;
+ }
+
+ .btn-primary {
+ background: linear-gradient(135deg, #6d28d9 0%, #a855f7 100%);
+ color: white;
+ }
+
+ .btn-primary:hover {
+ transform: translateY(-2px);
+ box-shadow: 0 6px 12px rgba(109, 40, 217, 0.3);
+ }
+
+ .btn-secondary {
+ background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+ color: white;
+ }
+
+ .btn-secondary:hover {
+ transform: translateY(-2px);
+ box-shadow: 0 6px 12px rgba(79, 70, 229, 0.3);
+ }
+
+ .btn-success {
+ background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+ color: white;
+ }
+
+ .btn-danger {
+ background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+ color: white;
+ }
+
+ .btn-warning {
+ background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+ color: white;
+ }
+
+ /* Content Card */
+ .content-card {
+ background: white;
+ border-radius: 15px;
+ padding: 30px;
+ box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+ margin-bottom: 30px;
+ }
+
+ /* Sessions Grid */
+ .sessions-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+ gap: 25px;
+ margin-top: 25px;
+ }
+
+ .session-card {
+ background: white;
+ border-radius: 12px;
+ padding: 25px;
+ box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+ border-left: 4px solid #6d28d9;
+ transition: all 0.3s ease;
+ }
+
+ .session-card:hover {
+ transform: translateY(-5px);
+ box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+ }
+
+ .session-header {
+ display: flex;
+ justify-content: space-between;
+ align-items: flex-start;
+ margin-bottom: 15px;
+ }
+
+ .session-title {
+ font-size: 20px;
+ color: #1f2937;
+ font-weight: 600;
+ margin-bottom: 8px;
+ }
+
+ .session-badge {
+ padding: 5px 12px;
+ border-radius: 20px;
+ font-size: 12px;
+ font-weight: 600;
+ text-transform: uppercase;
+ }
+
+ .badge-upcoming {
+ background: #dbeafe;
+ color: #1e40af;
+ }
+
+ .badge-ongoing {
+ background: #d1fae5;
+ color: #065f46;
+ }
+
+ .badge-completed {
+ background: #e5e7eb;
+ color: #4b5563;
+ }
+
+ .badge-cancelled {
+ background: #fee2e2;
+ color: #991b1b;
+ }
+
+ .session-details {
+ margin: 15px 0;
+ color: #6b7280;
+ font-size: 14px;
+ }
+
+ .session-detail {
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ margin: 8px 0;
+ }
+
+ .session-detail i {
+ width: 20px;
+ color: #6d28d9;
+ }
+
+ .session-actions {
+ display: flex;
+ gap: 10px;
+ margin-top: 20px;
+ padding-top: 20px;
+ border-top: 1px solid #e5e7eb;
+ }
+
+ .session-actions .btn {
+ flex: 1;
+ justify-content: center;
+ font-size: 13px;
+ padding: 8px 12px;
+ }
+
+ /* Modal */
+ .modal {
+ display: none;
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ background: rgba(0,0,0,0.5);
+ z-index: 1000;
+ align-items: center;
+ justify-content: center;
+ }
+
+ .modal.active {
+ display: flex;
+ }
+
+ .modal-content {
+ background: white;
+ border-radius: 15px;
+ padding: 30px;
+ max-width: 600px;
+ width: 90%;
+ max-height: 90vh;
+ overflow-y: auto;
+ }
+
+ .modal-header {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ margin-bottom: 25px;
+ }
+
+ .modal-header h2 {
+ color: #1f2937;
+ font-size: 24px;
+ }
+
+ .close-modal {
+ background: none;
+ border: none;
+ font-size: 28px;
+ color: #6b7280;
+ cursor: pointer;
+ padding: 0;
+ width: 30px;
+ height: 30px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ }
+
+ .close-modal:hover {
+ color: #1f2937;
+ }
+
+ .form-group {
+ margin-bottom: 20px;
+ }
+
+ .form-group label {
+ display: block;
+ margin-bottom: 8px;
+ color: #374151;
+ font-weight: 600;
+ font-size: 14px;
+ }
+
+ .form-control {
+ width: 100%;
+ padding: 12px;
+ border: 2px solid #e5e7eb;
+ border-radius: 8px;
+ font-size: 14px;
+ transition: all 0.3s ease;
+ }
+
+ .form-control:focus {
+ outline: none;
+ border-color: #6d28d9;
+ box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.1);
+ }
+
+ textarea.form-control {
+ resize: vertical;
+ min-height: 100px;
+ }
+
+ .form-row {
+ display: grid;
+ grid-template-columns: 1fr 1fr;
+ gap: 15px;
+ }
+
+ .empty-state {
+ text-align: center;
+ padding: 60px 20px;
+ color: #6b7280;
+ }
+
+ .empty-state i {
+ font-size: 64px;
+ color: #d1d5db;
+ margin-bottom: 20px;
+ }
+
+ .empty-state h3 {
+ font-size: 20px;
+ margin-bottom: 10px;
+ }
+ </style>
+</head>
+<body>
+ <div class="container">
+ <!-- Sidebar -->
+ <aside class="sidebar">
+ <div class="logo">
+ <h2><i class="fas fa-graduation-cap"></i> TPO Portal</h2>
+ </div>
+ <ul class="nav-menu">
+ <li class="nav-item">
+ <a href="{% url 'tpo_dashboard' %}" class="nav-link">
+ <i class="fas fa-chart-line"></i>
+ <span>Dashboard</span>
+ </a>
+ </li>
+ <li class="nav-item">
+ <a href="{% url 'student_list' %}" class="nav-link">
+ <i class="fas fa-users"></i>
+ <span>Student Records</span>
+ </a>
+ </li>
+ <li class="nav-item">
+ <a href="{% url 'ai_recommendations' %}" class="nav-link">
+ <i class="fas fa-robot"></i>
+ <span>AI Recommendations</span>
+ </a>
+ </li>
+ <li class="nav-item">
+ <a href="{% url 'what_if_simulation' %}" class="nav-link">
+ <i class="fas fa-flask"></i>
+ <span>What-If Simulation</span>
+ </a>
+ </li>
+ <li class="nav-item">
+ <a href="{% url 'select_department_report' %}" class="nav-link">
+ <i class="fas fa-file-pdf"></i>
+ <span>Reports</span>
+ </a>
+ </li>
+ <li class="nav-item">
+ <a href="{% url 'manage_training_sessions' %}" class="nav-link active">
+ <i class="fas fa-chalkboard-teacher"></i>
+ <span>Training Sessions</span>
+ </a>
+ </li>
+ <li class="nav-item">
+ <a href="{% url 'analytics_dashboard' %}" class="nav-link">
+ <i class="fas fa-chart-pie"></i>
+ <span>Analytics</span>
+ </a>
+ </li>
+ <li class="nav-item">
+ <a href="{% url 'placement_logout' %}" class="nav-link">
+ <i class="fas fa-sign-out-alt"></i>
+ <span>Logout</span>
+ </a>
+ </li>
+ </ul>
+ </aside>
+
+ <!-- Main Content -->
+ <main class="main-content">
+ <div class="header">
+ <h1>
+ <i class="fas fa-chalkboard-teacher"></i>
+ Training Sessions Management
+ </h1>
+ <div class="header-actions">
+ <button class="btn btn-primary" onclick="openModal()">
+ <i class="fas fa-plus"></i>
+ Add New Session
+ </button>
+ </div>
+ </div>
+
+ <!-- Sessions Grid -->
+ {% if sessions %}
+ <div class="sessions-grid">
+ {% for session in sessions %}
+ <div class="session-card">
+ <div class="session-header">
+ <div>
+ <div class="session-title">{{ session.title }}</div>
+ <span class="session-badge badge-{{ session.status }}">
+ {{ session.status }}
+ </span>
+ </div>
+ </div>
+ 
+ <div class="session-details">
+ <div class="session-detail">
+ <i class="fas fa-calendar"></i>
+ <span>{{ session.date|date:"F d, Y" }}</span>
+ </div>
+ <div class="session-detail">
+ <i class="fas fa-clock"></i>
+ <span>{{ session.start_time|time:"g:i A" }} - {{ session.end_time|time:"g:i A" }}</span>
+ </div>
+ <div class="session-detail">
+ <i class="fas fa-map-marker-alt"></i>
+ <span>{{ session.location }}</span>
+ </div>
+ <div class="session-detail">
+ <i class="fas fa-user-tie"></i>
+ <span>{{ session.instructor }}</span>
+ </div>
+ {% if session.target_branches.all %}
+ <div class="session-detail">
+ <i class="fas fa-code-branch"></i>
+ <span>{% for branch in session.target_branches.all %}{{ branch.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</span>
+ </div>
+ {% endif %}
+ <div class="session-detail">
+ <i class="fas fa-users"></i>
+ <span>{{ session.registered_students.count }} / {{ session.max_participants }} registered</span>
+ </div>
+ </div>
+
+ <div class="session-actions">
+ <a href="#" class="btn btn-secondary" onclick="viewSession({{ session.id }})">
+ <i class="fas fa-eye"></i>
+ View
+ </a>
+ <a href="#" class="btn btn-warning" onclick="editSession({{ session.id }})">
+ <i class="fas fa-edit"></i>
+ Edit
+ </a>
+ {% if session.status == 'upcoming' %}
+ <a href="#" class="btn btn-danger" onclick="cancelSession({{ session.id }})">
+ <i class="fas fa-times"></i>
+ Cancel
+ </a>
+ {% endif %}
+ </div>
+ </div>
+ {% endfor %}
+ </div>
+ {% else %}
+ <div class="content-card">
+ <div class="empty-state">
+ <i class="fas fa-calendar-times"></i>
+ <h3>No Training Sessions Found</h3>
+ <p>Get started by creating your first training session.</p>
+ <button class="btn btn-primary" onclick="openModal()" style="margin-top: 20px;">
+ <i class="fas fa-plus"></i>
+ Create First Session
+ </button>
+ </div>
+ </div>
+ {% endif %}
+ </main>
+ </div>
+
+ <!-- Add Session Modal -->
+ <div id="sessionModal" class="modal">
+ <div class="modal-content">
+ <div class="modal-header">
+ <h2><i class="fas fa-plus-circle"></i> Add New Training Session</h2>
+ <button class="close-modal" onclick="closeModal()">&times;</button>
+ </div>
+ <form method="POST" action="{% url 'manage_training_sessions' %}">
+ {% csrf_token %}
+ <div class="form-group">
+ <label for="title">Session Title *</label>
+ <input type="text" id="title" name="title" class="form-control" required>
+ </div>
+
+ <div class="form-group">
+ <label for="description">Description</label>
+ <textarea id="description" name="description" class="form-control"></textarea>
+ </div>
+
+ <div class="form-row">
+ <div class="form-group">
+ <label for="date">Date *</label>
+ <input type="date" id="date" name="date" class="form-control" required>
+ </div>
+ <div class="form-group">
+ <label for="location">Location *</label>
+ <input type="text" id="location" name="location" class="form-control" required>
+ </div>
+ </div>
+
+ <div class="form-row">
+ <div class="form-group">
+ <label for="start_time">Start Time *</label>
+ <input type="time" id="start_time" name="start_time" class="form-control" required>
+ </div>
+ <div class="form-group">
+ <label for="end_time">End Time *</label>
+ <input type="time" id="end_time" name="end_time" class="form-control" required>
+ </div>
+ </div>
+
+ <div class="form-row">
+ <div class="form-group">
+ <label for="instructor">Instructor *</label>
+ <input type="text" id="instructor" name="instructor" class="form-control" required>
+ </div>
+ <div class="form-group">
+ <label for="max_participants">Max Participants *</label>
+ <input type="number" id="max_participants" name="max_participants" class="form-control" min="1" required>
+ </div>
+ </div>
+
+ <div class="form-group">
+ <label for="target_branches">Target Branches</label>
+ <select id="target_branches" name="target_branches" class="form-control" multiple>
+ {% for branch in branches %}
+ <option value="{{ branch.id }}">{{ branch.name }}</option>
+ {% endfor %}
+ </select>
+ </div>
+
+ <div style="display: flex; gap: 10px; margin-top: 25px;">
+ <button type="submit" class="btn btn-success" style="flex: 1;">
+ <i class="fas fa-save"></i>
+ Create Session
+ </button>
+ <button type="button" class="btn btn-secondary" onclick="closeModal()" style="flex: 1;">
+ <i class="fas fa-times"></i>
+ Cancel
+ </button>
+ </div>
+ </form>
+ </div>
+ </div>
+
+ <script>
+ function openModal() {
+ document.getElementById('sessionModal').classList.add('active');
+ }
+
+ function closeModal() {
+ document.getElementById('sessionModal').classList.remove('active');
+ }
+
+ function viewSession(id) {
+ // Implement view session details
+ alert('View session details - ID: ' + id);
+ }
+
+ function editSession(id) {
+ // Implement edit session
+ alert('Edit session - ID: ' + id);
+ }
+
+ function cancelSession(id) {
+ if (confirm('Are you sure you want to cancel this training session?')) {
+ // Implement cancel session
+ alert('Cancel session - ID: ' + id);
+ }
+ }
+
+ // Close modal when clicking outside
+ window.onclick = function(event) {
+ const modal = document.getElementById('sessionModal');
+ if (event.target === modal) {
+ closeModal();
+ }
+ }
+ </script>
+</body>
+</html>

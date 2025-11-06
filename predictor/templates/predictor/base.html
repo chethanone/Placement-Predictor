@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>{% block title %}AI Placement Predictor{% endblock %}</title>
+ {% load static %}
+ <link rel="stylesheet" href="{% static 'css/colors.css' %}">
+ <link rel="stylesheet" href="{% static 'css/style.css' %}">
+ <link rel="stylesheet" href="{% static 'css/college_portal.css' %}">
+ <link rel="stylesheet" href="{% static 'css/officer_dashboard.css' %}">
+ <link rel="stylesheet" href="{% static 'css/tpo_portal.css' %}">
+ <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ {% block extra_css %}{% endblock %}
+</head>
+<body class="{% if 'college' in request.path %}college-portal{% endif %}">
+ <!-- Navigation -->
+ <nav class="navbar">
+ <div class="container">
+ <div class="nav-brand">
+ <i class="fas fa-graduation-cap"></i>
+ <span>AI Placement Predictor</span>
+ </div>
+ <div class="nav-menu">
+ <a href="{% url 'landing' %}" class="nav-link {% if request.path == '/' %}active{% endif %}">
+ <i class="fas fa-home"></i> Home
+ </a>
+ <a href="{% url 'student_portal' %}" class="nav-link">
+ <i class="fas fa-user-graduate"></i> Student Portal
+ </a>
+ <a href="{% url 'college_login' %}" class="nav-link">
+ <i class="fas fa-school"></i> College Portal
+ </a>
+ <a href="{% url 'placement_login' %}" class="nav-link">
+ <i class="fas fa-briefcase"></i> Placement Portal
+ </a>
+ </div>
+ </div>
+ </nav>
+
+ <!-- Messages -->
+ {% if messages %}
+ <div class="messages-container">
+ {% for message in messages %}
+ <div class="alert alert-{{ message.tags }}">
+ <i class="fas fa-info-circle"></i>
+ {{ message }}
+ <button class="close-alert">&times;</button>
+ </div>
+ {% endfor %}
+ </div>
+ {% endif %}
+
+ <!-- Main Content -->
+ <main class="main-content">
+ {% block content %}{% endblock %}
+ </main>
+
+ <!-- Footer -->
+ <footer class="footer">
+ <div class="container">
+ <div class="footer-content">
+ <div class="footer-section">
+ <h3><i class="fas fa-graduation-cap"></i> AI Placement Predictor</h3>
+ <p>Powered by Machine Learning to predict placement probability and provide personalized recommendations.</p>
+ </div>
+ <div class="footer-section">
+ <h4>Quick Links</h4>
+ <ul>
+ <li><a href="{% url 'student_portal' %}"><i class="fas fa-angle-right"></i> Student Portal</a></li>
+ <li><a href="{% url 'college_login' %}"><i class="fas fa-angle-right"></i> College Dashboard</a></li>
+ </ul>
+ </div>
+ <div class="footer-section">
+ <h4>Contact Us</h4>
+ <p><i class="fas fa-envelope"></i> support@placement.ai</p>
+ <p><i class="fas fa-globe"></i> www.placement.ai</p>
+ </div>
+ <div class="footer-section">
+ <h4>Model Stats</h4>
+ <p><i class="fas fa-check-circle"></i> Accuracy: 99.8%</p>
+ <p><i class="fas fa-database"></i> Training Data: 10,000+ students</p>
+ </div>
+ </div>
+ <div class="footer-bottom">
+ <p>&copy; 2025 AI Placement Predictor. All rights reserved.</p>
+ </div>
+ </div>
+ </footer>
+
+ <script src="{% static 'js/main.js' %}"></script>
+ {% block extra_js %}{% endblock %}
+</body>
+</html>

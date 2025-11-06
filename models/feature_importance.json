@@ -1,0 +1,17 @@
+{
+    "Communication_Skills": 0.27807821799183485,
+    "Projects_Completed": 0.16404117574033786,
+    "IQ": 0.14972458534277316,
+    "CGPA": 0.11607599569612022,
+    "Prev_Sem_Result": 0.08208074449120213,
+    "IQ_x_Prev_Sem_Result": 0.056380422466976526,
+    "IQ_div_Prev_Sem_Result": 0.05091738717860384,
+    "avg_academic_score": 0.02315651752233764,
+    "Prev_Sem_Result_x_CGPA": 0.021393066259428526,
+    "Prev_Sem_Result_div_CGPA": 0.012394996666253074,
+    "College_ID_div_IQ": 0.012075194902178971,
+    "College_ID_x_IQ": 0.010925620732355314,
+    "academic_consistency": 0.009303473060259849,
+    "College_ID": 0.008335974442725514,
+    "Extra_Curricular_Score": 0.005116627506612602
+}

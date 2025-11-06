@@ -1,0 +1,508 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Notifications - College Portal</title>
+ 
+ <!-- Google Fonts -->
+ <link rel="preconnect" href="https://fonts.googleapis.com">
+ <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+ <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+ 
+ <!-- Font Awesome -->
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ 
+ <style>
+ :root {
+ --sage-green: #8FB9A8;
+ --cream: #FEFAD4;
+ --peach: #FCB9AA;
+ --rose: #F1828D;
+ --mauve: #765D69;
+ --dark-text: #2c3e50;
+ --light-bg: #f8f9fa;
+ --white: #ffffff;
+ --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+ --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.12);
+ --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.16);
+ }
+
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ }
+
+ body {
+ font-family: 'Inter', 'Poppins', sans-serif;
+ background: linear-gradient(135deg, var(--cream) 0%, #fff 50%, var(--cream) 100%);
+ color: var(--dark-text);
+ min-height: 100vh;
+ }
+
+ /* Sidebar Navigation */
+ .sidebar {
+ position: fixed;
+ left: 0;
+ top: 0;
+ height: 100vh;
+ width: 280px;
+ background: linear-gradient(180deg, var(--sage-green) 0%, var(--mauve) 100%);
+ box-shadow: var(--shadow-lg);
+ z-index: 1000;
+ transition: all 0.3s ease;
+ overflow-y: auto;
+ }
+
+ .sidebar-header {
+ padding: 30px 20px;
+ border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+ }
+
+ .logo {
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ color: white;
+ font-size: 20px;
+ font-weight: 700;
+ font-family: 'Poppins', sans-serif;
+ }
+
+ .logo i {
+ font-size: 28px;
+ }
+
+ .nav-menu {
+ padding: 20px 0;
+ }
+
+ .nav-item {
+ margin: 5px 15px;
+ }
+
+ .nav-link {
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ padding: 14px 20px;
+ color: rgba(255, 255, 255, 0.9);
+ text-decoration: none;
+ border-radius: 12px;
+ transition: all 0.3s ease;
+ font-weight: 500;
+ position: relative;
+ }
+
+ .nav-link:hover, .nav-link.active {
+ background: rgba(255, 255, 255, 0.15);
+ color: white;
+ transform: translateX(5px);
+ }
+
+ .nav-link i {
+ width: 24px;
+ text-align: center;
+ font-size: 18px;
+ }
+
+ .notification-badge {
+ position: absolute;
+ right: 15px;
+ background: var(--rose);
+ color: white;
+ border-radius: 50%;
+ width: 24px;
+ height: 24px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ font-size: 12px;
+ font-weight: 700;
+ }
+
+ /* Main Content */
+ .main-content {
+ margin-left: 280px;
+ padding: 30px;
+ min-height: 100vh;
+ }
+
+ /* Top Bar */
+ .top-bar {
+ background: white;
+ padding: 25px 30px;
+ border-radius: 20px;
+ box-shadow: var(--shadow-sm);
+ margin-bottom: 30px;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ animation: slideDown 0.5s ease;
+ }
+
+ @keyframes slideDown {
+ from {
+ opacity: 0;
+ transform: translateY(-20px);
+ }
+ to {
+ opacity: 1;
+ transform: translateY(0);
+ }
+ }
+
+ .page-title {
+ display: flex;
+ align-items: center;
+ gap: 15px;
+ }
+
+ .page-title i {
+ font-size: 32px;
+ color: var(--rose);
+ }
+
+ .page-title h1 {
+ font-size: 28px;
+ font-weight: 700;
+ color: var(--mauve);
+ }
+
+ .stats-badge {
+ padding: 10px 20px;
+ background: linear-gradient(135deg, rgba(241, 130, 141, 0.1), rgba(241, 130, 141, 0.05));
+ border: 2px solid var(--rose);
+ border-radius: 25px;
+ font-weight: 600;
+ color: var(--rose);
+ }
+
+ /* Notifications List */
+ .notifications-container {
+ background: white;
+ padding: 30px;
+ border-radius: 20px;
+ box-shadow: var(--shadow-sm);
+ animation: fadeIn 0.6s ease;
+ }
+
+ @keyframes fadeIn {
+ from {
+ opacity: 0;
+ transform: translateY(20px);
+ }
+ to {
+ opacity: 1;
+ transform: translateY(0);
+ }
+ }
+
+ .notification-card {
+ background: linear-gradient(135deg, rgba(241, 130, 141, 0.05), rgba(252, 185, 170, 0.05));
+ border-left: 4px solid var(--rose);
+ padding: 25px;
+ border-radius: 16px;
+ margin-bottom: 20px;
+ transition: all 0.3s ease;
+ animation: slideIn 0.5s ease;
+ }
+
+ @keyframes slideIn {
+ from {
+ opacity: 0;
+ transform: translateX(-20px);
+ }
+ to {
+ opacity: 1;
+ transform: translateX(0);
+ }
+ }
+
+ .notification-card:hover {
+ transform: translateX(5px);
+ box-shadow: var(--shadow-md);
+ }
+
+ .notification-header {
+ display: flex;
+ justify-content: space-between;
+ align-items: flex-start;
+ margin-bottom: 15px;
+ }
+
+ .notification-icon {
+ width: 50px;
+ height: 50px;
+ background: linear-gradient(135deg, var(--rose), var(--peach));
+ border-radius: 12px;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ color: white;
+ font-size: 24px;
+ }
+
+ .notification-content {
+ flex: 1;
+ margin-left: 20px;
+ }
+
+ .notification-title {
+ font-size: 18px;
+ font-weight: 600;
+ color: var(--dark-text);
+ margin-bottom: 8px;
+ }
+
+ .notification-message {
+ color: #666;
+ line-height: 1.6;
+ margin-bottom: 12px;
+ }
+
+ .notification-meta {
+ display: flex;
+ gap: 20px;
+ font-size: 13px;
+ color: #999;
+ }
+
+ .notification-meta i {
+ margin-right: 5px;
+ }
+
+ .notification-actions {
+ display: flex;
+ gap: 10px;
+ }
+
+ .btn {
+ padding: 10px 20px;
+ border-radius: 10px;
+ font-weight: 600;
+ text-decoration: none;
+ transition: all 0.3s ease;
+ display: inline-flex;
+ align-items: center;
+ gap: 8px;
+ font-size: 13px;
+ border: none;
+ cursor: pointer;
+ }
+
+ .btn-resolve {
+ background: linear-gradient(135deg, var(--sage-green), #7aa89a);
+ color: white;
+ }
+
+ .btn-resolve:hover {
+ transform: translateY(-2px);
+ box-shadow: 0 8px 20px rgba(143, 185, 168, 0.3);
+ }
+
+ .btn-add {
+ background: white;
+ color: var(--sage-green);
+ border: 2px solid var(--sage-green);
+ }
+
+ .btn-add:hover {
+ background: var(--sage-green);
+ color: white;
+ }
+
+ .empty-state {
+ text-align: center;
+ padding: 80px 20px;
+ }
+
+ .empty-state i {
+ font-size: 80px;
+ color: var(--sage-green);
+ margin-bottom: 20px;
+ }
+
+ .empty-state h3 {
+ font-size: 24px;
+ color: var(--mauve);
+ margin-bottom: 10px;
+ }
+
+ .empty-state p {
+ color: #666;
+ font-size: 16px;
+ }
+
+ @media (max-width: 768px) {
+ .sidebar {
+ transform: translateX(-100%);
+ }
+
+ .main-content {
+ margin-left: 0;
+ padding: 15px;
+ }
+
+ .notification-header {
+ flex-direction: column;
+ gap: 15px;
+ }
+
+ .notification-actions {
+ width: 100%;
+ flex-direction: column;
+ }
+
+ .btn {
+ width: 100%;
+ justify-content: center;
+ }
+ }
+ </style>
+</head>
+<body>
+ <!-- Sidebar Navigation -->
+ <aside class="sidebar">
+ <div class="sidebar-header">
+ <div class="logo">
+ <i class="fas fa-university"></i>
+ <span>College Portal</span>
+ </div>
+ </div>
+ 
+ <nav class="nav-menu">
+ <div class="nav-item">
+ <a href="{% url 'college_dashboard' %}" class="nav-link">
+ <i class="fas fa-chart-line"></i>
+ <span>Dashboard</span>
+ </a>
+ </div>
+ <div class="nav-item">
+ <a href="{% url 'college_manage_students' %}" class="nav-link">
+ <i class="fas fa-users"></i>
+ <span>Manage Students</span>
+ </a>
+ </div>
+ <div class="nav-item">
+ <a href="{% url 'manage_subjects' %}" class="nav-link">
+ <i class="fas fa-book"></i>
+ <span>Manage Subjects</span>
+ </a>
+ </div>
+ <div class="nav-item">
+ <a href="{% url 'college_add_student' %}" class="nav-link">
+ <i class="fas fa-user-plus"></i>
+ <span>Add Student</span>
+ </a>
+ </div>
+ <div class="nav-item">
+ <a href="{% url 'college_analytics' %}" class="nav-link">
+ <i class="fas fa-chart-pie"></i>
+ <span>Analytics</span>
+ </a>
+ </div>
+ <div class="nav-item">
+ <a href="{% url 'college_reports' %}" class="nav-link">
+ <i class="fas fa-file-export"></i>
+ <span>Reports</span>
+ </a>
+ </div>
+ <div class="nav-item">
+ <a href="{% url 'college_notifications' %}" class="nav-link active">
+ <i class="fas fa-bell"></i>
+ <span>Notifications</span>
+ {% if unresolved_count > 0 %}
+ <span class="notification-badge">{{ unresolved_count }}</span>
+ {% endif %}
+ </a>
+ </div>
+ <div class="nav-item">
+ <a href="{% url 'college_logout' %}" class="nav-link">
+ <i class="fas fa-sign-out-alt"></i>
+ <span>Logout</span>
+ </a>
+ </div>
+ </nav>
+ </aside>
+
+ <!-- Main Content -->
+ <main class="main-content">
+ <!-- Top Bar -->
+ <div class="top-bar">
+ <div class="page-title">
+ <i class="fas fa-bell"></i>
+ <div>
+ <h1>Access Notifications</h1>
+ </div>
+ </div>
+ 
+ <div class="stats-badge">
+ <i class="fas fa-exclamation-circle"></i>
+ {{ unresolved_count }} Unresolved
+ </div>
+ </div>
+
+ <!-- Notifications List -->
+ <div class="notifications-container">
+ {% if notifications %}
+ {% for notification in notifications %}
+ <div class="notification-card">
+ <div class="notification-header">
+ <div style="display: flex; align-items: flex-start; flex: 1;">
+ <div class="notification-icon">
+ <i class="fas fa-user-slash"></i>
+ </div>
+ <div class="notification-content">
+ <div class="notification-title">
+ Unregistered Student Access Attempt
+ </div>
+ <div class="notification-message">
+ A student with <strong>USN: {{ notification.usn }}</strong> from <strong>{{ notification.college_name }}</strong> tried to log in but has no record in the system. Please verify and add this student if authorized.
+ </div>
+ <div class="notification-meta">
+ <span>
+ <i class="fas fa-clock"></i>
+ {{ notification.requested_at|timesince }} ago
+ </span>
+ <span>
+ <i class="fas fa-id-card"></i>
+ {{ notification.usn }}
+ </span>
+ <span>
+ <i class="fas fa-school"></i>
+ {{ notification.college_name }}
+ </span>
+ </div>
+ </div>
+ </div>
+ <div class="notification-actions">
+ <a href="{% url 'college_add_student' %}" class="btn btn-add">
+ <i class="fas fa-user-plus"></i>
+ Add Student
+ </a>
+ <form method="POST" style="display: inline;">
+ {% csrf_token %}
+ <input type="hidden" name="notification_id" value="{{ notification.id }}">
+ <button type="submit" class="btn btn-resolve">
+ <i class="fas fa-check"></i>
+ Mark Resolved
+ </button>
+ </form>
+ </div>
+ </div>
+ </div>
+ {% endfor %}
+ {% else %}
+ <div class="empty-state">
+ <i class="fas fa-check-circle"></i>
+ <h3>All Clear!</h3>
+ <p>No unresolved notifications. All student access attempts have been addressed.</p>
+ </div>
+ {% endif %}
+ </div>
+ </main>
+</body>
+</html>

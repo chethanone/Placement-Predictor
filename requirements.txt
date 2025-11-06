@@ -1,0 +1,24 @@
+# Core ML
+pandas>=1.5.0
+numpy>=1.23.0
+scikit-learn>=1.2.0
+joblib>=1.2.0
+
+# Django
+Django>=5.0.0
+
+# AI/ML Services
+google-generativeai>=0.8.0
+google-api-python-client>=2.100.0
+
+# Environment Variables
+python-dotenv>=1.0.0
+
+# PDF and Document Processing (for quiz feature)
+PyMuPDF>=1.22.0
+python-pptx>=0.6.21
+PyPDF2>=2.0.0
+
+# Utilities
+python-dateutil>=2.8.0
+

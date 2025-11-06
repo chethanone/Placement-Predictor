@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>AI Recommendations - TPO Portal</title>
+ <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+ <style>
+ :root {
+ --purple: #6d28d9;
+ --violet: #a855f7;
+ --indigo: #4f46e5;
+ --amber: #f59e0b;
+ --slate: #334155;
+ --light-gray: #f8fafc;
+ }
+
+ * {
+ margin: 0;
+ padding: 0;
+ box-sizing: border-box;
+ }
+
+ body {
+ font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+ background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+ min-height: 100vh;
+ }
+
+ .container {
+ display: flex;
+ min-height: 100vh;
+ }
+
+ /* Sidebar */
+ .sidebar {
+ width: 280px;
+ background: linear-gradient(180deg, var(--purple), var(--indigo));
+ padding: 30px 0;
+ color: white;
+ position: fixed;
+ height: 100vh;
+ overflow-y: auto;
+ box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+ }
+
+ .sidebar::-webkit-scrollbar {
+ width: 6px;
+ }
+
+ .sidebar::-webkit-scrollbar-track {
+ background: rgba(255, 255, 255, 0.1);
+ }
+
+ .sidebar::-webkit-scrollbar-thumb {
+ background: rgba(255, 255, 255, 0.3);
+ border-radius: 3px;
+ }
+
+ .sidebar-header {
+ padding: 0 25px 30px;
+ border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+ }
+
+ .sidebar-header h2 {
+ font-size: 24px;
+ font-weight: 700;
+ display: flex;
+ align-items: center;
+ gap: 12px;
+ }
+
+ .sidebar-menu {
+ padding: 20px 0;
+ }
+
+ .menu-item {
+ display: flex;
+ align-items: center;
+ gap: 15px;
+ padding: 15px 25px;
+ color: rgba(255, 255, 255, 0.9);
+ text-decoration: none;
+ transition: all 0.3s ease;
+ font-weight: 500;
+ }
+
+ .menu-item:hover, .menu-item.active {
+ background: rgba(255, 255, 255, 0.15);
+ border-left: 4px solid var(--amber);
+ padding-left: 21px;
+ }
+
+ .menu-item i {
+ font-size: 18px;
+ width: 25px;
+ }
+
+ /* Main Content */
+ .main-content {
+ flex: 1;
+ margin-left: 280px;
+ padding: 30px;
+ max-width: calc(100vw - 280px);
+ }
+
+ .header {
+ background: linear-gradient(135deg, var(--purple), var(--violet));
+ padding: 35px 40px;
+ border-radius: 20px;
+ margin-bottom: 30px;
+ box-shadow: 0 8px 32px rgba(109, 40, 217, 0.16);
+ color: white;
+ }
+
+ .header h1 {
+ font-size: 32px;
+ font-weight: 700;
+ margin-bottom: 8px;
+ }
+
+ .header p {
+ font-size: 15px;
+ opacity: 0.9;
+ }
+
+ /* Control Panel */
+ .control-panel {
+ background: white;
+ padding: 30px;
+ border-radius: 18px;
+ box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+ margin-bottom: 30px;
+ }
+
+ .control-header {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ margin-bottom: 25px;
+ padding-bottom: 15px;
+ border-bottom: 2px solid #e2e8f0;
+ }
+
+ .control-title {
+ font-size: 20px;
+ font-weight: 700;
+ color: var(--purple);
+ display: flex;
+ align-items: center;
+ gap: 10px;
+ }
+
+ .filters {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+ gap: 20px;
+ }
+
+ .filter-group {
+ display: flex;
+ flex-direction: column;
+ gap: 8px;
+ }
+
+ .filter-group label {
+ font-size: 14px;
+ font-weight: 600;
+ color: var(--slate);
+ }
+
+ .filter-group select,
+ .filter-group input {
+ padding: 12px;
+ border: 2px solid #e5e7eb;
+ border-radius: 10px;
+ font-size: 14px;
+ transition: all 0.3s ease;
+ }
+
+ .filter-group select:focus,
+ .filter-group input:focus {
+ outline: none;
+ border-color: var(--violet);
+ box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+ }
+
+ .btn {
+ padding: 12px 24px;
+ border: none;
+ border-radius: 10px;
+ font-weight: 600;
+ font-size: 14px;
+ cursor: pointer;
+ transition: all 0.3s ease;
+ display: inline-flex;
+ align-items: center;
+ gap: 8px;
+ text-decoration: none;
+ }
+
+ .btn-primary {
+ background: linear-gradient(135deg, var(--purple), var(--violet));
+ color: white;
+ }
+
+ .btn-primary:hover {
+ transform: translateY(-2px);
+ box-shadow: 0 8px 20px rgba(109, 40, 217, 0.3);
+ }
+
+ .btn-secondary {
+ background: linear-gradient(135deg, var(--indigo), #7c3aed);
+ color: white;
+ }
+
+ .btn-generate {
+ background: linear-gradient(135deg, #10b981, #059669);
+ color: white;
+ font-size: 16px;
+ padding: 14px 28px;
+ }
+
+ .btn-generate:hover {
+ transform: translateY(-2px);
+ box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+ }
+
+ /* Loading */
+ .loading {
+ display: none;
+ text-align: center;
+ padding: 40px;
+ background: white;
+ border-radius: 18px;
+ box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+ }
+
+ .loading.active {
+ display: block;
+ }
+
+ .spinner {
+ border: 4px solid #f3f4f6;
+ border-top: 4px solid var(--violet);
+ border-radius: 50%;
+ width: 50px;
+ height: 50px;
+ animation: spin 1s linear infinite;
+ margin: 0 auto 20px;
+ }
+
+ @keyframes spin {
+ 0% { transform: rotate(0deg); }
+ 100% { transform: rotate(360deg); }
+ }
+
+ /* Recommendations Grid */
+ .recommendations-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+ gap: 25px;
+ margin-bottom: 30px;
+ }
+
+ .recommendation-card {
+ background: white;
+ border-radius: 18px;
+ padding: 30px;
+ box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+ border-left: 5px solid var(--purple);
+ transition: all 0.3s ease;
+ }
+
+ .recommendation-card:hover {
+ transform: translateY(-5px);
+ box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+ }
+
+ .recommendation-card:nth-child(2n) {
+ border-left-color: var(--violet);
+ }
+
+ .recommendation-card:nth-child(3n) {
+ border-left-color: var(--indigo);
+ }
+
+ .student-header {
+ display: flex;
+ justify-content: space-between;
+ align-items: flex-start;
+ margin-bottom: 20px;
+ padding-bottom: 15px;
+ border-bottom: 2px solid #f1f5f9;
+ }
+
+ .student-info h3 {
+ font-size: 20px;
+ color: var(--slate);
+ margin-bottom: 8px;
+ }
+
+ .student-info p {
+ font-size: 14px;
+ color: #6b7280;
+ }
+
+ .score-badge {
+ padding: 10px 20px;
+ border-radius: 20px;
+ font-weight: 700;
+ font-size: 18px;
+ }
+
+ .score-excellent {
+ background: rgba(16, 185, 129, 0.15);
+ color: #059669;
+ }
+
+ .score-good {
+ background: rgba(59, 130, 246, 0.15);
+ color: #2563eb;
+ }
+
+ .score-average {
+ background: rgba(245, 158, 11, 0.15);
+ color: #d97706;
+ }
+
+ .score-poor {
+ background: rgba(239, 68, 68, 0.15);
+ color: #dc2626;
+ }
+
+ .recommendation-section {
+ margin-bottom: 20px;
+ }
+
+ .recommendation-section h4 {
+ font-size: 16px;
+ color: var(--purple);
+ margin-bottom: 12px;
+ display: flex;
+ align-items: center;
+ gap: 8px;
+ }
+
+ .recommendation-list {
+ list-style: none;
+ padding: 0;
+ }
+
+ .recommendation-list li {
+ padding: 10px 15px;
+ background: #f8fafc;
+ border-radius: 8px;
+ margin-bottom: 8px;
+ font-size: 14px;
+ color: var(--slate);
+ display: flex;
+ align-items: flex-start;
+ gap: 10px;
+ }
+
+ .recommendation-list li i {
+ color: var(--violet);
+ margin-top: 2px;
+ flex-shrink: 0;
+ }
+
+ .skills-grid {
+ display: grid;
+ grid-template-columns: repeat(2, 1fr);
+ gap: 10px;
+ margin-top: 10px;
+ }
+
+ .skill-item {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ padding: 8px 12px;
+ background: #f8fafc;
+ border-radius: 8px;
+ font-size: 13px;
+ }
+
+ .skill-name {
+ color: var(--slate);
+ font-weight: 600;
+ }
+
+ .skill-score {
+ color: var(--violet);
+ font-weight: 700;
+ }
+
+ .action-buttons {
+ display: flex;
+ gap: 10px;
+ margin-top: 20px;
+ padding-top: 20px;
+ border-top: 2px solid #f1f5f9;
+ }
+
+ .action-buttons .btn {
+ flex: 1;
+ justify-content: center;
+ font-size: 13px;
+ }
+
+ .empty-state {
+ text-align: center;
+ padding: 80px 20px;
+ background: white;
+ border-radius: 18px;
+ box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+ }
+
+ .empty-state i {
+ font-size: 64px;
+ color: #d1d5db;
+ margin-bottom: 20px;
+ }
+
+ .empty-state h3 {
+ font-size: 24px;
+ color: var(--slate);
+ margin-bottom: 10px;
+ }
+
+ .empty-state p {
+ font-size: 16px;
+ color: #6b7280;
+ margin-bottom: 30px;
+ }
+
+ @media (max-width: 1024px) {
+ .sidebar {
+ transform: translateX(-100%);
+ }
+
+ .main-content {
+ margin-left: 0;
+ max-width: 100vw;
+ }
+
+ .recommendations-grid {
+ grid-template-columns: 1fr;
+ }
+ }
+ </style>
+</head>
+<body>
+ <div class="container">
+ <!-- Sidebar -->
+ <aside class="sidebar">
+ <div class="sidebar-header">
+ <h2><i class="fas fa-briefcase"></i> TPO Portal</h2>
+ </div>
+ <nav class="sidebar-menu">
+ <a href="{% url 'tpo_dashboard' %}" class="menu-item">
+ <i class="fas fa-th-large"></i>
+ <span>Dashboard</span>
+ </a>
+ <a href="{% url 'student_list' %}" class="menu-item">
+ <i class="fas fa-users"></i>
+ <span>Student Records</span>
+ </a>
+ <a href="{% url 'ai_recommendations' %}" class="menu-item active">
+ <i class="fas fa-robot"></i>
+ <span>AI Recommendations</span>
+ </a>
+ <a href="{% url 'what_if_simulation' %}" class="menu-item">
+ <i class="fas fa-flask"></i>
+ <span>What-If Analysis</span>
+ </a>
+ <a href="{% url 'generate_department_report' %}" class="menu-item">
+ <i class="fas fa-file-pdf"></i>
+ <span>Generate Reports</span>
+ </a>
+ <a href="{% url 'manage_training_sessions' %}" class="menu-item">
+ <i class="fas fa-chalkboard-teacher"></i>
+ <span>Training Sessions</span>
+ </a>
+ <a href="{% url 'placement_analytics' %}" class="menu-item">
+ <i class="fas fa-chart-pie"></i>
+ <span>Analytics</span>
+ </a>
+ <a href="{% url 'placement_logout' %}" class="menu-item">
+ <i class="fas fa-sign-out-alt"></i>
+ <span>Logout</span>
+ </a>
+ </nav>
+ </aside>
+
+ <!-- Main Content -->
+ <main class="main-content">
+ <div class="header">
+ <h1><i class="fas fa-robot"></i> AI-Powered Recommendations</h1>
+ <p>Get intelligent insights and personalized recommendations powered by Google Gemini AI</p>
+ </div>
+
+ <!-- Control Panel -->
+ <div class="control-panel">
+ <div class="control-header">
+ <h3 class="control-title">
+ <i class="fas fa-sliders-h"></i>
+ Recommendation Settings
+ </h3>
+ </div>
+
+ <form method="GET" id="recommendationForm">
+ <div class="filters">
+ <div class="filter-group">
+ <label for="branch">Select Branch</label>
+ <select name="branch" id="branch">
+ <option value="">All Branches</option>
+ {% for branch in branches %}
+ <option value="{{ branch.code }}" {% if selected_branch == branch.code %}selected{% endif %}>
+ {{ branch.name }}
+ </option>
+ {% endfor %}
+ </select>
+ </div>
+
+ <div class="filter-group">
+ <label for="employability_level">Employability Level</label>
+ <select name="employability_level" id="employability_level">
+ <option value="">All Levels</option>
+ <option value="needs_improvement" {% if employability_level == 'needs_improvement' %}selected{% endif %}>
+ Needs Improvement (< 50%)
+ </option>
+ <option value="average" {% if employability_level == 'average' %}selected{% endif %}>
+ Average (50-69%)
+ </option>
+ <option value="good" {% if employability_level == 'good' %}selected{% endif %}>
+ Good (70-89%)
+ </option>
+ <option value="excellent" {% if employability_level == 'excellent' %}selected{% endif %}>
+ Excellent (90-100%)
+ </option>
+ </select>
+ </div>
+
+ <div class="filter-group">
+ <label for="limit">Number of Students</label>
+ <input type="number" name="limit" id="limit" min="1" max="50" value="{{ limit|default:10 }}" placeholder="10">
+ </div>
+
+ <div class="filter-group" style="display: flex; align-items: flex-end;">
+ <button type="submit" class="btn btn-generate" style="width: 100%;">
+ <i class="fas fa-magic"></i>
+ Generate AI Recommendations
+ </button>
+ </div>
+ </div>
+ </form>
+ </div>
+
+ <!-- Loading State -->
+ <div id="loadingState" class="loading">
+ <div class="spinner"></div>
+ <h3 style="color: var(--purple); margin-bottom: 10px;">Generating AI Recommendations...</h3>
+ <p style="color: #6b7280;">Our AI is analyzing student data and creating personalized insights</p>
+ </div>
+
+ <!-- Recommendations Grid -->
+ {% if recommendations %}
+ <div class="recommendations-grid">
+ {% for rec in recommendations %}
+ <div class="recommendation-card">
+ <div class="student-header">
+ <div class="student-info">
+ <h3>{{ rec.student.name }}</h3>
+ <p><strong>ID:</strong> {{ rec.student.student_id }} | <strong>Branch:</strong> {{ rec.student.get_branch_display }}</p>
+ <p><strong>CGPA:</strong> {{ rec.student.cgpa }} | <strong>Semester:</strong> {{ rec.student.current_semester }}</p>
+ </div>
+ <div class="score-badge score-{{ rec.readiness_class }}">
+ {{ rec.employability_score|floatformat:1 }}%
+ </div>
+ </div>
+
+ <!-- Skills Overview -->
+ <div class="recommendation-section">
+ <h4><i class="fas fa-chart-bar"></i> Skills Overview</h4>
+ <div class="skills-grid">
+ <div class="skill-item">
+ <span class="skill-name">Communication</span>
+ <span class="skill-score">{{ rec.communication_score }}/10</span>
+ </div>
+ <div class="skill-item">
+ <span class="skill-name">Technical</span>
+ <span class="skill-score">{{ rec.technical_score }}/10</span>
+ </div>
+ <div class="skill-item">
+ <span class="skill-name">Coding</span>
+ <span class="skill-score">{{ rec.coding_score }}/10</span>
+ </div>
+ <div class="skill-item">
+ <span class="skill-name">Aptitude</span>
+ <span class="skill-score">{{ rec.aptitude_score }}/100</span>
+ </div>
+ </div>
+ </div>
+
+ <!-- AI Recommendations -->
+ <div class="recommendation-section">
+ <h4><i class="fas fa-lightbulb"></i> AI-Generated Recommendations</h4>
+ <ul class="recommendation-list">
+ {% for recommendation in rec.ai_recommendations %}
+ <li>
+ <i class="fas fa-check-circle"></i>
+ <span>{{ recommendation }}</span>
+ </li>
+ {% endfor %}
+ </ul>
+ </div>
+
+ <!-- Action Plan -->
+ <div class="recommendation-section">
+ <h4><i class="fas fa-tasks"></i> Suggested Action Plan</h4>
+ <ul class="recommendation-list">
+ {% for action in rec.action_plan %}
+ <li>
+ <i class="fas fa-arrow-right"></i>
+ <span>{{ action }}</span>
+ </li>
+ {% endfor %}
+ </ul>
+ </div>
+
+ <!-- Action Buttons -->
+ <div class="action-buttons">
+ <a href="{% url 'student_detail' rec.student.student_id %}" class="btn btn-primary">
+ <i class="fas fa-eye"></i>
+ View Profile
+ </a>
+ <a href="{% url 'what_if_simulation' %}?student_id={{ rec.student.student_id }}" class="btn btn-secondary">
+ <i class="fas fa-flask"></i>
+ Simulate
+ </a>
+ </div>
+ </div>
+ {% endfor %}
+ </div>
+ {% else %}
+ <div class="empty-state">
+ <i class="fas fa-robot"></i>
+ <h3>No Recommendations Generated Yet</h3>
+ <p>Select your filters and click "Generate AI Recommendations" to get started</p>
+ <button onclick="document.getElementById('recommendationForm').scrollIntoView({behavior: 'smooth'})" class="btn btn-generate">
+ <i class="fas fa-magic"></i>
+ Get Started
+ </button>
+ </div>
+ {% endif %}
+ </main>
+ </div>
+
+ <script>
+ // Show loading state when form is submitted
+ document.getElementById('recommendationForm').addEventListener('submit', function() {
+ document.getElementById('loadingState').classList.add('active');
+ });
+
+ // Hide loading state on page load
+ window.addEventListener('load', function() {
+ document.getElementById('loadingState').classList.remove('active');
+ });
+ </script>
+</body>
+</html>
