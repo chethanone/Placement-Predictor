@@ -1,8 +1,8 @@
 # Security Setup Guide
 
-## ⚠️ IMPORTANT: Credentials Configuration
+## Important: Credentials Configuration
 
-This project has been configured to use environment variables for all sensitive credentials. **You MUST set these up before running the application.**
+This project requires environment variables for sensitive credentials. You must configure these before running the application.
 
 ## Required Steps
 
@@ -83,7 +83,7 @@ GOOGLE_SEARCH_ENGINE_ID=your-engine-id
 - [ ] Added Gemini API key
 - [ ] Added Firebase credentials (if using)
 - [ ] Verified `.env` is in `.gitignore`
-- [ ] **NEVER** committed `.env` to git
+- [ ] Never committed `.env` to git
 - [ ] Changed default admin password after first login
 - [ ] Set `DEBUG=False` in production
 
@@ -99,32 +99,32 @@ The following files are configured to **never** be committed:
 
 ## What Was Removed
 
-Previous versions of this repository exposed:
-- ❌ Firebase API keys
-- ❌ Gemini API keys  
-- ❌ Django secret key
+Previous versions exposed:
+- Firebase API keys
+- Gemini API keys  
+- Django secret key
 
-**All exposed credentials have been:**
-1. ✅ Removed from code
-2. ✅ Moved to environment variables
-3. ✅ Added to `.gitignore`
-4. ✅ Documented in this guide
+All exposed credentials have been:
+1. Removed from code
+2. Moved to environment variables
+3. Added to `.gitignore`
+4. Documented in this guide
 
 ## If You Forked Before Security Fix
 
 **CRITICAL:** If you forked/cloned this repo before the security update:
 
-1. **Rotate all API keys immediately**:
+1. Rotate all API keys immediately:
    - Generate new Firebase API key
    - Generate new Gemini API key
    - Generate new Django secret key
 
-2. **Check your fork** for exposed credentials:
+2. Check your fork for exposed credentials:
    ```bash
    git log --all --full-history --source -- '*firebase*' '*config*' '*.env'
    ```
 
-3. **If credentials are in history**, consider:
+3. If credentials are in history, consider:
    - Deleting and re-forking the repository
    - Or using `git filter-branch` to remove sensitive data
 
@@ -187,5 +187,5 @@ python manage.py runserver
 
 ---
 
-**Last Updated**: November 6, 2025  
-**Status**: All security issues resolved ✅
+**Last Updated:** November 6, 2025  
+**Status:** All security issues resolved

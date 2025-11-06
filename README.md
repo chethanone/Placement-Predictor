@@ -33,8 +33,8 @@ A comprehensive Django-based placement prediction system with Machine Learning f
 
 ## Quick Start
 
-### 1. Configure Environment Variables ⚠️
-**IMPORTANT:** Set up your API keys first!
+### 1. Configure Environment Variables (Required)
+
 ```bash
 # Copy the example file
 Copy-Item .env.example .env
@@ -79,7 +79,7 @@ python manage.py runserver
 | College Portal | college | college123 |
 | Placement Portal | placement | placement123 |
 
-⚠️ **Change these passwords in production!**
+**Note:** Change these passwords in production environments.
 
 ## Project Structure
 
@@ -97,12 +97,13 @@ Placement Predictor/
 
 ## Documentation
 
-- **SECURITY_SETUP.md** - ⚠️ **START HERE** - API keys and credentials setup
-- **ENV_SETUP.md** - Environment variables configuration
-- **DATABASE_ACCESS_GUIDE.md** - Database access methods
-- **DATABASE_MANAGEMENT.md** - CRUD operations guide
-- **GEMINI_QUIZ_INTEGRATION.md** - AI quiz generation setup
-- **GOOGLE_SEARCH_API_SETUP.md** - Optional search API setup
+- **SECURITY_SETUP.md** - **START HERE** - API keys and credentials setup
+- **docs/SETUP_GUIDE.md** - Complete installation guide
+- **docs/ENV_SETUP.md** - Environment variables configuration
+- **docs/DATABASE_ACCESS_GUIDE.md** - Database access methods
+- **docs/DATABASE_MANAGEMENT.md** - CRUD operations guide
+- **docs/GEMINI_QUIZ_INTEGRATION.md** - AI quiz generation setup
+- **docs/GOOGLE_SEARCH_API_SETUP.md** - Optional search API setup
 
 ## VTU Grading System
 
