@@ -51,7 +51,7 @@
  <label>CGPA (Direct Entry)</label>
                             <input type="number" name="cgpa" step="0.01" min="0" max="10" value="{{ student.cgpa }}" placeholder="Enter CGPA (0.00 - 10.00)">
                             <small style="color: #666; display: block; margin-top: -8px; margin-bottom: 10px;">
-                                Current: {{ student.cgpa }} {% if student.cgpa_manually_entered %}(Manually Entered){% else %}(Calculated from Marks){% endif %}
+                                💡 Current: {{ student.cgpa }} {% if student.cgpa_manually_entered %}(Manually Entered){% else %}(Calculated from Marks){% endif %}
                             </small> <button type="submit">Update Student</button>
  </form>
  </div>
