@@ -688,7 +688,9 @@ def student_quiz_results(request, quiz_id):
             'question_text': q.question_text,
             'student_answer': q.student_answer or 'Not answered',
             'correct_answer': q.correct_answer,
-            'status': 'correct' if q.is_correct else 'incorrect'
+            'status': 'correct' if q.is_correct else 'incorrect',
+            'reference_text': q.reference_text,
+            'page_number': q.page_number
         })
     
     context = {

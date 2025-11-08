@@ -237,6 +237,8 @@ class QuizQuestion(models.Model):
     is_correct = models.BooleanField(null=True)
     
     explanation = models.TextField(blank=True)
+    reference_text = models.TextField(blank=True)  # Text snippet from PDF for context
+    page_number = models.IntegerField(null=True, blank=True)  # Page number in PDF where answer is found
     
     def __str__(self):
         return f"Q{self.question_number} - Quiz {self.quiz.id}"

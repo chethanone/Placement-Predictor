@@ -485,6 +485,17 @@
  <span class="answer-label">Correct Answer:</span>
  <span class="answer-value correct">{{ q.correct_answer }}</span>
  </div>
+ {% if q.reference_text %}
+ <div style="margin-top: 12px;">
+ <button onclick="showPDFReference({{ q.number }})" style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600;">
+ 📄 View Answer in PDF{% if q.page_number %} (Page {{ q.page_number }}){% endif %}
+ </button>
+ <div id="pdf-ref-{{ q.number }}" style="display:none; margin-top: 12px; padding: 16px; background: #f0f9ff; border-left: 4px solid #3b82f6; border-radius: 8px;">
+ <strong style="color: #1e40af; display: block; margin-bottom: 8px;">📖 Reference from PDF:</strong>
+ <p style="margin: 0; line-height: 1.6; color: #334155;">{{ q.reference_text }}</p>
+ </div>
+ </div>
+ {% endif %}
  {% endif %}
  </div>
  {% endfor %}
@@ -496,5 +507,20 @@
  <a href="{% url 'student_portal' %}" class="btn btn-secondary"> Back to Dashboard</a>
  </div>
  </div>
+
+<script>
+function showPDFReference(questionNum) {
+    const refDiv = document.getElementById('pdf-ref-' + questionNum);
+    const btn = event.target;
+    if (refDiv.style.display === 'none') {
+        refDiv.style.display = 'block';
+        btn.textContent = btn.textContent.replace('View', 'Hide');
+    } else {
+        refDiv.style.display = 'none';
+        btn.textContent = btn.textContent.replace('Hide', 'View');
+    }
+}
+</script>
+
 </body>
 </html>
