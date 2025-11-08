@@ -124,25 +124,25 @@
  font-size: 15px;
  }
 
- /* Report Cards Grid */
- .reports-grid {
- display: grid;
- grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
- gap: 25px;
- margin-bottom: 30px;
- }
+        /* Report Cards Grid */
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+            align-items: start;
+        }
 
- .report-card {
- background: white;
- padding: 30px;
- border-radius: 16px;
- box-shadow: 0 4px 15px rgba(0,0,0,0.08);
- transition: all 0.3s ease;
- animation: slideUp 0.6s ease;
- border-left: 4px solid var(--sage-green);
- }
-
- .report-card:hover {
+        .report-card {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            animation: slideUp 0.6s ease;
+            border-left: 4px solid var(--sage-green);
+            height: auto;
+        } .report-card:hover {
  transform: translateY(-5px);
  box-shadow: 0 8px 25px rgba(0,0,0,0.12);
  }
@@ -231,110 +231,170 @@
  background: #e2e8f0;
  }
 
- /* Custom Report Builder */
- .custom-report {
- background: white;
- padding: 35px;
- border-radius: 16px;
- box-shadow: 0 4px 15px rgba(0,0,0,0.08);
- animation: slideUp 0.7s ease;
- }
+        /* Custom Report Builder */
+        .custom-report {
+            background: white;
+            padding: 30px 35px;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            animation: slideUp 0.7s ease;
+            margin-top: 0;
+            border-left: 4px solid var(--sage-green);
+            height: auto;
+            overflow: hidden;
+        }
 
- .section-title {
- font-size: 22px;
- font-weight: 600;
- color: var(--mauve);
- margin-bottom: 20px;
- font-family: 'Poppins', sans-serif;
- display: flex;
- align-items: center;
- gap: 12px;
- }
+        .custom-report .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--mauve);
+            margin-bottom: 20px;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
 
- .section-title i {
- color: var(--sage-green);
- }
+        .custom-report .section-title i {
+            color: var(--sage-green);
+            font-size: 24px;
+        }
 
- .form-grid {
- display: grid;
- grid-template-columns: repeat(2, 1fr);
- gap: 20px;
- margin-bottom: 25px;
- }
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+            margin-bottom: 18px;
+            width: 100%;
+        }
 
- .form-group {
- display: flex;
- flex-direction: column;
- }
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
 
- .form-label {
- font-weight: 600;
- color: var(--mauve);
- margin-bottom: 8px;
- font-size: 14px;
- }
+        .form-label {
+            font-weight: 600;
+            color: var(--mauve);
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
 
- .form-select, .form-input {
- padding: 12px;
- border: 2px solid #e2e8f0;
- border-radius: 10px;
- font-size: 14px;
- font-family: 'Inter', sans-serif;
- transition: all 0.3s ease;
- }
+        .form-select, .form-input {
+            padding: 11px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: 'Inter', sans-serif;
+            transition: all 0.3s ease;
+            background: white;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
 
- .form-select:focus, .form-input:focus {
- outline: none;
- border-color: var(--sage-green);
- box-shadow: 0 0 0 3px rgba(143, 185, 168, 0.1);
- }
+        .form-select:focus, .form-input:focus {
+            outline: none;
+            border-color: var(--sage-green);
+            box-shadow: 0 0 0 3px rgba(143, 185, 168, 0.1);
+        }
 
- .checkbox-group {
- display: grid;
- grid-template-columns: repeat(4, 1fr);
- gap: 16px;
- margin-top: 16px;
- }
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-top: 12px;
+            width: 100%;
+        }
 
- .checkbox-label {
- display: flex;
- align-items: center;
- gap: 10px;
- padding: 12px 16px;
- background: white;
- border: 2px solid #e0e0e0;
- border-radius: 10px;
- font-size: 14px;
- font-weight: 600;
- color: var(--dark-text);
- cursor: pointer;
- transition: all 0.3s ease;
- user-select: none;
- }
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px;
+            background: white;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--dark-text);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+            min-width: 0;
+            max-width: 100%;
+            box-sizing: border-box;
+        }
 
- .checkbox-label:hover {
- border-color: var(--sage-green);
- background: var(--cream);
- }
+        .checkbox-label:hover {
+            border-color: var(--sage-green);
+            background: rgba(143, 185, 168, 0.05);
+        }
 
- .checkbox-label input[type="checkbox"] {
- width: 20px;
- height: 20px;
- cursor: pointer;
- accent-color: var(--sage-green);
- border-radius: 4px;
- }
+        .checkbox-label input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: var(--sage-green);
+            flex-shrink: 0;
+        }
 
- .checkbox-label input[type="checkbox"]:checked + span {
- color: var(--sage-green);
- }
+        .checkbox-label i {
+            color: var(--sage-green);
+            font-size: 16px;
+            flex-shrink: 0;
+        }
 
- .checkbox-label:has(input:checked) {
- background: rgba(143, 185, 168, 0.1);
- border-color: var(--sage-green);
- }
+        .checkbox-label:has(input:checked) {
+            background: rgba(143, 185, 168, 0.1);
+            border-color: var(--sage-green);
+        }
 
- /* Animations */
+        .checkbox-label:has(input:checked) i {
+            color: var(--sage-green);
+        }
+
+        .icon-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 12px;
+            padding: 12px;
+            background: rgba(143, 185, 168, 0.05);
+            border-radius: 8px;
+            font-size: 12px;
+            color: #4a5568;
+        }
+
+        .icon-legend span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .icon-legend i {
+            color: var(--sage-green);
+            font-size: 13px;
+        }
+
+        .custom-report .report-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-start;
+            margin-top: 18px;
+            width: 100%;
+        }
+
+        .custom-report .report-actions .btn {
+            padding: 12px 22px;
+            flex: 1;
+            font-size: 14px;
+            justify-content: center;
+        }
+
+        /* Animations */
  @keyframes fadeIn {
  from { opacity: 0; }
  to { opacity: 1; }
@@ -373,14 +433,38 @@
  padding: 20px;
  }
 
+ .stats-grid {
+ grid-template-columns: 1fr;
+ }
+
+ .reports-grid {
+ grid-template-columns: 1fr;
+ }
+
  .form-grid {
  grid-template-columns: 1fr;
  }
  
  .checkbox-group {
  grid-template-columns: repeat(2, 1fr);
- gap: 12px;
+ gap: 10px;
  }
+
+ .custom-report {
+ padding: 20px;
+ }
+
+ .custom-report .section-title {
+ font-size: 18px;
+ }
+
+ .custom-report .report-actions {
+ flex-direction: column;
+ }
+
+ .custom-report .report-actions .btn {
+ width: 100%;
+ justify-content: center;
  }
  }
  </style>
@@ -609,45 +693,53 @@
  </div>
  </div>
 
- <div class="form-group">
- <label class="form-label">Include Fields</label>
- <div class="checkbox-group">
- <label class="checkbox-label">
- <input type="checkbox" name="field" value="usn" checked>
- <span>USN</span>
- </label>
- <label class="checkbox-label">
- <input type="checkbox" name="field" value="name" checked>
- <span>Name</span>
- </label>
- <label class="checkbox-label">
- <input type="checkbox" name="field" value="branch" checked>
- <span>Branch</span>
- </label>
- <label class="checkbox-label">
- <input type="checkbox" name="field" value="cgpa" checked>
- <span>CGPA</span>
- </label>
- <label class="checkbox-label">
- <input type="checkbox" name="field" value="phone">
- <span>Phone</span>
- </label>
- <label class="checkbox-label">
- <input type="checkbox" name="field" value="email">
- <span>Email</span>
- </label>
- <label class="checkbox-label">
- <input type="checkbox" name="field" value="backlogs">
- <span>Backlogs</span>
- </label>
- <label class="checkbox-label">
- <input type="checkbox" name="field" value="batch">
- <span>Batch</span>
- </label>
- </div>
- </div>
-
- <div class="report-actions">
+                <div class="form-group">
+                    <label class="form-label">Include Fields</label>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label" title="Student USN">
+                            <input type="checkbox" name="field" value="usn" checked>
+                            <i class="fas fa-id-card"></i>
+                        </label>
+                        <label class="checkbox-label" title="Student Name">
+                            <input type="checkbox" name="field" value="name" checked>
+                            <i class="fas fa-user"></i>
+                        </label>
+                        <label class="checkbox-label" title="Branch/Department">
+                            <input type="checkbox" name="field" value="branch" checked>
+                            <i class="fas fa-code-branch"></i>
+                        </label>
+                        <label class="checkbox-label" title="CGPA Score">
+                            <input type="checkbox" name="field" value="cgpa" checked>
+                            <i class="fas fa-graduation-cap"></i>
+                        </label>
+                        <label class="checkbox-label" title="Phone Number">
+                            <input type="checkbox" name="field" value="phone">
+                            <i class="fas fa-phone"></i>
+                        </label>
+                        <label class="checkbox-label" title="Email Address">
+                            <input type="checkbox" name="field" value="email">
+                            <i class="fas fa-envelope"></i>
+                        </label>
+                        <label class="checkbox-label" title="Number of Backlogs">
+                            <input type="checkbox" name="field" value="backlogs">
+                            <i class="fas fa-exclamation-triangle"></i>
+                        </label>
+                        <label class="checkbox-label" title="Student Batch Year">
+                            <input type="checkbox" name="field" value="batch">
+                            <i class="fas fa-calendar-alt"></i>
+                        </label>
+                    </div>
+                    <div class="icon-legend">
+                        <span><i class="fas fa-id-card"></i> USN</span>
+                        <span><i class="fas fa-user"></i> Name</span>
+                        <span><i class="fas fa-code-branch"></i> Branch</span>
+                        <span><i class="fas fa-graduation-cap"></i> CGPA</span>
+                        <span><i class="fas fa-phone"></i> Phone</span>
+                        <span><i class="fas fa-envelope"></i> Email</span>
+                        <span><i class="fas fa-exclamation-triangle"></i> Backlogs</span>
+                        <span><i class="fas fa-calendar-alt"></i> Batch</span>
+                    </div>
+                </div> <div class="report-actions">
  <button type="submit" class="btn btn-primary" onclick="setFormat('pdf')">
  <i class="fas fa-file-pdf"></i>
  Generate PDF

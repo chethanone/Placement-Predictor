@@ -21,6 +21,11 @@ from datetime import datetime
 
 def college_login(request):
     """College portal login"""
+    # Clear any existing messages when displaying login page
+    if request.method == 'GET':
+        storage = messages.get_messages(request)
+        storage.used = True
+    
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -203,7 +208,7 @@ def enter_student_marks(request, student_id):
         recalculate_cgpa(student)
         
         messages.success(request, f'Marks entered successfully for {subject.subject_name}!')
-        return redirect('enter_student_marks', student_id=student_id)
+        return redirect('college_enter_marks', student_id=student_id)
     
     # Get subjects for student's branch and semester
     subjects = Subject.objects.filter(
@@ -274,9 +279,9 @@ def switch_cgpa_mode(request, student_id):
                 student.save()
                 messages.success(request, f'CGPA manually set to {student.cgpa}. Automatic calculation disabled.')
         
-        return redirect('enter_student_marks', student_id=student_id)
+        return redirect('college_enter_marks', student_id=student_id)
     
-    return redirect('enter_student_marks', student_id=student_id)
+    return redirect('college_enter_marks', student_id=student_id)
 
 @login_required
 def delete_student(request, student_id):
@@ -391,6 +396,10 @@ def delete_subject(request, subject_id):
 @login_required
 def college_logout(request):
     """Logout"""
+    # Clear all messages before logout
+    storage = messages.get_messages(request)
+    storage.used = True
+    
     logout(request)
     return redirect('college_login')
 
@@ -544,6 +553,11 @@ def generate_custom_report(request):
         cgpa_max = request.POST.get('cgpa_max')
         format_type = request.POST.get('format', 'csv')
         
+        # Get selected fields
+        selected_fields = request.POST.getlist('field')
+        if not selected_fields:
+            selected_fields = ['usn', 'name', 'branch', 'cgpa']  # Default fields
+        
         # Build query
         students = StudentRecord.objects.all()
         
@@ -560,13 +574,115 @@ def generate_custom_report(request):
         
         # Generate report
         if format_type == 'csv':
-            return generate_students_csv(students, 'custom_report')
+            return generate_students_csv_custom(students, 'custom_report', selected_fields)
         else:
-            return generate_students_pdf(students, 'Custom Student Report')
+            return generate_students_pdf_custom(students, 'Custom Student Report', selected_fields)
     
     return redirect('college_reports')
 
 # Helper functions for CSV generation
+def generate_students_csv_custom(students, filename, selected_fields):
+    """Generate CSV for students with selected fields"""
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = f'attachment; filename="{filename}_{datetime.now().strftime("%Y%m%d")}.csv"'
+    
+    writer = csv.writer(response)
+    
+    # Define field mapping
+    field_mapping = {
+        'usn': ('Student ID', lambda s: s.student_id),
+        'name': ('Name', lambda s: s.name),
+        'branch': ('Branch', lambda s: s.get_branch_display()),
+        'cgpa': ('CGPA', lambda s: f"{s.cgpa:.2f}"),
+        'phone': ('Phone', lambda s: s.phone or 'N/A'),
+        'email': ('Email', lambda s: s.email or 'N/A'),
+        'backlogs': ('Backlogs', lambda s: s.total_backlogs),
+        'batch': ('Batch', lambda s: s.batch_year)
+    }
+    
+    # Write header row
+    headers = [field_mapping[field][0] for field in selected_fields if field in field_mapping]
+    writer.writerow(headers)
+    
+    # Write data rows
+    for student in students:
+        row = [field_mapping[field][1](student) for field in selected_fields if field in field_mapping]
+        writer.writerow(row)
+    
+    return response
+
+def generate_students_pdf_custom(students, title, selected_fields):
+    """Generate PDF for students with selected fields"""
+    buffer = io.BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=A4)
+    elements = []
+    
+    # Styles
+    styles = getSampleStyleSheet()
+    title_style = ParagraphStyle(
+        'CustomTitle',
+        parent=styles['Heading1'],
+        fontSize=24,
+        textColor=colors.HexColor('#8FB9A8'),
+        spaceAfter=30,
+        alignment=1  # Center
+    )
+    
+    # Title
+    elements.append(Paragraph(title, title_style))
+    elements.append(Paragraph(f"Generated on: {datetime.now().strftime('%B %d, %Y')}", styles['Normal']))
+    elements.append(Spacer(1, 20))
+    
+    # Define field mapping
+    field_mapping = {
+        'usn': ('ID', lambda s: s.student_id, 1.2),
+        'name': ('Name', lambda s: s.name[:20], 2),
+        'branch': ('Branch', lambda s: s.branch, 0.8),
+        'cgpa': ('CGPA', lambda s: f"{s.cgpa:.2f}", 0.7),
+        'phone': ('Phone', lambda s: s.phone or 'N/A', 1.2),
+        'email': ('Email', lambda s: (s.email[:20] + '...') if s.email and len(s.email) > 20 else (s.email or 'N/A'), 1.8),
+        'backlogs': ('Backlogs', lambda s: str(s.total_backlogs), 0.8),
+        'batch': ('Batch', lambda s: str(s.batch_year), 0.7)
+    }
+    
+    # Table data - header
+    headers = [field_mapping[field][0] for field in selected_fields if field in field_mapping]
+    data = [headers]
+    
+    # Table data - rows
+    for student in students:
+        row = [str(field_mapping[field][1](student)) for field in selected_fields if field in field_mapping]
+        data.append(row)
+    
+    # Calculate column widths
+    col_widths = [field_mapping[field][2] * inch for field in selected_fields if field in field_mapping]
+    
+    # Create table
+    table = Table(data, colWidths=col_widths)
+    table.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#8FB9A8')),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, 0), 10),
+        ('FONTSIZE', (0, 1), (-1, -1), 8),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black),
+        ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, colors.HexColor('#f0f9f5')])
+    ]))
+    
+    elements.append(table)
+    
+    # Build PDF
+    doc.build(elements)
+    buffer.seek(0)
+    
+    response = HttpResponse(buffer, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="custom_report_{datetime.now().strftime("%Y%m%d")}.pdf"'
+    
+    return response
+
 def generate_students_csv(students, filename):
     """Generate CSV for students"""
     response = HttpResponse(content_type='text/csv')

@@ -100,12 +100,12 @@ for branch_code, semesters in all_subjects.items():
                 }
             )
             if created:
-                print(f"  ✓ Sem {semester}: {subject.subject_code} - {subject.subject_name}")
+                print(f"  [+] Sem {semester}: {subject.subject_code} - {subject.subject_name}")
                 total_added += 1
 
 print(f"\n{'=' * 60}")
-print(f"✅ Successfully added {total_added} new subjects!")
-print(f"📊 Total subjects in database: {Subject.objects.count()}")
+print(f"Successfully added {total_added} new subjects!")
+print(f"Total subjects in database: {Subject.objects.count()}")
 print(f"{'=' * 60}")
 
 # Verify all students now have subjects
@@ -118,14 +118,14 @@ from predictor.models import StudentRecord
 all_ok = True
 for student in StudentRecord.objects.all():
     subjects = Subject.objects.filter(branch=student.branch, semester=student.current_semester)
-    status = "✅" if subjects.exists() else "❌"
+    status = "[OK]" if subjects.exists() else "[MISSING]"
     print(f"{status} {student.name} ({student.branch} Sem {student.current_semester}): {subjects.count()} subjects")
     if not subjects.exists():
         all_ok = False
 
 print("=" * 60)
 if all_ok:
-    print("🎉 SUCCESS: All students now have subjects available!")
+    print("SUCCESS: All students now have subjects available!")
 else:
-    print("⚠️  Some students still missing subjects - may need manual addition")
+    print("WARNING: Some students still missing subjects - may need manual addition")
 print("=" * 60)

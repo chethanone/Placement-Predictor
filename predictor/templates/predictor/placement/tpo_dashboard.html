@@ -19,19 +19,20 @@
  
  <style>
  :root {
- --purple: #6d28d9;
- --violet: #a855f7;
- --indigo: #4f46e5;
- --amber: #f59e0b;
- --slate: #334155;
- --light-gray: #f8fafc;
+ --primary-blue: #4a90e2;
+ --secondary-blue: #5dade2;
+ --dark-blue: #2c5f8d;
+ --light-blue: #a8d5e2;
+ --accent-teal: #45b7aa;
+ --slate: #34495e;
+ --light-gray: #ecf0f1;
  --white: #ffffff;
- --success: #10b981;
- --warning: #f59e0b;
- --danger: #ef4444;
- --shadow-sm: 0 2px 8px rgba(109, 40, 217, 0.08);
- --shadow-md: 0 4px 16px rgba(109, 40, 217, 0.12);
- --shadow-lg: 0 8px 32px rgba(109, 40, 217, 0.16);
+ --success: #27ae60;
+ --warning: #f39c12;
+ --danger: #e74c3c;
+ --shadow-sm: 0 2px 8px rgba(74, 144, 226, 0.12);
+ --shadow-md: 0 4px 16px rgba(74, 144, 226, 0.18);
+ --shadow-lg: 0 8px 32px rgba(74, 144, 226, 0.24);
  }
 
  * {
@@ -42,9 +43,30 @@
 
  body {
  font-family: 'Inter', 'Poppins', sans-serif;
- background: linear-gradient(135deg, var(--light-gray) 0%, #ede9fe 50%, var(--light-gray) 100%);
+ background: linear-gradient(135deg, #d6e9f5 0%, #e8f4f8 50%, #d6e9f5 100%);
+ background-attachment: fixed;
+ position: relative;
  color: var(--slate);
  min-height: 100vh;
+ }
+
+ body::before {
+ content: '';
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ background-image: 
+ repeating-linear-gradient(0deg, rgba(74, 144, 226, 0.03) 0px, transparent 1px, transparent 2px, rgba(74, 144, 226, 0.03) 3px),
+ repeating-linear-gradient(90deg, rgba(74, 144, 226, 0.03) 0px, transparent 1px, transparent 2px, rgba(74, 144, 226, 0.03) 3px);
+ pointer-events: none;
+ z-index: 1;
+ }
+
+ body > * {
+ position: relative;
+ z-index: 2;
  }
 
  /* Sidebar Navigation */
@@ -54,7 +76,7 @@
  left: 0;
  width: 280px;
  height: 100vh;
- background: linear-gradient(180deg, var(--purple), var(--indigo));
+ background: linear-gradient(180deg, var(--primary-blue), var(--dark-blue));
  padding: 30px 0;
  color: white;
  overflow-y: auto;
@@ -125,7 +147,7 @@
 
  .menu-item:hover, .menu-item.active {
  background: rgba(255, 255, 255, 0.15);
- border-left: 4px solid var(--amber);
+ border-left: 4px solid var(--accent-teal);
  padding-left: 21px;
  }
 
@@ -149,7 +171,7 @@
 
  /* Header */
  .header {
- background: linear-gradient(135deg, var(--purple), var(--violet));
+ background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
  padding: 35px 40px;
  border-radius: 20px;
  margin-bottom: 30px;
@@ -226,19 +248,19 @@
  left: 0;
  right: 0;
  height: 5px;
- background: linear-gradient(90deg, var(--purple), var(--violet));
+ background: linear-gradient(90deg, var(--primary-blue), var(--secondary-blue));
  }
 
  .summary-card:nth-child(2)::before {
- background: linear-gradient(90deg, var(--violet), var(--indigo));
+ background: linear-gradient(90deg, var(--secondary-blue), var(--accent-teal));
  }
 
  .summary-card:nth-child(3)::before {
- background: linear-gradient(90deg, var(--indigo), var(--amber));
+ background: linear-gradient(90deg, var(--accent-teal), var(--dark-blue));
  }
 
  .summary-card:nth-child(4)::before {
- background: linear-gradient(90deg, var(--amber), var(--purple));
+ background: linear-gradient(90deg, var(--warning), var(--primary-blue));
  }
 
  .summary-card:hover {
@@ -261,26 +283,26 @@
  align-items: center;
  justify-content: center;
  font-size: 28px;
- background: linear-gradient(135deg, var(--purple), var(--violet));
+ background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
  color: white;
  }
 
  .summary-card:nth-child(2) .card-icon {
- background: linear-gradient(135deg, var(--violet), var(--indigo));
+ background: linear-gradient(135deg, var(--secondary-blue), var(--accent-teal));
  }
 
  .summary-card:nth-child(3) .card-icon {
- background: linear-gradient(135deg, var(--indigo), var(--amber));
+ background: linear-gradient(135deg, var(--accent-teal), var(--success));
  }
 
  .summary-card:nth-child(4) .card-icon {
- background: linear-gradient(135deg, var(--amber), var(--purple));
+ background: linear-gradient(135deg, var(--warning), var(--primary-blue));
  }
 
  .card-value {
  font-size: 42px;
  font-weight: 700;
- color: var(--purple);
+ color: var(--primary-blue);
  line-height: 1;
  margin-bottom: 10px;
  }
@@ -701,13 +723,13 @@
  Top Performing Department
  </h3>
  </div>
- <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 20px; background: linear-gradient(135deg, rgba(109, 40, 217, 0.05), rgba(168, 85, 247, 0.05)); border-radius: 12px;">
+ <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; padding: 20px; background: linear-gradient(135deg, rgba(74, 144, 226, 0.05), rgba(93, 173, 226, 0.05)); border-radius: 12px;">
  <div style="text-align: center;">
- <div style="font-size: 28px; font-weight: 700; color: var(--purple); margin-bottom: 8px;">{{ top_department.name }}</div>
+ <div style="font-size: 28px; font-weight: 700; color: var(--primary-blue); margin-bottom: 8px;">{{ top_department.name }}</div>
  <p style="color: var(--slate); font-weight: 600;">Department</p>
  </div>
  <div style="text-align: center;">
- <div style="font-size: 28px; font-weight: 700; color: var(--violet); margin-bottom: 8px;">{{ top_department.avg_employability }}%</div>
+ <div style="font-size: 28px; font-weight: 700; color: var(--secondary-blue); margin-bottom: 8px;">{{ top_department.avg_employability }}%</div>
  <p style="color: var(--slate); font-weight: 600;">Avg Employability</p>
  </div>
  <div style="text-align: center;">
@@ -749,7 +771,7 @@
  <span class="badge badge-good">{{ company.get_company_type_display }}</span>
  </td>
  <td>{{ company.package_min }} - {{ company.package_max }} LPA</td>
- <td><strong style="color: var(--purple);">{{ company.total_placements }}</strong></td>
+ <td><strong style="color: var(--primary-blue);">{{ company.total_placements }}</strong></td>
  </tr>
  {% endfor %}
  </tbody>

@@ -83,12 +83,24 @@ print("\nCreating training sessions...")
 from datetime import datetime, timedelta, time
 
 sessions_data = [
-{'title': 'Python Programming Workshop', 'type': 'technical', 'desc': 'Learn Python from basics to advanced'},
-{'title': 'Aptitude Test Preparation', 'type': 'aptitude', 'desc': 'Quantitative and logical reasoning'},
-{'title': 'Communication Skills', 'type': 'communication', 'desc': 'Improve verbal and written communication'},
-{'title': 'Mock Interview Session', 'type': 'interview', 'desc': 'Practice technical and HR interviews'},
-{'title': 'Group Discussion Training', 'type': 'gd', 'desc': 'Learn effective group discussion skills'},
-{'title': 'Resume Building Workshop', 'type': 'resume', 'desc': 'Create professional resumes'},
+{
+'title': 'Full Stack Development Bootcamp',
+'type': 'technical',
+'desc': 'Comprehensive training on modern web development including React, Node.js, MongoDB, and deployment strategies. Learn industry-standard practices and build real-world projects.',
+'venue': 'Computer Lab - Block A, Room 301',
+'duration': 180,
+'max_students': 40,
+'resource_links': 'https://reactjs.org/docs,https://nodejs.org/docs,https://www.mongodb.com/docs'
+},
+{
+'title': 'Interview Preparation & Communication Skills',
+'type': 'interview',
+'desc': 'Master the art of technical and HR interviews. Includes mock interviews, common question practice, body language tips, and effective communication strategies for campus placements.',
+'venue': 'Seminar Hall - Block B, 2nd Floor',
+'duration': 120,
+'max_students': 50,
+'resource_links': 'https://www.geeksforgeeks.org/interview-preparation,https://leetcode.com'
+},
 ]
 
 base_date = datetime.now() + timedelta(days=7)
@@ -98,9 +110,12 @@ title=sess['title'],
 defaults={
 'description': sess['desc'],
 'session_type': sess['type'],
-'scheduled_date': base_date.date() + timedelta(days=i*2),
+'scheduled_date': base_date.date() + timedelta(days=i*3),
 'scheduled_time': time(14, 0), # 2 PM
-'max_students': 30,
+'duration_minutes': sess['duration'],
+'venue': sess['venue'],
+'max_students': sess['max_students'],
+'resource_links': sess['resource_links'],
 'is_active': True
 }
 )

@@ -6,18 +6,54 @@
  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
  <style>
- :root { --purple: #6d28d9; --violet: #a855f7; }
+ :root { 
+ --primary-blue: #4a90e2; 
+ --secondary-blue: #5dade2;
+ --dark-blue: #2c5f8d;
+ --light-blue: #a8d5e2;
+ }
  * { margin: 0; padding: 0; box-sizing: border-box; }
- body { font-family: 'Inter', sans-serif; background: linear-gradient(135deg, #f8fafc 0%, #ede9fe 50%, #f8fafc 100%); padding: 30px; }
- .header { background: linear-gradient(135deg, var(--purple), var(--violet)); padding: 30px; border-radius: 18px; color: white; margin-bottom: 25px; }
- .card { background: white; padding: 30px; border-radius: 18px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(109, 40, 217, 0.08); }
- .btn { padding: 10px 20px; border-radius: 10px; background: linear-gradient(135deg, var(--purple), var(--violet)); color: white; border: none; font-weight: 600; cursor: pointer; width: 100%; }
+ body { 
+ font-family: 'Inter', sans-serif; 
+ background: linear-gradient(135deg, #d6e9f5 0%, #e8f4f8 50%, #d6e9f5 100%); 
+ background-attachment: fixed;
+ padding: 30px; 
+ position: relative;
+ }
+ body::before {
+ content: '';
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ background-image: 
+ repeating-linear-gradient(0deg, rgba(74, 144, 226, 0.03) 0px, transparent 1px, transparent 2px, rgba(74, 144, 226, 0.03) 3px),
+ repeating-linear-gradient(90deg, rgba(74, 144, 226, 0.03) 0px, transparent 1px, transparent 2px, rgba(74, 144, 226, 0.03) 3px);
+ pointer-events: none;
+ z-index: 1;
+ }
+ body > * {
+ position: relative;
+ z-index: 2;
+ }
+ .header { background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue)); padding: 30px; border-radius: 18px; color: white; margin-bottom: 25px; }
+ .card { background: white; padding: 30px; border-radius: 18px; margin-bottom: 20px; box-shadow: 0 2px 8px rgba(74, 144, 226, 0.12); }
+ .btn { padding: 10px 20px; border-radius: 10px; background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue)); color: white; border: none; font-weight: 600; cursor: pointer; width: 100%; }
+ .btn:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(74, 144, 226, 0.3); transition: all 0.3s ease; }
+ .btn-back { background: linear-gradient(135deg, #95a5a6, #7f8c8d); width: auto; padding: 10px 20px; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; margin-bottom: 15px; }
+ .btn-back:hover { transform: translateY(-2px); box-shadow: 0 6px 12px rgba(127, 140, 141, 0.3); }
  input, select { width: 100%; padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px; font-family: 'Inter', sans-serif; }
+ input:focus, select:focus { outline: none; border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1); }
  label { display: block; margin-bottom: 8px; font-weight: 600; color: #334155; }
  .form-group { margin-bottom: 20px; }
  </style>
 </head>
 <body>
+ <a href="{% url 'tpo_dashboard' %}" class="btn btn-back">
+ <i class="fas fa-arrow-left"></i>
+ Back to Dashboard
+ </a>
  <div class="header">
  <h1><i class="fas fa-flask"></i> What-If Skill Improvement Simulation</h1>
  <p style="margin-top: 10px;">See how skill improvements affect employability & placement chances</p>
@@ -66,16 +102,16 @@
  </div>
 
  {% if result %}
- <div class="card" style="background: linear-gradient(135deg, rgba(109, 40, 217, 0.05), rgba(168, 85, 247, 0.05)); border: 2px solid var(--violet);">
- <h2 style="color: var(--purple); margin-bottom: 25px;"><i class="fas fa-chart-line"></i> Simulation Results</h2>
+ <div class="card" style="background: linear-gradient(135deg, rgba(74, 144, 226, 0.05), rgba(93, 173, 226, 0.05)); border: 2px solid var(--secondary-blue);">
+ <h2 style="color: var(--primary-blue); margin-bottom: 25px;"><i class="fas fa-chart-line"></i> Simulation Results</h2>
  <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px;">
  <div>
  <h3 style="color: #64748b; font-size: 14px; margin-bottom: 10px;">Current Employability</h3>
- <p style="font-size: 48px; font-weight: 700; color: var(--purple);">{{ result.current_score }}%</p>
+ <p style="font-size: 48px; font-weight: 700; color: var(--primary-blue);">{{ result.current_score }}%</p>
  </div>
  <div>
  <h3 style="color: #64748b; font-size: 14px; margin-bottom: 10px;">Projected Employability</h3>
- <p style="font-size: 48px; font-weight: 700; color: #10b981;">{{ result.new_score }}%</p>
+ <p style="font-size: 48px; font-weight: 700; color: #27ae60;">{{ result.new_score }}%</p>
  </div>
  <div>
  <h3 style="color: #64748b; font-size: 14px; margin-bottom: 10px;">Improvement</h3>

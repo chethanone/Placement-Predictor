@@ -16,4 +16,4 @@ for student in StudentRecord.objects.all():
     subjects = Subject.objects.filter(branch=student.branch, semester=student.current_semester)
     print(f'  Available subjects: {subjects.count()}')
     if not subjects.exists():
-        print('  ⚠️  NO SUBJECTS AVAILABLE!')
+        print('  [WARNING] NO SUBJECTS AVAILABLE!')

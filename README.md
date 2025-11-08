@@ -1,24 +1,31 @@
-# AI Placement Predictor System
+# Placement Predictor System
 
-A comprehensive Django-based placement prediction system with Machine Learning for colleges.
+A comprehensive web-based placement management system that helps colleges manage student placements, predict employability, and provide AI-powered recommendations.
 
 ## Features
 
-### **3-Portal Architecture**
-1. **Student Portal** - No login required
- - Placement prediction
- - Quiz system (upload PDF/PPT)
- - View results
+### For Students
+- Track academic performance and skill levels
+- Take auto-generated quizzes based on uploaded syllabi
+- View employability predictions
+- Enroll in training sessions
+- Access personalized recommendations
+- Download placement certificates
 
-2. **College Portal** - Secure login
- - Student management (CRUD)
- - Subject management (CRUD)
- - VTU-style marks entry
- - Auto CGPA calculation
+### For TPO (Training & Placement Officer)
+- Manage student records
+- Generate AI-powered recommendations
+- Create and manage training sessions
+- View analytics and reports
+- Run what-if simulations
+- Export data in various formats
 
-3. **Placement Portal** - Secure login
- - Training session management
- - Student analytics
+### For College Administrators
+- Department-wise analytics
+- Company recruitment tracking
+- Student performance reports
+- Custom report generation
+- Bulk student data import
  - Personalized recommendations
 
 ### **ML Model**

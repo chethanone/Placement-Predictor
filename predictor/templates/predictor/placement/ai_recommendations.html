@@ -7,12 +7,14 @@
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
  <style>
  :root {
- --purple: #6d28d9;
- --violet: #a855f7;
- --indigo: #4f46e5;
- --amber: #f59e0b;
- --slate: #334155;
- --light-gray: #f8fafc;
+ --primary-blue: #4a90e2;
+ --secondary-blue: #5dade2;
+ --dark-blue: #2c5f8d;
+ --light-blue: #a8d5e2;
+ --accent-teal: #45b7aa;
+ --amber: #f39c12;
+ --slate: #34495e;
+ --light-gray: #ecf0f1;
  }
 
  * {
@@ -23,8 +25,28 @@
 
  body {
  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
- background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+ background: linear-gradient(135deg, #4a90e2 0%, #2c5f8d 100%);
  min-height: 100vh;
+ position: relative;
+ }
+
+ body::before {
+ content: '';
+ position: fixed;
+ top: 0;
+ left: 0;
+ width: 100%;
+ height: 100%;
+ background-image: 
+ repeating-linear-gradient(0deg, rgba(255, 255, 255, 0.03) 0px, transparent 1px, transparent 2px, rgba(255, 255, 255, 0.03) 3px),
+ repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.03) 0px, transparent 1px, transparent 2px, rgba(255, 255, 255, 0.03) 3px);
+ pointer-events: none;
+ z-index: 1;
+ }
+
+ body > * {
+ position: relative;
+ z-index: 2;
  }
 
  .container {
@@ -35,7 +57,7 @@
  /* Sidebar */
  .sidebar {
  width: 280px;
- background: linear-gradient(180deg, var(--purple), var(--indigo));
+ background: linear-gradient(180deg, var(--primary-blue), var(--dark-blue));
  padding: 30px 0;
  color: white;
  position: fixed;
@@ -87,7 +109,7 @@
 
  .menu-item:hover, .menu-item.active {
  background: rgba(255, 255, 255, 0.15);
- border-left: 4px solid var(--amber);
+ border-left: 4px solid var(--accent-teal);
  padding-left: 21px;
  }
 
@@ -105,12 +127,15 @@
  }
 
  .header {
- background: linear-gradient(135deg, var(--purple), var(--violet));
+ background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
  padding: 35px 40px;
  border-radius: 20px;
  margin-bottom: 30px;
- box-shadow: 0 8px 32px rgba(109, 40, 217, 0.16);
+ box-shadow: 0 8px 32px rgba(74, 144, 226, 0.24);
  color: white;
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
  }
 
  .header h1 {
@@ -181,8 +206,8 @@
  .filter-group select:focus,
  .filter-group input:focus {
  outline: none;
- border-color: var(--violet);
- box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+ border-color: var(--secondary-blue);
+ box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
  }
 
  .btn {
@@ -200,22 +225,32 @@
  }
 
  .btn-primary {
- background: linear-gradient(135deg, var(--purple), var(--violet));
+ background: linear-gradient(135deg, var(--primary-blue), var(--secondary-blue));
  color: white;
  }
 
  .btn-primary:hover {
  transform: translateY(-2px);
- box-shadow: 0 8px 20px rgba(109, 40, 217, 0.3);
+ box-shadow: 0 8px 20px rgba(74, 144, 226, 0.3);
  }
 
  .btn-secondary {
- background: linear-gradient(135deg, var(--indigo), #7c3aed);
+ background: linear-gradient(135deg, var(--dark-blue), var(--primary-blue));
  color: white;
  }
 
+ .btn-back {
+ background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+ color: white;
+ }
+
+ .btn-back:hover {
+ transform: translateY(-2px);
+ box-shadow: 0 6px 12px rgba(127, 140, 141, 0.3);
+ }
+
  .btn-generate {
- background: linear-gradient(135deg, #10b981, #059669);
+ background: linear-gradient(135deg, #27ae60, #2ecc71);
  color: white;
  font-size: 16px;
  padding: 14px 28px;
@@ -223,7 +258,7 @@
 
  .btn-generate:hover {
  transform: translateY(-2px);
- box-shadow: 0 8px 20px rgba(16, 185, 129, 0.3);
+ box-shadow: 0 8px 20px rgba(39, 174, 96, 0.3);
  }
 
  /* Loading */
@@ -242,7 +277,7 @@
 
  .spinner {
  border: 4px solid #f3f4f6;
- border-top: 4px solid var(--violet);
+ border-top: 4px solid var(--secondary-blue);
  border-radius: 50%;
  width: 50px;
  height: 50px;
@@ -268,7 +303,7 @@
  border-radius: 18px;
  padding: 30px;
  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
- border-left: 5px solid var(--purple);
+ border-left: 5px solid var(--primary-blue);
  transition: all 0.3s ease;
  }
 
@@ -278,11 +313,11 @@
  }
 
  .recommendation-card:nth-child(2n) {
- border-left-color: var(--violet);
+ border-left-color: var(--secondary-blue);
  }
 
  .recommendation-card:nth-child(3n) {
- border-left-color: var(--indigo);
+ border-left-color: var(--accent-teal);
  }
 
  .student-header {
@@ -497,8 +532,14 @@
  <!-- Main Content -->
  <main class="main-content">
  <div class="header">
+ <div>
  <h1><i class="fas fa-robot"></i> AI-Powered Recommendations</h1>
  <p>Get intelligent insights and personalized recommendations powered by Google Gemini AI</p>
+ </div>
+ <a href="{% url 'tpo_dashboard' %}" class="btn btn-back">
+ <i class="fas fa-arrow-left"></i>
+ Back to Dashboard
+ </a>
  </div>
 
  <!-- Control Panel -->
@@ -561,7 +602,7 @@
  <!-- Loading State -->
  <div id="loadingState" class="loading">
  <div class="spinner"></div>
- <h3 style="color: var(--purple); margin-bottom: 10px;">Generating AI Recommendations...</h3>
+ <h3 style="color: var(--primary-blue); margin-bottom: 10px;">Generating AI Recommendations...</h3>
  <p style="color: #6b7280;">Our AI is analyzing student data and creating personalized insights</p>
  </div>
 

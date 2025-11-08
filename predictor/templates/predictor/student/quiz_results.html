@@ -488,10 +488,10 @@
  {% if q.reference_text %}
  <div style="margin-top: 12px;">
  <button onclick="showPDFReference({{ q.number }})" style="background: linear-gradient(135deg, #3b82f6, #2563eb); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 600;">
- 📄 View Answer in PDF{% if q.page_number %} (Page {{ q.page_number }}){% endif %}
+ <i class="fas fa-file-pdf"></i> View Answer in PDF{% if q.page_number %} (Page {{ q.page_number }}){% endif %}
  </button>
  <div id="pdf-ref-{{ q.number }}" style="display:none; margin-top: 12px; padding: 16px; background: #f0f9ff; border-left: 4px solid #3b82f6; border-radius: 8px;">
- <strong style="color: #1e40af; display: block; margin-bottom: 8px;">📖 Reference from PDF:</strong>
+ <strong style="color: #1e40af; display: block; margin-bottom: 8px;"><i class="fas fa-book-open"></i> Reference from PDF:</strong>
  <p style="margin: 0; line-height: 1.6; color: #334155;">{{ q.reference_text }}</p>
  </div>
  </div>
@@ -503,8 +503,9 @@
  </div>
 
  <div class="action-buttons">
- <a href="{% url 'student_quiz_upload' %}" class="btn btn-primary"> Take Another Quiz</a>
- <a href="{% url 'student_portal' %}" class="btn btn-secondary"> Back to Dashboard</a>
+ <a href="{% url 'student_retake_quiz' quiz.id %}" class="btn btn-primary"><i class="fas fa-redo"></i> Retake This Quiz</a>
+ <a href="{% url 'student_quiz_upload' %}" class="btn btn-primary"><i class="fas fa-upload"></i> Take Another Quiz</a>
+ <a href="{% url 'student_portal' %}" class="btn btn-secondary"><i class="fas fa-home"></i> Back to Dashboard</a>
  </div>
  </div>
 

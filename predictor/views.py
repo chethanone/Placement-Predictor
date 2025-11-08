@@ -46,41 +46,97 @@ from .models import (
     StudentRecord, 
     StudentQuiz, 
     QuizQuestion, 
-    StudentPrediction
+    StudentPrediction,
+    TrainingSession,
+    SessionRecommendation
 )
 
 def process_pdf(file_path):
     text = ""
     print(f" Processing PDF: {file_path}")
-    # Try PyMuPDF first
+    
+    # Try PyMuPDF first (best quality)
     if fitz:
         try:
-            print(" Using PyMuPDF...")
+            print(" Using PyMuPDF for high-quality extraction...")
             doc = fitz.open(file_path)
-            for page in doc:
-                text += page.get_text()
+            for page_num, page in enumerate(doc, 1):
+                # Extract text with better formatting
+                page_text = page.get_text("text", sort=True)  # Sort text by reading order
+                if page_text.strip():
+                    # Don't add page markers - just append text with spacing
+                    text += "\n" + page_text
+                else:
+                    # Try blocks method if normal extraction fails
+                    blocks = page.get_text("blocks")
+                    for block in blocks:
+                        if len(block) >= 5:  # Block has text
+                            text += block[4] + " "
             doc.close()
-            print(f" Extracted {len(text)} characters")
-            return text
+            
+            # Clean extracted text - Remove junk characters and excessive whitespace
+            import re
+            
+            # Remove ALL page markers in various formats
+            text = re.sub(r'---\s*[Pp]age\s+\d+\s*---', '', text)  # --- Page 17 ---
+            text = re.sub(r'-+\s*[Pp]age\s+\d+\s*-+', '', text)   # -- page 17 --
+            text = re.sub(r'[Pp]age\s+\d+\s+of\s+\d+', '', text)   # Page 1 of 10
+            text = re.sub(r'^\s*\d+\s*$', '', text, flags=re.MULTILINE)  # Remove standalone numbers
+            
+            # Remove special characters and control characters (but keep newlines, spaces, basic punctuation)
+            text = re.sub(r'[\x00-\x08\x0b-\x0c\x0e-\x1f\x7f-\x9f]', '', text)  # Remove control chars
+            
+            # Remove excessive blank lines (more than 2 consecutive)
+            text = re.sub(r'\n\s*\n\s*\n+', '\n\n', text)
+            
+            # Remove excessive spaces
+            text = re.sub(r' {2,}', ' ', text)
+            
+            # Remove bullet points and list markers if they're standalone
+            text = re.sub(r'^\s*[•○▪▫■□●◆◇★☆]+\s*$', '', text, flags=re.MULTILINE)
+            
+            # Clean up common PDF artifacts
+            text = re.sub(r'[\uf0b7\uf0a7\uf076\uf0d8]', '', text)  # Remove common PDF bullet symbols
+            
+            # Final cleanup - trim leading/trailing whitespace
+            text = text.strip()
+            
+            print(f" Extracted and cleaned {len(text)} characters with PyMuPDF")
+            if len(text) > 100:
+                return text
         except Exception as e:
             print(f" PyMuPDF error: {e}")
-            pass
     
     # Fallback to PyPDF2
-    if PyPDF2:
+    if PyPDF2 and len(text) < 100:
         try:
             print(" Using PyPDF2 fallback...")
             with open(file_path, 'rb') as file:
                 reader = PyPDF2.PdfReader(file)
-                for page in reader.pages:
-                    text += page.extract_text() + "\n"
-            print(f" Extracted {len(text)} characters")
-            return text
+                for page_num, page in enumerate(reader.pages, 1):
+                    page_text = page.extract_text()
+                    if page_text.strip():
+                        # Don't add page markers - just append text
+                        text += "\n" + page_text
+            
+            # Clean text with same cleaning as above
+            import re
+            text = re.sub(r'---\s*[Pp]age\s+\d+\s*---', '', text)
+            text = re.sub(r'-+\s*[Pp]age\s+\d+\s*-+', '', text)
+            text = re.sub(r'[Pp]age\s+\d+\s+of\s+\d+', '', text)
+            text = re.sub(r'[\x00-\x08\x0b-\x0c\x0e-\x1f\x7f-\x9f]', '', text)
+            text = re.sub(r'\n\s*\n\s*\n+', '\n\n', text)
+            text = re.sub(r' {2,}', ' ', text)
+            text = re.sub(r'[\uf0b7\uf0a7\uf076\uf0d8]', '', text)
+            text = text.strip()
+            
+            print(f" Extracted and cleaned {len(text)} characters with PyPDF2")
         except Exception as e:
             print(f" PyPDF2 error: {e}")
-            pass
     
-    print(" No PDF library available or extraction failed")
+    if len(text) < 100:
+        print(" WARNING: Very little text extracted - PDF may be image-based or encrypted")
+    
     return text
 
 def process_ppt(file_path):
@@ -138,31 +194,38 @@ def generate_questions_from_text(text, max_questions=25):
             }
         )
         
-        # Create optimized prompt for faster generation
+        # Create optimized prompt for faster generation with better question quality
         prompt = f"""
-Generate EXACTLY 25 quiz questions from this content. Be CONCISE and DIRECT.
+Analyze this educational content and generate EXACTLY 25 high-quality quiz questions that test understanding of KEY CONCEPTS and IMPORTANT TOPICS.
 
-CONTENT:
-{text[:6000]}
+CONTENT TO ANALYZE:
+{text[:15000]}
 
-OUTPUT FORMAT (JSON ONLY, NO EXTRA TEXT):
+INSTRUCTIONS FOR QUESTION GENERATION:
+1. Focus on MAIN CONCEPTS, definitions, algorithms, formulas, and key principles
+2. Avoid trivial questions about formatting, page numbers, or irrelevant details
+3. Make MCQ options plausible and challenging (not obviously wrong)
+4. For fill-in-blank, choose important terms/concepts (not random words)
+5. For true/false, test understanding of core principles
+6. For short answers, ask about explanations or applications of concepts
+7. Extract a relevant text snippet for the "ref" field that explains the answer
+
+OUTPUT FORMAT (STRICT JSON, NO MARKDOWN):
 {{
   "questions": [
-    {{"q": "Question text?", "type": "mcq", "options": ["A", "B", "C", "D"], "answer": "A"}},
-    {{"q": "The _____ is key.", "type": "fill_blank", "answer": "term"}},
-    {{"q": "Statement is correct.", "type": "true_false", "answer": "True"}},
-    {{"q": "Explain concept X.", "type": "short_answer", "answer": "Brief explanation"}}
+    {{"q": "What is the primary purpose of divide and conquer?", "type": "mcq", "options": ["Break problems into subproblems", "Sort arrays", "Search trees", "Optimize space"], "answer": "Break problems into subproblems", "ref": "Divide and conquer works by recursively breaking down a problem into sub-problems until they become simple enough to solve directly."}},
+    {{"q": "The time complexity of binary search is _____.", "type": "fill_blank", "answer": "O(log n)", "ref": "Binary search has logarithmic time complexity O(log n) because it divides the search space in half with each comparison."}},
+    {{"q": "Dynamic programming stores results of subproblems to avoid recomputation.", "type": "true_false", "answer": "True", "ref": "Dynamic programming is an optimization technique that stores the results of expensive function calls and reuses them when the same inputs occur again."}},
+    {{"q": "Explain the greedy approach in algorithm design.", "type": "short_answer", "answer": "Makes locally optimal choices at each step hoping to find global optimum", "ref": "A greedy algorithm makes the locally optimal choice at each stage with the hope of finding a global optimum."}}
   ]
 }}
 
-REQUIREMENTS:
-- 10 MCQs (4 options each)
-- 5 Fill in the Blank (use _____)
-- 5 True/False
-- 5 Short Answer
-- RANDOMIZE order (mix types)
-- Questions based ONLY on the content above
-- ONE correct answer per question
+DISTRIBUTION REQUIRED:
+- 10 Multiple Choice Questions (MCQ) with 4 meaningful options each
+- 5 Fill in the Blank questions about key terms/concepts
+- 5 True/False statements about core principles  
+- 5 Short Answer questions requiring explanation
+- Mix the order randomly (don't group by type)
 """
         
         # Generate content with Gemini (faster with optimized prompt)
@@ -197,7 +260,8 @@ REQUIREMENTS:
                 'question_text': q.get('q', q.get('question_text', '')),
                 'correct_answer': q.get('answer', q.get('correct_answer', '')),
                 'question_type': q.get('type', q.get('question_type', 'text')),
-                'options': q.get('options', [])
+                'options': q.get('options', []),
+                'reference_text': q.get('ref', q.get('reference_text', ''))
             })
         
         # Ensure we have exactly 25 questions
@@ -226,58 +290,122 @@ def generate_basic_questions(text, max_questions=25):
     if not text:
         return []
     
+    # Clean text and split into sentences
     sentences = re.split(r'(?<=[.!?])\s+', text)
-    sentences = [s.strip() for s in sentences if len(s.strip()) > 20]
+    
+    # Filter out very short sentences, page markers, and figure references
+    good_sentences = []
+    for s in sentences:
+        s = s.strip()
+        # Skip if too short, is a page marker, or is just a figure reference
+        if (len(s) < 30 or 
+            re.match(r'^(Page|\d+|Figure|Fig\.|Table|Diagram)', s, re.IGNORECASE) or
+            s.count(' ') < 3):  # At least 3 words
+            continue
+        good_sentences.append(s)
+    
+    if not good_sentences:
+        # If no good sentences found, return minimal questions
+        return [{
+            'question_text': "Based on the content provided, what are the key concepts discussed?",
+            'correct_answer': "Please refer to the study material",
+            'question_type': 'short_answer',
+            'options': [],
+            'reference_text': "Please review the uploaded document for details."
+        }] * max_questions
+    
     questions = []
+    random.shuffle(good_sentences)
     
-    random.shuffle(sentences)
+    question_templates = [
+        ('mcq', lambda s: (f"Which statement best describes the following?\n{s[:200]}...", 
+                          "Correct", 
+                          ["Correct", "Incorrect", "Partially correct", "Cannot determine"])),
+        ('fill_blank', lambda s: create_fill_blank(s)),
+        ('true_false', lambda s: (f"The following statement is true: {s[:150]}...", 
+                                  "True", 
+                                  ["True", "False"])),
+        ('short_answer', lambda s: (f"Explain the concept: {s[:120]}...", 
+                                   s[:200], 
+                                   []))
+    ]
     
-    for i, sentence in enumerate(sentences[:max_questions]):
-        # Alternate between question types
-        if i % 4 == 0:  # MCQ
-            questions.append({
-                'question_text': f"Which statement is correct about the following?\n{sentence}",
-                'correct_answer': "True",
-                'question_type': 'mcq',
-                'options': ["True", "False", "Partially correct", "Cannot determine"]
-            })
-        elif i % 4 == 1:  # Fill blank
-            words = sentence.split()
-            if len(words) > 5:
-                important_words = [w for w in words if len(w) > 4 and w.isalnum()]
-                if important_words:
-                    blank_word = random.choice(important_words)
+    for i, sentence in enumerate(good_sentences[:max_questions * 2]):  # Get extra in case some fail
+        if len(questions) >= max_questions:
+            break
+            
+        template_type, template_func = question_templates[i % 4]
+        
+        try:
+            # Check if sentence mentions figures/diagrams
+            has_figure = bool(re.search(r'\b(figure|fig\.|diagram|graph|chart|table|image)\b', sentence, re.IGNORECASE))
+            reference_note = f"[Note: This content may reference visual elements from the original document]\n\n{sentence}" if has_figure else sentence
+            
+            if template_type == 'fill_blank':
+                result = template_func(sentence)
+                if result:  # Only add if fill_blank was successful
+                    q_text, answer = result
                     questions.append({
-                        'question_text': sentence.replace(blank_word, "_____", 1),
-                        'correct_answer': blank_word,
+                        'question_text': q_text,
+                        'correct_answer': answer,
                         'question_type': 'fill_blank',
-                        'options': []
+                        'options': [],
+                        'reference_text': reference_note
                     })
-        elif i % 4 == 2:  # True/False
-            questions.append({
-                'question_text': sentence,
-                'correct_answer': "True",
-                'question_type': 'true_false',
-                'options': ["True", "False"]
-            })
-        else:  # Short answer
-            questions.append({
-                'question_text': f"Explain: {sentence[:100]}...",
-                'correct_answer': sentence,
-                'question_type': 'short_answer',
-                'options': []
-            })
+            else:
+                q_text, answer, options = template_func(sentence)
+                questions.append({
+                    'question_text': q_text,
+                    'correct_answer': answer,
+                    'question_type': template_type,
+                    'options': options,
+                    'reference_text': reference_note
+                })
+        except Exception as e:
+            print(f" Error creating question: {e}")
+            continue
     
-    # Ensure exactly max_questions
+    # If still not enough questions, add generic ones
     while len(questions) < max_questions:
         questions.append({
-            'question_text': f"Question {len(questions) + 1} from the content.",
-            'correct_answer': "Answer based on content",
+            'question_text': f"What are the key takeaways from the study material? (Topic {len(questions) + 1})",
+            'correct_answer': "Refer to the study material for comprehensive understanding",
             'question_type': 'short_answer',
-            'options': []
+            'options': [],
+            'reference_text': "This question requires comprehensive review of the uploaded document."
         })
     
     return questions[:max_questions]
+
+def create_fill_blank(sentence):
+    """Helper function to create fill-in-the-blank questions."""
+    words = sentence.split()
+    if len(words) < 6:
+        return None
+    
+    # Find important words (nouns, longer words, capitalized words)
+    important_words = []
+    for i, word in enumerate(words):
+        # Clean word of punctuation
+        clean_word = re.sub(r'[^\w]', '', word)
+        if (len(clean_word) > 5 and 
+            clean_word.isalnum() and 
+            not clean_word.isdigit() and
+            i > 0 and i < len(words) - 1):  # Not first or last word
+            important_words.append((i, word, clean_word))
+    
+    if not important_words:
+        return None
+    
+    # Pick a random important word
+    idx, original_word, clean_word = random.choice(important_words)
+    question_text = ' '.join(words[:idx] + ['_____'] + words[idx+1:])
+    
+    # Limit question length
+    if len(question_text) > 200:
+        question_text = question_text[:200] + '...'
+    
+    return (question_text, clean_word)
 
 def student_quiz_upload(request):
     if request.method == 'POST':
@@ -327,7 +455,7 @@ def student_quiz_upload(request):
                 student_id=student_id,
                 student_name=student_name,
                 file_type=file_ext,
-                extracted_text=syllabus_text[:10000]  # Limit stored text to 10000 chars
+                extracted_text=syllabus_text[:50000]  # Store more text for better question generation (50KB)
             )
             
             # Save the uploaded file to the quiz
@@ -352,7 +480,8 @@ def student_quiz_upload(request):
                     question_text=q['question_text'],
                     correct_answer=q['correct_answer'],
                     question_type=q_type,
-                    options=json.dumps(q.get('options', [])) if q.get('options') else None
+                    options=json.dumps(q.get('options', [])) if q.get('options') else None,
+                    reference_text=q.get('reference_text', '')
                 )
                 print(f" Question {idx} ({q_type}) saved")
             
@@ -388,6 +517,61 @@ def student_take_quiz(request, quiz_id):
         'quiz': quiz,
         'questions': questions
     })
+
+def student_retake_quiz(request, quiz_id):
+    """
+    Retake the same quiz with randomized questions without re-uploading the file.
+    This regenerates questions from the already extracted text.
+    """
+    quiz = get_object_or_404(StudentQuiz, id=quiz_id)
+    
+    try:
+        # Delete old questions
+        QuizQuestion.objects.filter(quiz=quiz).delete()
+        
+        # Regenerate questions from stored text
+        print(f" Regenerating questions for quiz {quiz_id}...")
+        syllabus_text = quiz.extracted_text
+        
+        if not syllabus_text:
+            messages.error(request, "No text available for this quiz. Please upload the file again.")
+            return redirect('student_quiz_upload')
+        
+        # Generate new randomized questions
+        questions = generate_questions_from_text(syllabus_text)
+        print(f" Generated {len(questions)} new randomized questions")
+        
+        # Save new questions
+        question_type_count = {}
+        for idx, q in enumerate(questions, 1):
+            q_type = q.get('question_type', 'text')
+            question_type_count[q_type] = question_type_count.get(q_type, 0) + 1
+            
+            QuizQuestion.objects.create(
+                quiz=quiz,
+                question_number=idx,
+                question_text=q['question_text'],
+                correct_answer=q['correct_answer'],
+                question_type=q_type,
+                options=json.dumps(q.get('options', [])) if q.get('options') else None,
+                reference_text=q.get('reference_text', '')
+            )
+        
+        # Reset quiz metadata
+        quiz.submitted = False
+        quiz.score = None
+        quiz.start_time = timezone.now()
+        quiz.end_time = None
+        quiz.save()
+        
+        print(f" Quiz {quiz_id} reset successfully!")
+        messages.success(request, "🔄 Quiz regenerated with new randomized questions!")
+        return redirect('student_take_quiz', quiz_id=quiz.id)
+        
+    except Exception as e:
+        print(f" ERROR retaking quiz: {str(e)}")
+        messages.error(request, f"Error regenerating quiz: {str(e)}")
+        return redirect('student_quiz_upload')
 
 def verify_answer_with_content(question, student_answer, pdf_content):
     """
@@ -884,26 +1068,196 @@ def student_predict(request):
     return render(request, 'predictor/student/predict.html')
 
 def student_results(request):
-    from .models import StudentQuiz
+    from .models import StudentQuiz, StudentPrediction
     
     # Get the logged-in student's USN from session
     student_usn = request.session.get('student_usn')
+    student_name = request.session.get('student_name', 'Student')
     
     if not student_usn:
         # Redirect to login if no session found
         return redirect('student_entry')
     
-    # Filter quizzes by the logged-in student only (using student_id field)
+    # Get quiz results - filter by student_id and completed status
     quizzes = StudentQuiz.objects.filter(
         student_id=student_usn,
         status='completed'
     ).order_by('-completed_at')
     
+    # Get placement predictions - filter by student's student_id
+    predictions = StudentPrediction.objects.filter(
+        student__student_id=student_usn
+    ).order_by('-predicted_at')
+    
     return render(request, 'predictor/student/results.html', {
         'quizzes': quizzes,
-        'student_usn': student_usn
+        'predictions': predictions,
+        'student_usn': student_usn,
+        'student_name': student_name
     })
 
 
 # ==================== STUDENT TRAINING SESSIONS ====================
+
+def student_sessions(request):
+    """View all training sessions - student can enroll/unenroll"""
+    # Get the logged-in student's USN from session
+    student_usn = request.session.get('student_usn')
+    
+    if not student_usn:
+        # Redirect to login if no session found
+        messages.warning(request, 'Please enter your Student ID to access sessions.')
+        return redirect('student_entry')
+    
+    # Get student record
+    try:
+        student = StudentRecord.objects.get(student_id=student_usn)
+    except StudentRecord.DoesNotExist:
+        messages.error(request, 'Student record not found.')
+        return redirect('student_entry')
+    
+    # Get all active training sessions
+    all_sessions = TrainingSession.objects.filter(
+        is_active=True,
+        scheduled_date__gte=timezone.now().date()
+    ).order_by('scheduled_date', 'scheduled_time')
+    
+    # Get sessions student is enrolled in
+    enrolled_session_ids = student.training_sessions.values_list('id', flat=True)
+    
+    # Get recommendations for this student
+    recommendations = SessionRecommendation.objects.filter(
+        student=student
+    ).select_related('session')
+    
+    recommended_session_ids = [rec.session_id for rec in recommendations]
+    
+    # Build session data with enrollment status
+    sessions_data = []
+    for session in all_sessions:
+        enrolled_count = session.registered_students.count()
+        is_full = enrolled_count >= session.max_students
+        is_enrolled = session.id in enrolled_session_ids
+        is_recommended = session.id in recommended_session_ids
+        
+        # Get recommendation details if exists
+        recommendation = None
+        if is_recommended:
+            recommendation = recommendations.filter(session=session).first()
+        
+        sessions_data.append({
+            'session': session,
+            'enrolled_count': enrolled_count,
+            'seats_left': session.max_students - enrolled_count,
+            'is_full': is_full,
+            'is_enrolled': is_enrolled,
+            'is_recommended': is_recommended,
+            'recommendation': recommendation,
+            'resource_list': session.resource_links.split(',') if session.resource_links else []
+        })
+    
+    context = {
+        'sessions': sessions_data,
+        'student_usn': student_usn,
+        'student_name': request.session.get('student_name', 'Student'),
+    }
+    
+    return render(request, 'predictor/student/sessions.html', context)
+
+
+def enroll_session(request, session_id):
+    """Enroll student in a training session"""
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'message': 'Invalid request method'})
+    
+    student_usn = request.session.get('student_usn')
+    if not student_usn:
+        return JsonResponse({'success': False, 'message': 'Please login first'})
+    
+    try:
+        student = StudentRecord.objects.get(student_id=student_usn)
+        session = get_object_or_404(TrainingSession, id=session_id, is_active=True)
+        
+        # Check if already enrolled
+        if student in session.registered_students.all():
+            return JsonResponse({'success': False, 'message': 'Already enrolled in this session'})
+        
+        # Check if session is full
+        if session.registered_students.count() >= session.max_students:
+            return JsonResponse({'success': False, 'message': 'Session is full'})
+        
+        # Enroll the student
+        session.registered_students.add(student)
+        
+        # Mark recommendation as registered if exists
+        SessionRecommendation.objects.filter(
+            student=student,
+            session=session
+        ).update(is_registered=True)
+        
+        enrolled_count = session.registered_students.count()
+        seats_left = session.max_students - enrolled_count
+        
+        return JsonResponse({
+            'success': True,
+            'message': f'Successfully enrolled in {session.title}',
+            'enrolled_count': enrolled_count,
+            'seats_left': seats_left
+        })
+        
+    except StudentRecord.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Student record not found'})
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)})
+
+
+def unenroll_session(request, session_id):
+    """Unenroll student from a training session"""
+    if request.method != 'POST':
+        return JsonResponse({'success': False, 'message': 'Invalid request method'})
+    
+    student_usn = request.session.get('student_usn')
+    if not student_usn:
+        return JsonResponse({'success': False, 'message': 'Please login first'})
+    
+    try:
+        student = StudentRecord.objects.get(student_id=student_usn)
+        session = get_object_or_404(TrainingSession, id=session_id, is_active=True)
+        
+        # Check if enrolled
+        if student not in session.registered_students.all():
+            return JsonResponse({'success': False, 'message': 'Not enrolled in this session'})
+        
+        # Check if session is too soon (e.g., within 24 hours)
+        time_until_session = session.scheduled_date - timezone.now().date()
+        if time_until_session.days < 1:
+            return JsonResponse({
+                'success': False,
+                'message': 'Cannot unenroll less than 24 hours before session'
+            })
+        
+        # Unenroll the student
+        session.registered_students.remove(student)
+        
+        # Mark recommendation as not registered if exists
+        SessionRecommendation.objects.filter(
+            student=student,
+            session=session
+        ).update(is_registered=False)
+        
+        enrolled_count = session.registered_students.count()
+        seats_left = session.max_students - enrolled_count
+        
+        return JsonResponse({
+            'success': True,
+            'message': f'Successfully unenrolled from {session.title}',
+            'enrolled_count': enrolled_count,
+            'seats_left': seats_left
+        })
+        
+    except StudentRecord.DoesNotExist:
+        return JsonResponse({'success': False, 'message': 'Student record not found'})
+    except Exception as e:
+        return JsonResponse({'success': False, 'message': str(e)})
+
 

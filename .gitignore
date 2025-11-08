@@ -67,6 +67,7 @@ htmlcov/
 # Temporary files
 *.tmp
 *.bak
+urls_backup.txt
 
 # Firebase credentials (NEVER COMMIT!)
 config/firebase-credentials.json
@@ -81,3 +82,15 @@ db.sqlite3
 *.sqlite3
 media/
 staticfiles/
+staticfiles_build/
+
+# Vercel
+.vercel
+.now
+
+# Development scripts (optional)
+check_*.py
+fix_*.py
+populate_*.py
+test_*.py
+add_missing_*.py

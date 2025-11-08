@@ -371,7 +371,12 @@
 
 <div class="quiz-wrapper">
  <div class="quiz-header">
- <h1> Take Quiz</h1>
+ <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px;">
+ <h1 style="margin: 0;"><i class="fas fa-edit"></i> Take Quiz</h1>
+ <button type="button" onclick="confirmQuit()" style="background: rgba(255,255,255,0.25); color: white; padding: 10px 20px; border-radius: 10px; font-weight: 600; border: none; cursor: pointer; transition: all 0.3s ease; backdrop-filter: blur(10px);">
+ <i class="fas fa-times-circle"></i> Quit Quiz
+ </button>
+ </div>
  <p>Answer all questions to complete the quiz and get your results</p>
  <div class="quiz-info">
  <div class="quiz-info-item">
@@ -405,7 +410,14 @@
  {% for question in questions %}
  <div class="question-card" data-question-index="{{ forloop.counter0 }}" data-question-id="{{ question.id }}">
  <div class="question-number">Question {{ forloop.counter }} of {{ questions|length }}</div>
- <div class="question-text">{{ question.question_text }}</div>
+ <div class="question-text">
+ {{ question.question_text }}
+ {% if 'figure' in question.question_text|lower or 'fig.' in question.question_text|lower or 'diagram' in question.question_text|lower or 'graph' in question.question_text|lower or 'chart' in question.question_text|lower or 'table' in question.question_text|lower %}
+ <div style="margin-top: 12px; padding: 12px; background: #fff3cd; border-left: 4px solid #ffc107; border-radius: 6px; font-size: 14px; color: #856404;">
+ <strong><i class="fas fa-chart-pie" style="margin-right: 6px;"></i>Note:</strong> This question references a visual element from the original document. Please refer to your study material for the complete context.
+ </div>
+ {% endif %}
+ </div>
  
  {% if question.question_type == 'mcq' %}
  <div class="options-container">
@@ -473,7 +485,7 @@
  </div>
  
  <div class="final-submit-container" style="display: none;">
-                     <h2>✅ Quiz Completed!</h2>
+                     <h2><i class="fas fa-check-circle"></i> Quiz Completed!</h2>
  <p>You've answered all {{ questions|length }} questions. Review your answers or submit the quiz.</p>
  <div class="navigation-buttons" style="justify-content: center; margin-bottom: 20px;">
  <button type="button" class="nav-btn prev-btn" onclick="previousQuestion()">
@@ -481,7 +493,7 @@
  </button>
  </div>
  <button type="submit" class="submit-btn" id="submitBtn">
- 🎯 Submit Quiz
+ <i class="fas fa-paper-plane"></i> Submit Quiz
  </button>
  </div>
  </form>
@@ -690,6 +702,13 @@
  }
  }
  });
+
+ // Quit quiz with confirmation
+ function confirmQuit() {
+ if (confirm('Are you sure you want to quit?\n\nYour progress will NOT be saved and you will return to the Student Portal.')) {
+ window.location.href = "{% url 'student_portal' %}";
+ }
+ }
 </script>
 
 {% endblock %}

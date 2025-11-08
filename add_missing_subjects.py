@@ -63,12 +63,12 @@ for subject_data in aiml_all_semesters:
         }
     )
     if created:
-        print(f"✓ Added: {subject.subject_code} - {subject.subject_name} (Sem {subject.semester})")
+        print(f"[+] Added: {subject.subject_code} - {subject.subject_name} (Sem {subject.semester})")
         added_count += 1
     else:
         print(f"  Already exists: {subject.subject_code}")
 
-print(f"\n✅ Successfully added {added_count} subjects for AIML branch!")
+print(f"\nSuccessfully added {added_count} subjects for AIML branch!")
 
 # Verify
 from predictor.models import StudentRecord

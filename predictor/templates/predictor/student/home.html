@@ -114,6 +114,7 @@
  font-size: 2.5rem;
  margin-bottom: 20px;
  backdrop-filter: blur(10px);
+ color: white;
  }
 
  .header h1 {
@@ -183,29 +184,14 @@
  gap: 12px;
  }
 
- .info-box li::before {
- content: "";
- width: 20px;
- height: 20px;
- background: var(--sage-green);
- border-radius: 50%;
- flex-shrink: 0;
+ .info-box li i {
  margin-top: 2px;
- display: flex;
- align-items: center;
- justify-content: center;
- font-size: 12px;
- color: white;
- font-weight: bold;
- }
- 
- .info-box li::before {
- content: "";
+ flex-shrink: 0;
  }
 
  .features-grid {
  display: grid;
- grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+ grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
  gap: 28px;
  margin-top: 32px;
  }
@@ -283,6 +269,11 @@
  box-shadow: 0 8px 20px rgba(143, 185, 168, 0.3);
  }
  
+ .feature-card:nth-child(4) .feature-icon {
+ background: linear-gradient(135deg, var(--mauve), #5d4a54);
+ box-shadow: 0 8px 20px rgba(118, 93, 105, 0.3);
+ }
+ 
  .feature-card:hover .feature-icon {
  transform: scale(1.1) rotate(5deg);
  }
@@ -357,6 +348,15 @@
  box-shadow: 0 6px 20px rgba(252, 185, 170, 0.5);
  }
  
+ .feature-card:nth-child(4) .btn {
+ background: linear-gradient(135deg, var(--mauve), #5d4a54);
+ box-shadow: 0 4px 12px rgba(118, 93, 105, 0.3);
+ }
+ 
+ .feature-card:nth-child(4) .btn:hover {
+ box-shadow: 0 6px 20px rgba(118, 93, 105, 0.5);
+ }
+ 
  @media (max-width: 768px) {
  .header {
  padding: 30px 24px;
@@ -385,7 +385,9 @@
  
  <div class="header">
  <div class="header-content">
- <div class="header-icon"></div>
+ <div class="header-icon">
+ <i class="fas fa-user-graduate"></i>
+ </div>
  <h1>Student Portal</h1>
  <p>Welcome to the Student Portal - Your gateway to placement predictions and skill assessments</p>
  <span class="badge">
@@ -396,17 +398,20 @@
  </div>
 
             <div class="info-box">
-                <h3>💡 How to Use the Student Portal</h3>
+                <h3><i class="fas fa-lightbulb" style="color: var(--peach); margin-right: 8px;"></i>How to Use the Student Portal</h3>
                 <ul>
-                    <li>🎓 Enter your Student ID provided by your college</li>
-                    <li>🤖 Get AI-powered placement probability predictions</li>
-                    <li>📄 Upload PDF/PPT documents to generate quizzes</li>
-                    <li>📝 Take quizzes and receive personalized recommendations</li>
-                    <li>📈 Track your progress and improve your skills</li>
+                    <li><i class="fas fa-graduation-cap" style="color: var(--sage-green); margin-right: 8px;"></i>Enter your Student ID provided by your college</li>
+                    <li><i class="fas fa-brain" style="color: var(--sage-green); margin-right: 8px;"></i>Get AI-powered placement probability predictions</li>
+                    <li><i class="fas fa-file-pdf" style="color: var(--sage-green); margin-right: 8px;"></i>Upload PDF/PPT documents to generate quizzes</li>
+                    <li><i class="fas fa-chalkboard-teacher" style="color: var(--sage-green); margin-right: 8px;"></i>Enroll in training sessions recommended by placement cell</li>
+                    <li><i class="fas fa-clipboard-check" style="color: var(--sage-green); margin-right: 8px;"></i>Take quizzes and receive personalized recommendations</li>
+                    <li><i class="fas fa-chart-line" style="color: var(--sage-green); margin-right: 8px;"></i>Track your progress and improve your skills</li>
                 </ul>
             </div> <div class="features-grid">
  <div class="feature-card" onclick="window.location.href='{% url 'student_predict' %}'">
- <div class="feature-icon">🎯</div>
+ <div class="feature-icon">
+ <i class="fas fa-bullseye" style="color: white;"></i>
+ </div>
  <h2>Placement Prediction</h2>
  <p>Get AI-powered predictions about your placement probability based on your academic performance, skills, and experience.</p>
  <a href="{% url 'student_predict' %}" class="btn">
@@ -416,7 +421,9 @@
  </div>
 
  <div class="feature-card" onclick="window.location.href='{% url 'student_quiz_upload' %}'">
- <div class="feature-icon">📚</div>
+ <div class="feature-icon">
+ <i class="fas fa-book-open" style="color: white;"></i>
+ </div>
  <h2>Upload & Quiz</h2>
  <p>Upload PDF or PowerPoint files and get automatically generated quizzes with 25 questions to test your knowledge.</p>
  <a href="{% url 'student_quiz_upload' %}" class="btn">
@@ -425,8 +432,22 @@
  </a>
  </div>
 
+ <div class="feature-card" onclick="window.location.href='{% url 'student_sessions' %}'">
+ <div class="feature-icon">
+ <i class="fas fa-chalkboard-teacher" style="color: white;"></i>
+ </div>
+ <h2>Training Sessions</h2>
+ <p>Browse and enroll in training sessions recommended by placement cell. Improve your skills and boost placement chances.</p>
+ <a href="{% url 'student_sessions' %}" class="btn">
+ <span>View Sessions</span>
+ <i class="fas fa-arrow-right"></i>
+ </a>
+ </div>
+
  <div class="feature-card" onclick="window.location.href='{% url 'student_results' %}'">
- <div class="feature-icon">📊</div>
+ <div class="feature-icon">
+ <i class="fas fa-chart-bar" style="color: white;"></i>
+ </div>
  <h2>View Results</h2>
  <p>Check your quiz scores, placement predictions, and receive personalized book recommendations to improve.</p>
  <a href="{% url 'student_results' %}" class="btn">
@@ -437,13 +458,13 @@
  </div>
 
  <div class="info-box" style="margin-top: 32px; border-left-color: var(--sage-green);">
- <h3><i class="fas fa-lightbulb" style="color: var(--sage-green);"></i> Tips for Best Results</h3>
+ <h3><i class="fas fa-star" style="color: var(--sage-green); margin-right: 8px;"></i>Tips for Best Results</h3>
  <ul>
- <li>Ensure your Student ID is correct and registered with your college</li>
- <li>Provide accurate information for better placement predictions</li>
- <li>Upload clear, well-formatted PDF or PPT files for quiz generation</li>
- <li>Review your quiz results and follow the recommendations</li>
- <li>Contact your placement cell for training sessions</li>
+ <li><i class="fas fa-id-card" style="color: var(--sage-green); margin-right: 8px;"></i>Ensure your Student ID is correct and registered with your college</li>
+ <li><i class="fas fa-check-circle" style="color: var(--sage-green); margin-right: 8px;"></i>Provide accurate information for better placement predictions</li>
+ <li><i class="fas fa-file-upload" style="color: var(--sage-green); margin-right: 8px;"></i>Upload clear, well-formatted PDF or PPT files for quiz generation</li>
+ <li><i class="fas fa-chalkboard-teacher" style="color: var(--sage-green); margin-right: 8px;"></i>Enroll early in training sessions - seats are limited!</li>
+ <li><i class="fas fa-tasks" style="color: var(--sage-green); margin-right: 8px;"></i>Review your quiz results and follow the recommendations</li>
  </ul>
  </div>
  </div>
