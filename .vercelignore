@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+.Python
+
+# Virtual Environment
+.venv/
+venv/
+env/
+
+# Environment
+.env
+.env.local
+
+# Database
+db.sqlite3
+*.sqlite3
+
+# Media files
+media/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+
+# Documentation (optional - can deploy docs if needed)
+docs/
+notebooks/
+
+# Development scripts
+check_*.py
+fix_*.py
+populate_*.py
+test_*.py
+add_missing_*.py
+create_sample_data.py
+run_server.py
+set_admin_password.py
+
+# Backup files
+urls_backup.txt
+*.bak
+
+# Git
+.git/
+.gitignore
+
+# Firebase
+config/firebase-credentials.json
+
+# Markdown docs (optional)
+*.md
+!README.md

@@ -6,14 +6,7 @@
       "use": "@vercel/python",
       "config": {
         "maxLambdaSize": "15mb",
-        "runtime": "python3.9"
-      }
-    },
-    {
-      "src": "build_files.sh",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "staticfiles_build"
+        "runtime": "python3.12"
       }
     }
   ],
@@ -30,5 +23,8 @@
       "src": "/(.*)",
       "dest": "placement_project/wsgi.py"
     }
-  ]
+  ],
+  "env": {
+    "DJANGO_SETTINGS_MODULE": "placement_project.settings"
+  }
 }
